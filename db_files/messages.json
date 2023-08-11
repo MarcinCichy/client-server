@@ -1,0 +1,136 @@
+{
+    "messages": {
+        "user": {
+            "1": {
+                "sender": "kto2",
+                "date": "2023-06-11",
+                "content": "dvrwetqerhgyqethqthqthqtrheufhuwedu udfi"
+            }
+        },
+        "administrator": {
+            "1": {
+                "sender": "user",
+                "date": "2023-06-26",
+                "content": "dvqefv ev f"
+            },
+            "2": {
+                "sender": "user",
+                "date": "2023-06-26",
+                "content": "fvqef"
+            },
+            "3": {
+                "sender": "user",
+                "date": "2023-06-28",
+                "content": "jakas wiadomosc do administartora"
+            }
+        },
+        "marcin": {
+            "1": {
+                "sender": "ktos",
+                "date": "2023-05-22",
+                "content": "gkhgkjgk"
+            },
+            "2": {
+                "sender": "inny",
+                "date": "2023-07-16",
+                "content": "inny pise tez"
+            },
+            "3": {
+                "sender": "user",
+                "date": "2023-08-07",
+                "content": "dvwrv fn liojd efvbdf v fwv kwdn lkdv qdfn kqdvlkqvdn klqdnfnvqe, flkv nj qknfvqkfvnipwfvqfv q klivbni1r lqdv fklqdf v qm,f nlnolqkfnv qmf vlq blqkfv mqf,.amvn.qnkfvqkfv lqkfb lvfv mad nlkfbv m.madfn vqekfrv ljqdfvvn ljqfnvqfkjjfjfjjii934nniv ojreger"
+            },
+            "4": {
+                "sender": "user",
+                "date": "2023-08-08",
+                "content": "TO znowu ja pisze do Ciebie."
+            }
+        },
+        "inny": {
+            "1": {
+                "sender": "user",
+                "date": "2023-06-26",
+                "content": "a ty co pisale?"
+            },
+            "2": {
+                "sender": "user",
+                "date": "2023-07-01",
+                "content": "kdfh duh f\u01afwed f0w eifjd9uweof"
+            },
+            "3": {
+                "sender": "marcin",
+                "date": "2023-07-17",
+                "content": "co tu robisz?"
+            },
+            "4": {
+                "sender": "marcin",
+                "date": "2023-07-30",
+                "content": "cos to napisal?"
+            },
+            "5": {
+                "sender": "marcin",
+                "date": "2023-08-03",
+                "content": "co tam robisz?"
+            }
+        },
+        "kto": {
+            "1": {
+                "sender": "marcin",
+                "date": "2023-06-26",
+                "content": "nic nie pisalem"
+            },
+            "2": {
+                "sender": "user",
+                "date": "2023-06-26",
+                "content": "feveefqv rev\u0104\u0104\u0104\u0104\u0104\u0104\u0104\u0105\u0105\u0105\u0105\u0105\u0104\u0104\u0104\u0104\u0104\u0104"
+            },
+            "3": {
+                "sender": "user",
+                "date": "2023-07-01",
+                "content": "sgafbabfn fabgafdg"
+            },
+            "4": {
+                "sender": "user",
+                "date": "2023-07-01",
+                "content": "sdgver gerf adgf ea "
+            },
+            "5": {
+                "sender": "marcin",
+                "date": "2023-07-06",
+                "content": "g 3ry35ht1h h53y1hgte"
+            }
+        },
+        "kto2": {
+            "1": {
+                "sender": "marcin",
+                "date": "2023-07-01",
+                "content": "egfr fg efg qea"
+            },
+            "2": {
+                "sender": "marcin",
+                "date": "2023-08-08",
+                "content": "A tys co za jeden?"
+            },
+            "3": {
+                "sender": "marcin",
+                "date": "2023-08-11",
+                "content": "juibbuo"
+            }
+        },
+        "kto5": {
+            "1": {
+                "sender": "marcin",
+                "date": "2023-07-21",
+                "content": "fqbvlqfebv fkef nef nlfvlefvjlafknfvlfnblfnvir knk nrbi nkfl nkfvjkpefvkfvlfvnlsfnvblfnvlfnvklfnbklfn iprekn lf nlfvbnklf nklfnvper;kn klfn kfenvpwrk;nf klfn pkrvnkpfnebnb kkl nklf nlfg nklfn ldfn bkefnvbpk;fln k;fpnb pkfn fnb kfnbefnbpirbnfbnkfbeffe"
+            },
+            "2": {
+                "sender": "marcin",
+                "date": "2023-07-29",
+                "content": "i do tego tez cos pisze"
+            }
+        },
+        "ktos-tam": {},
+        "kto3": {},
+        "kto33": {}
+    }
+}

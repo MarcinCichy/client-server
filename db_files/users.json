@@ -1,0 +1,65 @@
+{
+    "users": {
+        "user": {
+            "password": "pass",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-04-06"
+        },
+        "administrator": {
+            "password": "root",
+            "permissions": "admin",
+            "status": "active",
+            "activation_date": "2023-04-06"
+        },
+        "marcin": {
+            "password": "12345",
+            "permissions": "admin",
+            "status": "active",
+            "activation_date": "2023-04-06"
+        },
+        "inny": {
+            "password": "ktos",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-06-06"
+        },
+        "kto": {
+            "password": "to",
+            "permissions": "admin",
+            "status": "active",
+            "activation_date": "2023-07-06"
+        },
+        "kto2": {
+            "password": "ktos",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-06-23"
+        },
+        "kto5": {
+            "password": "zxcv",
+            "permissions": "user",
+            "status": "banned",
+            "activation_date": "2023-06-26"
+        },
+        "ktos-tam": {
+            "password": "uiop",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-07-16"
+        },
+        "kto3": {
+            "password": "asdf",
+            "permissions": "admin",
+            "status": "banned",
+            "activation_date": "2023-08-06"
+        },
+        "kto33": {
+            "password": "asdf",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-08-08"
+        }
+    },
+    "logged_users": []
+}
