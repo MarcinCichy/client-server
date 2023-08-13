@@ -2,8 +2,8 @@ import json
 from datetime import datetime
 from os import name, system
 
-import srv_datas
-import srv_response
+import server_data
+import server_response
 
 
 class SystemUtilities:
@@ -20,14 +20,14 @@ class SystemUtilities:
     @staticmethod
     def uptime():
         now = datetime.now()
-        live_time = now - srv_datas.START_TIME
+        live_time = now - server_data.START_TIME
         uptime_dict = {"uptime": str(live_time).split(".")[0]}
         uptime_json = json.dumps(uptime_dict)
         return uptime_json
 
     @staticmethod
     def info():
-        info_dict = {"version": srv_datas.VERSION, "start_at": str(srv_datas.DATE)}
+        info_dict = {"version": server_data.VERSION, "start_at": str(server_data.DATE)}
         info_json = json.dumps(info_dict)
         return info_json
 
@@ -69,13 +69,13 @@ class SystemUtilities:
 
     @staticmethod
     def unrecognised_command():
-        un_comm_dict = srv_response.UNRECOGNISED_COMMAND
+        un_comm_dict = server_response.UNRECOGNISED_COMMAND
         un_comm_json = json.dumps(un_comm_dict)
         return un_comm_json
 
     @staticmethod
     def stop():
-        stop_dict = srv_response.CONNECTION_CLOSE
+        stop_dict = server_response.CONNECTION_CLOSE
         stop_json = json.dumps(stop_dict)
         return stop_json
 

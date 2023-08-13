@@ -1,6 +1,7 @@
 import json
 import socket
-import cln_datas
+
+import client_data
 
 
 class Client:
@@ -18,7 +19,7 @@ class Client:
                     s.sendall(in_comm)
                     data = s.recv(self.srv_buff)
                     decoded_data = self.decode_received_data(data)
-                    if decoded_data.values() == cln_datas.CLOSE:
+                    if decoded_data.values() == client_data.CLOSE:
                         break
                     else:
                         return decoded_data
@@ -26,7 +27,7 @@ class Client:
                 return {"Error": "Unable to connect to server."}
 
     def input_command(self, command):
-        encoded_command = self.serialize_command(command).encode(cln_datas.ENCODE_FORMAT)
+        encoded_command = self.serialize_command(command).encode(client_data.ENCODE_FORMAT)
         return encoded_command
 
     @staticmethod
@@ -42,7 +43,7 @@ class Client:
 
 
 def start(sent):
-    client = Client(cln_datas.HOST, cln_datas.PORT, cln_datas.BUFFER_SIZE)
+    client = Client(client_data.HOST, client_data.PORT, client_data.BUFFER_SIZE)
     transmit = client.client_connection(sent)
     return transmit
 

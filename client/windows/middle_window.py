@@ -1,20 +1,16 @@
 import curses
-# import base_window
-import cln_datas
+
+import client_data
 import server_communication
 
-
-class BaseWindow:
-    def __init__(self, stdscr):
-        self.stdscr = stdscr
-        self.maxY, self.maxX = self.stdscr.getmaxyx()
+from .base_window import BaseWindow
 
 
 class MiddleWindow(BaseWindow):
     def __init__(self, stdscr, info_window, bottom_window, useradd_window, new_message_window, show_message_window, login_window):
         super().__init__(stdscr)
-        self.window = self.stdscr.subwin(self.maxY - 5, cln_datas.MIDDLE_HEIGHT, 2, 1)
-        self.window.bkgd(' ', curses.color_pair(cln_datas.COLOR_PAIR))
+        self.window = self.stdscr.subwin(self.maxY - 5, client_data.MIDDLE_HEIGHT, 2, 1)
+        self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.previous_message = ''
         self.command = ''
         self.bottom_window = bottom_window
@@ -35,8 +31,8 @@ class MiddleWindow(BaseWindow):
         """
                 Used to clear a message before displaying a new one.
         """
-        for num_of_row in range(self.maxY - cln_datas.START_POINT - 1):
-            self.window.move(cln_datas.START_POINT + num_of_row, 10)
+        for num_of_row in range(self.maxY - client_data.START_POINT - 1):
+            self.window.move(client_data.START_POINT + num_of_row, 10)
             self.window.clrtoeol()
             self.window.refresh()
 
@@ -52,22 +48,22 @@ class MiddleWindow(BaseWindow):
         if "msg" in sentence.keys():
             sentence = sentence['msg']
             self.window.addstr(2, 10, "Messages: ")
-            self.window.hline(cln_datas.START_POINT + 1, 10, 0, 30)
+            self.window.hline(client_data.START_POINT + 1, 10, 0, 30)
             row = 2
         elif "Existing_accounts" in sentence.keys():
             sentence = sentence['Existing_accounts']
             self.window.addstr(2, 10, "Existing accounts: ")
-            self.window.hline(cln_datas.START_POINT + 1, 10, 0, 30)
+            self.window.hline(client_data.START_POINT + 1, 10, 0, 30)
             row = 2
         elif "Account_info" in sentence.keys():
             sentence = sentence['Account_info']
             self.window.addstr(2, 10, "Account info: ")
-            self.window.hline(cln_datas.START_POINT + 1, 10, 0, 30)
+            self.window.hline(client_data.START_POINT + 1, 10, 0, 30)
             row = 2
 
         for response_keyword, response_content in sentence.items():
             if response_keyword == "line":
-                self.window.hline(cln_datas.START_POINT + row, 10, 0, self.maxX)
+                self.window.hline(client_data.START_POINT + row, 10, 0, self.maxX)
                 row += 1
             else:
                 text = f"{response_keyword} : {response_content}"
@@ -77,7 +73,7 @@ class MiddleWindow(BaseWindow):
                         row += 1
                         column = 0
                     if char not in '{}':
-                        self.window.addch(cln_datas.START_POINT + row, 10 + column, str(char))
+                        self.window.addch(client_data.START_POINT + row, 10 + column, str(char))
                     curses.delay_output(100)
                     self.window.refresh()
                     column += 1
@@ -89,9 +85,9 @@ class MiddleWindow(BaseWindow):
 
         if "Error" in server_response:
             self.clear_previous_messages()
-            self.window.attron(curses.color_pair(cln_datas.ERROR_COLOR_PAIR))
+            self.window.attron(curses.color_pair(client_data.ERROR_COLOR_PAIR))
             self.show_sign_by_sign(server_response)
-            self.window.attroff(curses.color_pair(cln_datas.ERROR_COLOR_PAIR))
+            self.window.attroff(curses.color_pair(client_data.ERROR_COLOR_PAIR))
             self.window.refresh()
         elif "User-add" in server_response:
             self.clear_previous_messages()

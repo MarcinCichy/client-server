@@ -1,6 +1,6 @@
 import json
 import socket
-import srv_datas
+import server_data
 import menu
 from functions import SystemUtilities
 
@@ -25,10 +25,10 @@ class Server:
                     command = conn.recv(self.srv_buff)
                     com = self.decode_received_data(command)
                     result = menu.handler.use_command(com)
-                    conn.sendall(result.encode(srv_datas.ENCODE_FORMAT))
+                    conn.sendall(result.encode(server_data.ENCODE_FORMAT))
 
                     if "Connection" in result:
-                        if (json.loads(result))["Connection"] == srv_datas.CLOSE:
+                        if (json.loads(result))["Connection"] == server_data.CLOSE:
                             print("Server stopped")
                             break
 
@@ -48,7 +48,7 @@ class Server:
 
 def start():
     SystemUtilities.clear_screen()
-    server = Server(srv_datas.HOST, srv_datas.PORT, srv_datas.BUFFER_SIZE)
+    server = Server(server_data.HOST, server_data.PORT, server_data.BUFFER_SIZE)
     server.server_connection()
 
 

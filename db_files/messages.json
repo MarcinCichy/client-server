@@ -37,13 +37,13 @@
             },
             "3": {
                 "sender": "user",
-                "date": "2023-08-07",
-                "content": "dvwrv fn liojd efvbdf v fwv kwdn lkdv qdfn kqdvlkqvdn klqdnfnvqe, flkv nj qknfvqkfvnipwfvqfv q klivbni1r lqdv fklqdf v qm,f nlnolqkfnv qmf vlq blqkfv mqf,.amvn.qnkfvqkfv lqkfb lvfv mad nlkfbv m.madfn vqekfrv ljqdfvvn ljqfnvqfkjjfjfjjii934nniv ojreger"
-            },
-            "4": {
-                "sender": "user",
                 "date": "2023-08-08",
                 "content": "TO znowu ja pisze do Ciebie."
+            },
+            "4": {
+                "sender": "inny",
+                "date": "2023-08-12",
+                "content": "Ja ju\u017c mam pe\u0142nazynke. I co mam dlalej z tym zro zrobc? Jk tak dalej bedzie, to nikt nic do mnienie napisze. Daj znac co moge zrobic z ta skrzyna! Blallallslsld ldldld dlvfdvjorfv ofvjofev ojefvo eefovj oefvjoef vfo jeofv jpf jwf2002irv f i0fvfvgevbg"
             }
         },
         "inny": {
@@ -131,6 +131,7 @@
         },
         "ktos-tam": {},
         "kto3": {},
-        "kto33": {}
+        "kto33": {},
+        "kto34": {}
     }
 }

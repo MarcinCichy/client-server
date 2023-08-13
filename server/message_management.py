@@ -1,8 +1,8 @@
 import json
 from database_support import DatabaseSupport
 from database_support import handle_db_file_error
-import srv_response
-import srv_datas
+import server_response
+import server_data
 
 
 class MessageManagement(DatabaseSupport):
@@ -17,7 +17,7 @@ class MessageManagement(DatabaseSupport):
 
     @handle_db_file_error
     def new_message(self, data):
-        db_msgs = self.database_support.read_db_json(srv_datas.MESSAGES_DATABASE)
+        db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
 
         sender = data[0]
         date = data[1]
@@ -26,11 +26,11 @@ class MessageManagement(DatabaseSupport):
         username = recipient["recipient"]
 
         if recipient["recipient"] not in db_msgs["messages"].keys():
-            msg_snd_error = srv_response.E_RECIPIENT_DOES_NOT_EXIST
+            msg_snd_error = server_response.E_RECIPIENT_DOES_NOT_EXIST
             msg_snd_error_json = json.dumps(msg_snd_error)
             return msg_snd_error_json
         elif len(db_msgs["messages"][username]) == 5:
-            msg_snd_error = srv_response.E_RECIPIENT_INBOX_IS_FULL
+            msg_snd_error = server_response.E_RECIPIENT_INBOX_IS_FULL
             msg_snd_error_json = json.dumps(msg_snd_error)
             return msg_snd_error_json
         else:
@@ -42,14 +42,14 @@ class MessageManagement(DatabaseSupport):
                 **content
             }
             db_msgs["messages"][username][inbox_msg_count] = new_tem_dict
-            self.database_support.save_db_json(db_msgs, srv_datas.MESSAGES_DATABASE)
-            msgs_snd_dict = srv_response.MESSAGE_WAS_SENT
+            self.database_support.save_db_json(db_msgs, server_data.MESSAGES_DATABASE)
+            msgs_snd_dict = server_response.MESSAGE_WAS_SENT
             msgs_snd_json = json.dumps(msgs_snd_dict)
             return msgs_snd_json
 
     @handle_db_file_error
     def msg_list(self, username):  # to show all messages in box in middle window show all msgs in box
-        db_msgs = self.database_support.read_db_json(srv_datas.MESSAGES_DATABASE)
+        db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
         all_inbox_msgs = db_msgs['messages'][username]
 
         new_dict = {}
@@ -62,7 +62,7 @@ class MessageManagement(DatabaseSupport):
 
     @handle_db_file_error
     def msg_del(self, data):  # to delete selected message
-        db_msgs = self.database_support.read_db_json(srv_datas.MESSAGES_DATABASE)
+        db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
         for username, msg_num in data.items():
             if msg_num in db_msgs['messages'][username]:
                 del db_msgs['messages'][username][msg_num]
@@ -73,16 +73,16 @@ class MessageManagement(DatabaseSupport):
                         updated_msgs[str(new_num)] = msg
                         new_num += 1
                 db_msgs['messages'][username] = updated_msgs
-                self.database_support.save_db_json(db_msgs, srv_datas.MESSAGES_DATABASE)
-                msgs_del_dict = srv_response.MESSAGE_WAD_DELETED
+                self.database_support.save_db_json(db_msgs, server_data.MESSAGES_DATABASE)
+                msgs_del_dict = server_response.MESSAGE_WAD_DELETED
                 msgs_del_json = json.dumps(msgs_del_dict)
                 return msgs_del_json
             else:
-                return json.dumps(srv_response.E_MESSAGE_NOT_FOUND)
+                return json.dumps(server_response.E_MESSAGE_NOT_FOUND)
 
     @handle_db_file_error
     def msg_show(self, data):  # to show selected message
-        db_msgs = self.database_support.read_db_json(srv_datas.MESSAGES_DATABASE)
+        db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
         for username, msg_num in data.items():
             if msg_num in db_msgs['messages'][username]:
                 message_to_show = db_msgs['messages'][username][msg_num]
@@ -90,14 +90,14 @@ class MessageManagement(DatabaseSupport):
                 msgs_to_show_json = json.dumps(msgs_to_show_dict)
                 return msgs_to_show_json
             else:
-                return json.dumps(srv_response.E_MESSAGE_NOT_FOUND)
+                return json.dumps(server_response.E_MESSAGE_NOT_FOUND)
 
     @handle_db_file_error
     def msg_count(self, username):  # to count all messages in box
-        db_msgs = self.database_support.read_db_json(srv_datas.MESSAGES_DATABASE)
+        db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
         inbox_msg_count = len(db_msgs["messages"][username])
         if inbox_msg_count >= 5:
-            inbox_msg_count = str(inbox_msg_count) + srv_response.YOUR_INBOX_IS_FULL
+            inbox_msg_count = str(inbox_msg_count) + server_response.YOUR_INBOX_IS_FULL
         inbox_msg_count_dict = {"msg-inbox-count": inbox_msg_count}
         inbox_msg_count_json = json.dumps(inbox_msg_count_dict)
         return inbox_msg_count_json

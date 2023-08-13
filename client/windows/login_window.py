@@ -1,21 +1,16 @@
 import curses
-# import BaseWindow
-import cln_datas
+
+import client_data
 import server_communication
 
-
-class BaseWindow:
-    def __init__(self, stdscr):
-        self.stdscr = stdscr
-        self.maxY, self.maxX = self.stdscr.getmaxyx()
-
+from .base_window import BaseWindow
 
 
 class LoginWindow(BaseWindow, server_communication.ServerCommunication):
     def __init__(self, stdscr, middle_window):
         super().__init__(stdscr)
-        self.window = self.stdscr.subwin(cln_datas.LOGIN_HEIGHT, cln_datas.LOGIN_WIDTH, self.maxY // 4, self.maxX // 4)
-        self.window.bkgd(' ', curses.color_pair(cln_datas.COLOR_PAIR))
+        self.window = self.stdscr.subwin(client_data.LOGIN_HEIGHT, client_data.LOGIN_WIDTH, self.maxY // 4, self.maxX // 4)
+        self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.username = ''
         self.password = ''
         self.command = ''
@@ -54,8 +49,8 @@ class LoginWindow(BaseWindow, server_communication.ServerCommunication):
     def get_credentials(self):
         curses.curs_set(2)
         curses.echo()
-        self.window.addstr(1, 12, " " * (cln_datas.LOGIN_WIDTH - 14))  # to clear the line after wrong logging
-        self.window.addstr(2, 12, " " * (cln_datas.LOGIN_WIDTH - 14))  # to clear the line after wrong logging
+        self.window.addstr(1, 12, " " * (client_data.LOGIN_WIDTH - 14))  # to clear the line after wrong logging
+        self.window.addstr(2, 12, " " * (client_data.LOGIN_WIDTH - 14))  # to clear the line after wrong logging
         self.username = self.window.getstr(1, 12).decode(errors="ignore")
         self.init_window()
         self.password = self.get_and_mask_password()
@@ -75,10 +70,10 @@ class LoginWindow(BaseWindow, server_communication.ServerCommunication):
         server_response = self.send_command(self.command)
 
         if "Error" in server_response:
-            self.window.attron(curses.color_pair(cln_datas.ERROR_COLOR_PAIR))
+            self.window.attron(curses.color_pair(client_data.ERROR_COLOR_PAIR))
             self.window.addstr(4, 2, server_response['Error'])
             self.window.clrtoeol()
-            self.window.attroff(curses.color_pair(cln_datas.ERROR_COLOR_PAIR))
+            self.window.attroff(curses.color_pair(client_data.ERROR_COLOR_PAIR))
             self.window.refresh()
 
         elif 'Login' in server_response:

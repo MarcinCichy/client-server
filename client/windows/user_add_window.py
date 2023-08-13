@@ -1,21 +1,17 @@
 import curses
-# from base_window import BaseWindow
-import cln_datas
 from datetime import datetime
 
+import client_data
 
-class BaseWindow:
-    def __init__(self, stdscr):
-        self.stdscr = stdscr
-        self.maxY, self.maxX = self.stdscr.getmaxyx()
+from .base_window import BaseWindow
 
 
 class UserAddWindow(BaseWindow):
-    def __init__(self, stdscr, middle_window, login_window, console):
+    def __init__(self, stdscr, middle_window, login_window):
         super().__init__(stdscr)
-        self.window = self.stdscr.subwin(cln_datas.ADDUSER_HEIGHT, cln_datas.ADDUSER_WIDTH, self.maxY // 4,
+        self.window = self.stdscr.subwin(client_data.ADDUSER_HEIGHT, client_data.ADDUSER_WIDTH, self.maxY // 4,
                                          self.maxX // 4)
-        self.window.bkgd(' ', curses.color_pair(cln_datas.COLOR_PAIR))
+        self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.new_username = ''
         self.new_password = ''
         self.new_permissions = ''
@@ -23,7 +19,6 @@ class UserAddWindow(BaseWindow):
         self.login_window = login_window
         self.middle_window = middle_window
         self.activation_date = datetime.now().strftime("%Y-%m-%d")
-        # self.console = console
         self.useradd_window_closed = False  # sprawdzic to
 
     def init_window(self):
@@ -37,9 +32,9 @@ class UserAddWindow(BaseWindow):
         curses.curs_set(2)
         curses.echo()
         self.window.refresh()
-        self.window.addstr(1, 12, " " * (cln_datas.ADDUSER_WIDTH - 14))
-        self.window.addstr(2, 12, " " * (cln_datas.ADDUSER_WIDTH - 14))
-        self.window.addstr(3, 12, " " * (cln_datas.ADDUSER_WIDTH - 14))
+        self.window.addstr(1, 12, " " * (client_data.ADDUSER_WIDTH - 14))
+        self.window.addstr(2, 12, " " * (client_data.ADDUSER_WIDTH - 14))
+        self.window.addstr(3, 12, " " * (client_data.ADDUSER_WIDTH - 14))
         self.new_username = self.window.getstr(1, 15).decode(errors="ignore")
         self.init_window()
         self.new_password = self.window.getstr(2, 15).decode(errors="ignore")

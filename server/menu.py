@@ -4,7 +4,7 @@ from functions import SystemUtilities
 from message_management import MessageManagement
 from user_management import UserManagement
 from user_authentication import UserAuthentication
-import srv_response
+import server_response
 
 
 class CommandHandler:
@@ -97,7 +97,7 @@ class CommandHandler:
                 else:
                     result = self.admin_commands[command]()
             else:
-                result = srv_response.E_COMMAND_UNAVAILABLE
+                result = server_response.E_COMMAND_UNAVAILABLE
         else:
             result = SystemUtilities.unrecognised_command()
 

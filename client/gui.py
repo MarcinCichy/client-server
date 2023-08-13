@@ -1,17 +1,14 @@
 import curses
-from datetime import datetime
-import client
-import cln_datas
-from server_communication import ServerCommunication
-from windows.base_window import BaseWindow
-from windows.header_window import HeaderWindow
-from windows.middle_window import MiddleWindow
-from windows.info_window import InfoWindow
+
+import client_data
 from windows.bottom_window import BottomWindow
+from windows.header_window import HeaderWindow
+from windows.info_window import InfoWindow
 from windows.login_window import LoginWindow
-from windows.user_add_window import UserAddWindow
+from windows.middle_window import MiddleWindow
 from windows.new_message_window import NewMessageWindow
 from windows.show_message_window import ShowMessageWindow
+from windows.user_add_window import UserAddWindow
 
 
 class Console:
@@ -24,7 +21,7 @@ class Console:
         self.header_window = HeaderWindow(stdscr)
         self.info_window = InfoWindow(stdscr, self.login_window)
         self.bottom_window = BottomWindow(stdscr, self.login_window)
-        self.useradd_window = UserAddWindow(stdscr, self.middle_window, self.login_window, self)
+        self.useradd_window = UserAddWindow(stdscr, self.middle_window, self.login_window)
         self.new_message_window = NewMessageWindow(stdscr, self.middle_window, self.login_window, self)
         self.show_message_window = ShowMessageWindow(stdscr, self.middle_window)
         self.middle_window = MiddleWindow(stdscr, self.info_window, self.bottom_window, self.useradd_window,
@@ -35,14 +32,14 @@ class Console:
 
     def init_curses(self):
         curses.start_color()
-        curses.init_pair(cln_datas.COLOR_PAIR, cln_datas.COLOR_FG, cln_datas.COLOR_BG)
-        curses.init_pair(cln_datas.ERROR_COLOR_PAIR, curses.COLOR_RED, curses.COLOR_BLACK)
+        curses.init_pair(client_data.COLOR_PAIR, client_data.COLOR_FG, client_data.COLOR_BG)
+        curses.init_pair(client_data.ERROR_COLOR_PAIR, client_data.ERROR_COLOR_FG, client_data.ERROR_COLOR_BG)
         curses.noecho()
         curses.cbreak()
         curses.curs_set(0)
         self.stdscr.keypad(1)
         self.stdscr.nodelay(1)
-        self.stdscr.attron(curses.color_pair(cln_datas.COLOR_PAIR))
+        self.stdscr.attron(curses.color_pair(client_data.COLOR_PAIR))
         self.stdscr.border()
         self.stdscr.refresh()
 

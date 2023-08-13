@@ -1,20 +1,14 @@
 import curses
-# from base_window import BaseWindow
-import cln_datas
-
-
-class BaseWindow:
-    def __init__(self, stdscr):
-        self.stdscr = stdscr
-        self.maxY, self.maxX = self.stdscr.getmaxyx()
+from .base_window import BaseWindow
+import client_data
 
 
 class ShowMessageWindow(BaseWindow):
     def __init__(self, stdscr, middle_window):
         super().__init__(stdscr)
-        self.window = self.stdscr.subwin(cln_datas.SHOW_MSG_HEIGHT, cln_datas.SHOW_MSG_WIDTH, self.maxY // 4,
+        self.window = self.stdscr.subwin(client_data.SHOW_MSG_HEIGHT, client_data.SHOW_MSG_WIDTH, self.maxY // 4,
                                          self.maxX // 4)
-        self.window.bkgd(' ', curses.color_pair(cln_datas.COLOR_PAIR))
+        self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.content = ''
         self.date = ''
         self.show_message_window = False  # sprawdzic to

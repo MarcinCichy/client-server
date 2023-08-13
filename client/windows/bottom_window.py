@@ -1,19 +1,15 @@
 import curses
-# import base_window
-import cln_datas
 
+import client_data
 
-class BaseWindow:
-    def __init__(self, stdscr):
-        self.stdscr = stdscr
-        self.maxY, self.maxX = self.stdscr.getmaxyx()
+from .base_window import BaseWindow
 
 
 class BottomWindow(BaseWindow):
     def __init__(self, stdscr, login_window):
         super().__init__(stdscr)
-        self.window = self.stdscr.subwin(cln_datas.BOTTOM_HEIGHT, self.maxX - 1, self.maxY - 3, 0)
-        self.window.bkgd(' ', curses.color_pair(cln_datas.COLOR_PAIR))
+        self.window = self.stdscr.subwin(client_data.BOTTOM_HEIGHT, self.maxX - 1, self.maxY - 3, 0)
+        self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.login_window = login_window
 
     def init_window(self):
@@ -44,7 +40,9 @@ class BottomWindow(BaseWindow):
             if len(precommand) >= 2:
                 command = {command_type: precommand[1]}
             else:
-                command = {command_type: "_"}  # this is needed, because in "menu.py" if admin permissions are set and data is None, then command is send without data
+                # this is needed, because in "menu.py" if admin permissions are set and data is None,
+                # then command is send without data. So any data is needed.
+                command = {command_type: "_"}
         elif command_type in ("user-perm", "user-stat"):
             if len(precommand) >= 3:
                 command = {command_type: {precommand[1]: precommand[2]}}
