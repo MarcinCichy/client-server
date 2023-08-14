@@ -50,8 +50,8 @@
         },
         "kto3": {
             "password": "asdf",
-            "permissions": "admin",
-            "status": "banned",
+            "permissions": "user",
+            "status": "active",
             "activation_date": "2023-08-06"
         },
         "kto33": {

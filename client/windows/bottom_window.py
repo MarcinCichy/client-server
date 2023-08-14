@@ -11,6 +11,7 @@ class BottomWindow(BaseWindow):
         self.window = self.stdscr.subwin(client_data.BOTTOM_HEIGHT, self.maxX - 1, self.maxY - 3, 0)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.login_window = login_window
+        self.command = ''
 
     def init_window(self):
         self.window.hline(0, 1, 0, self.maxX)
@@ -19,7 +20,7 @@ class BottomWindow(BaseWindow):
 
     def get_command(self):
         """
-        Get input from the user
+            Get input from the user
         """
         curses.curs_set(2)
         curses.echo()
@@ -55,5 +56,5 @@ class BottomWindow(BaseWindow):
             command = command_type
         self.window.move(1, 19)
         self.window.clrtoeol()
-        command = {self.login_window.login_username: command}
-        return command
+        self.command = {self.login_window.login_username: command}
+        return self.command

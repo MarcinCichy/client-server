@@ -16,13 +16,10 @@ class NewMessageWindow(BaseWindow):
         self.content = ''
         self.date = datetime.now().strftime("%Y-%m-%d")
         self.command = ''
-        self.new_message_window = False  # sprawdzic to
         self.middle_window = middle_window
         self.console = console
-        self.new_message_window_closed = False  # sprawdzic to
         self.login_window = login_window
         self.message_exceeded = None
-        self.max_message_length = None
 
     def init_window(self):
         self.window.border()
@@ -40,7 +37,7 @@ class NewMessageWindow(BaseWindow):
             self.window.attron(curses.color_pair(client_data.ERROR_COLOR_PAIR))
         else:
             self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
-        self.window.addstr(10, client_data.NEW_MSG_WIDTH - 9, f'{count}/250 ')
+        self.window.addstr(10, client_data.NEW_MSG_WIDTH - 9, f'{count}/{client_data.MAX_MESSAGE_LENGTH} ')
         self.window.refresh()
 
     def get_new_message(self):
