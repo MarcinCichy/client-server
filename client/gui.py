@@ -24,7 +24,7 @@ class Console:
         self.useradd_window = UserAddWindow(stdscr, self.middle_window, self.login_window)
         self.new_message_window = NewMessageWindow(stdscr, self.middle_window, self.login_window, self)
         self.show_message_window = ShowMessageWindow(stdscr, self.middle_window)
-        self.middle_window = MiddleWindow(stdscr, self.info_window, self.bottom_window, self.useradd_window,
+        self.middle_window = MiddleWindow(stdscr, self.bottom_window, self.useradd_window,
                                           self.new_message_window, self.show_message_window, self.login_window)
 
         self.command = ''

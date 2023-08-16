@@ -13,7 +13,6 @@ class ShowMessageWindow(BaseWindow):
         self.date = ''
         self.show_message_window = False  # sprawdzic to
         self.middle_window = middle_window
-        self.show_message_window_closed = False  # sprawdzic to
         self.sender = None
         self.maxX_SMW = self.window.getmaxyx()[1]
 
@@ -25,7 +24,7 @@ class ShowMessageWindow(BaseWindow):
         self.window.refresh()
 
     def show_selected_message(self, message_content):
-        self.init_window()
+        self.init_window()  # sprawdzić
 
         self.sender = message_content["Message to show"]["sender"]
         self.date = message_content["Message to show"]["date"]

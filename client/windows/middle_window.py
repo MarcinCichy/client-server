@@ -7,14 +7,13 @@ from .base_window import BaseWindow
 
 
 class MiddleWindow(BaseWindow):
-    def __init__(self, stdscr, info_window, bottom_window, useradd_window, new_message_window, show_message_window, login_window):
+    def __init__(self, stdscr, bottom_window, useradd_window, new_message_window, show_message_window, login_window):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(self.maxY - 5, client_data.MIDDLE_HEIGHT, 2, 1)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.previous_message = ''
         self.command = ''
         self.bottom_window = bottom_window
-        self.info_window = info_window
         self.useradd_window = useradd_window
         self.new_message_window = new_message_window
         self.show_message_window = show_message_window
@@ -106,7 +105,7 @@ class MiddleWindow(BaseWindow):
             self.init_window()
         elif "Logout" in server_response:
             self.login_window.logged_in = False
-            self.login_window.login_username = ''
+            self.login_window.logged_username = ''
         elif "Clear" in server_response:
             self.clear_previous_messages()
         else:

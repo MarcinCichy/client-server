@@ -31,6 +31,9 @@ class NewMessageWindow(BaseWindow):
         self.window.addstr(10, client_data.NEW_MSG_WIDTH - 9, f'0/250 ')
         self.window.refresh()
 
+    def clear_line(self, y_poz):
+        self.window.addstr(y_poz, 12, client_data.CLEAR_SPACE_NEW_MSG__WINDOW)
+
     def number_of_chars(self):
         count = len(self.content)
         if count >= 250:
@@ -47,8 +50,8 @@ class NewMessageWindow(BaseWindow):
         curses.curs_set(2)
         curses.echo()
         self.window.refresh()
-        self.window.addstr(1, 12, " " * (client_data.ADDUSER_WIDTH - 24))
-        self.window.addstr(2, 12, " " * (client_data.ADDUSER_WIDTH - 24))
+        self.clear_line(1)
+        self.clear_line(2)
 
         self.recipient = self.window.getstr(1, 15).decode(errors="ignore")
         self.init_window()
@@ -60,9 +63,9 @@ class NewMessageWindow(BaseWindow):
 
         while True:
             key = self.window.getch()
-            if key == 10:  # Enter
+            if key == 10:  # Enter KEY
                 break
-            elif key == curses.KEY_BACKSPACE or key == ord('\b') or key == ord('\x7f'):  # Backspace
+            elif key == curses.KEY_BACKSPACE or key == ord('\b') or key == ord('\x7f'):  # Backspace KEY
                 if content_x > 15:
                     content_x -= 1
                     self.content = self.content[:-1]
@@ -92,7 +95,7 @@ class NewMessageWindow(BaseWindow):
                 pass
             elif key == curses.KEY_DOWN:
                 pass
-            elif key == curses.KEY_DC:  # DEL
+            elif key == curses.KEY_DC:  # DEL KEY
                 if content_x < client_data.NEW_MSG_WIDTH - 2:
                     self.content = self.content[:content_x - 15] + self.content[content_x - 14:]
                     self.window.delch(content_y, content_x)

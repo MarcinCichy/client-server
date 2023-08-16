@@ -12,34 +12,33 @@ class InfoWindow(BaseWindow, server_communication.ServerCommunication):
         self.window = self.stdscr.subwin(client_data.INFO_HEIGHT, client_data.INFO_WIDTH, 3, self.maxX - 50)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.login_window = login_window
-        self.logged_username = self.login_window.login_username
-        self.logged_user_permissions = self.login_window.login_permissions
 
     def init_window(self):
         self.window.border()
+
+    def clear_line(self, y_poz):
+        self.window.addstr(y_poz, 10, client_data.CLEAR_SPACE_INFO_WINDOW)
 
     def show_server_info(self):
         command = {"command": ""}
         check_connection = self.send_command(command)
         if "Error" not in check_connection.keys():
             self.window.refresh()
-            self.window.addstr(1, 9, " " * (client_data.INFO_WIDTH - 14))
+            self.clear_line(1)
 
             command = {self.login_window.login_username: "info"}
             server_resp = self.send_command(command)
             self.window.addstr(1, 2, f'Version: {server_resp["version"]}')
-            self.window.addstr(2, 10, " " * (client_data.INFO_WIDTH - 14))
-
+            self.clear_line(2)
             self.window.addstr(2, 2, f'Start at: {server_resp["start_at"]}')
-            self.window.addstr(3, 9, " " * (client_data.INFO_WIDTH - 14))
-
+            self.clear_line(3)
             command = {self.login_window.login_username: "uptime"}
             self.window.addstr(3, 2, f'Uptime: {self.send_command(command)["uptime"]}')
-            self.window.addstr(4, 9, " " * (client_data.INFO_WIDTH - 14))
+            self.clear_line(4)
             self.window.addstr(4, 1, f' Logged: {self.login_window.login_username}')
-            self.window.addstr(5, 13, " " * (client_data.INFO_WIDTH - 14))
+            self.clear_line(5)
             self.window.addstr(5, 1, f' Permissions: {self.login_window.login_permissions}')
-            self.window.addstr(6, 12, " " * (client_data.INFO_WIDTH - 14))
+            self.clear_line(6)
             self.window.refresh()
 
             command = {self.login_window.login_username: {"msg_count": ""}}

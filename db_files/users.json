@@ -65,9 +65,16 @@
             "permissions": "user",
             "status": "active",
             "activation_date": "2023-08-12"
+        },
+        "kto55": {
+            "password": "uiop",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-08-15"
         }
     },
     "logged_users": [
+        "user",
         "marcin"
     ]
 }

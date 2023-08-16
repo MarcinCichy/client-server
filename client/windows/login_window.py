@@ -25,6 +25,9 @@ class LoginWindow(BaseWindow, server_communication.ServerCommunication):
         self.window.addstr(2, 2, "Password: ")
         self.window.refresh()
 
+    def clear_line(self, y_poz):
+        self.window.addstr(y_poz, 10, client_data.CLEAR_SPACE_LOGIN_WINDOW)
+
     def get_and_mask_password(self):
         password = ""
         start_column_pos = 12
@@ -49,8 +52,8 @@ class LoginWindow(BaseWindow, server_communication.ServerCommunication):
     def get_credentials(self):
         curses.curs_set(2)
         curses.echo()
-        self.window.addstr(1, 12, " " * (client_data.LOGIN_WIDTH - 14))  # to clear the line after wrong logging
-        self.window.addstr(2, 12, " " * (client_data.LOGIN_WIDTH - 14))  # to clear the line after wrong logging
+        self.clear_line(1)
+        self.clear_line(2)
         self.username = self.window.getstr(1, 12).decode(errors="ignore")
         self.init_window()
         self.password = self.get_and_mask_password()
