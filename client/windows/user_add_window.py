@@ -19,7 +19,6 @@ class UserAddWindow(BaseWindow):
         self.login_window = login_window
         self.middle_window = middle_window
         self.activation_date = datetime.now().strftime("%Y-%m-%d")
-        self.useradd_window_closed = False  # sprawdzic to
 
     def init_window(self):
         self.window.border()
@@ -28,13 +27,16 @@ class UserAddWindow(BaseWindow):
         self.window.addstr(3, 2, "Permissions: ")
         self.window.refresh()
 
+    def clear_line(self, y_poz):
+        self.window.addstr(y_poz, 12, client_data.CLEAR_SPACE_ADDUSER_WINDOW)
+
     def get_new_account_data(self):
         curses.curs_set(2)
         curses.echo()
         self.window.refresh()
-        self.window.addstr(1, 12, " " * (client_data.ADDUSER_WIDTH - 14))
-        self.window.addstr(2, 12, " " * (client_data.ADDUSER_WIDTH - 14))
-        self.window.addstr(3, 12, " " * (client_data.ADDUSER_WIDTH - 14))
+        self.clear_line(1)
+        self.clear_line(2)
+        self.clear_line(3)
         self.new_username = self.window.getstr(1, 15).decode(errors="ignore")
         self.init_window()
         self.new_password = self.window.getstr(2, 15).decode(errors="ignore")
@@ -72,6 +74,4 @@ class UserAddWindow(BaseWindow):
         self.window.keypad(0)
         self.window.timeout(100)
 
-    def close_window(self):
-        self.useradd_window_closed = True
 

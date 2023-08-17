@@ -71,10 +71,19 @@
             "permissions": "user",
             "status": "active",
             "activation_date": "2023-08-15"
+        },
+        "innt_kto": {
+            "password": "hjkl",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-08-17"
+        },
+        "inny_ktos": {
+            "password": "ktos",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-08-17"
         }
     },
-    "logged_users": [
-        "user",
-        "marcin"
-    ]
+    "logged_users": []
 }

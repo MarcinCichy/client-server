@@ -62,7 +62,6 @@ class CommandHandler:
             command = self.comm
             data = None
 
-#  --------------------------------------------------------------------------------------
         if command in self.all_users_commands:
             match command:
                 case "login":

@@ -41,7 +41,7 @@ class BottomWindow(BaseWindow):
             if len(precommand) >= 2:
                 command = {command_type: precommand[1]}
             else:
-                # this is needed, because in "menu.py" if admin permissions are set and data is None,
+                # This is needed, because in "menu.py" if admin permissions are set and data is None,
                 # then command is send without data. So any data is needed.
                 command = {command_type: "_"}
         elif command_type in ("user-perm", "user-stat"):

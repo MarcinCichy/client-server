@@ -22,12 +22,9 @@ class Console:
         self.info_window = InfoWindow(stdscr, self.login_window)
         self.bottom_window = BottomWindow(stdscr, self.login_window)
         self.useradd_window = UserAddWindow(stdscr, self.middle_window, self.login_window)
-        self.new_message_window = NewMessageWindow(stdscr, self.middle_window, self.login_window, self)
-        self.show_message_window = ShowMessageWindow(stdscr, self.middle_window)
-        self.middle_window = MiddleWindow(stdscr, self.bottom_window, self.useradd_window,
-                                          self.new_message_window, self.show_message_window, self.login_window)
-
-        self.command = ''
+        self.new_message_window = NewMessageWindow(stdscr, self.middle_window, self.login_window)
+        self.show_message_window = ShowMessageWindow(stdscr)
+        self.middle_window = MiddleWindow(stdscr, self.bottom_window, self.useradd_window, self.new_message_window, self.show_message_window, self.login_window)
         self.init_curses()
 
     def init_curses(self):
@@ -57,9 +54,7 @@ class Console:
                 self.run()
 
     def init_windows(self):
-        self.stdscr.clear()
-        self.stdscr.border()
-        self.stdscr.refresh()
+        self.reset()
 
         self.header_window.init_window()
         self.middle_window.init_window()

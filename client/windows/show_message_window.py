@@ -4,16 +4,14 @@ import client_data
 
 
 class ShowMessageWindow(BaseWindow):
-    def __init__(self, stdscr, middle_window):
+    def __init__(self, stdscr):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.SHOW_MSG_HEIGHT, client_data.SHOW_MSG_WIDTH, self.maxY // 4,
                                          self.maxX // 4)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.content = ''
         self.date = ''
-        self.show_message_window = False  # sprawdzic to
-        self.middle_window = middle_window
-        self.sender = None
+        self.sender = ''
         self.maxX_SMW = self.window.getmaxyx()[1]
 
     def init_window(self):
@@ -24,8 +22,6 @@ class ShowMessageWindow(BaseWindow):
         self.window.refresh()
 
     def show_selected_message(self, message_content):
-        self.init_window()  # sprawdzić
-
         self.sender = message_content["Message to show"]["sender"]
         self.date = message_content["Message to show"]["date"]
         self.content = message_content["Message to show"]["content"]

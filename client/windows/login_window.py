@@ -25,8 +25,8 @@ class LoginWindow(BaseWindow, server_communication.ServerCommunication):
         self.window.addstr(2, 2, "Password: ")
         self.window.refresh()
 
-    def clear_line(self, y_poz):
-        self.window.addstr(y_poz, 10, client_data.CLEAR_SPACE_LOGIN_WINDOW)
+    def clear_line(self, y_pos):
+        self.window.addstr(y_pos, 10, client_data.CLEAR_SPACE_LOGIN_WINDOW)
 
     def get_and_mask_password(self):
         password = ""
@@ -71,7 +71,10 @@ class LoginWindow(BaseWindow, server_communication.ServerCommunication):
                 }
         }
         server_response = self.send_command(self.command)
+        return server_response
 
+    def login_handler(self):
+        server_response = self.login()
         if "Error" in server_response:
             self.window.attron(curses.color_pair(client_data.ERROR_COLOR_PAIR))
             self.window.addstr(4, 2, server_response['Error'])
@@ -90,4 +93,4 @@ class LoginWindow(BaseWindow, server_communication.ServerCommunication):
         while not self.logged_in:
             self.init_window()
             self.get_credentials()
-            self.login()
+            self.login_handler()

@@ -7,17 +7,16 @@ from .base_window import BaseWindow
 
 
 class NewMessageWindow(BaseWindow):
-    def __init__(self, stdscr, middle_window, login_window, console):
+    def __init__(self, stdscr, middle_window, login_window):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.NEW_MSG_HEIGHT, client_data.NEW_MSG_WIDTH, self.maxY // 4,
                                          self.maxX // 4)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.recipient = ''
         self.content = ''
-        self.date = datetime.now().strftime("%Y-%m-%d")
         self.command = ''
+        self.date = datetime.now().strftime("%Y-%m-%d")
         self.middle_window = middle_window
-        self.console = console
         self.login_window = login_window
         self.message_exceeded = None
 
@@ -36,7 +35,7 @@ class NewMessageWindow(BaseWindow):
 
     def number_of_chars(self):
         count = len(self.content)
-        if count >= 250:
+        if count >= client_data.MAX_MESSAGE_LENGTH:
             self.window.attron(curses.color_pair(client_data.ERROR_COLOR_PAIR))
         else:
             self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
@@ -44,8 +43,6 @@ class NewMessageWindow(BaseWindow):
         self.window.refresh()
 
     def get_new_message(self):
-        self.content = ''
-        self.command = {}
         self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
         curses.curs_set(2)
         curses.echo()
