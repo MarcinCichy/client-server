@@ -1,6 +1,6 @@
 {
     "users": {
-        "user": {
+        "nobody": {
             "password": "pass",
             "permissions": "user",
             "status": "active",
@@ -20,8 +20,8 @@
         },
         "inny": {
             "password": "ktos",
-            "permissions": "user",
-            "status": "active",
+            "permissions": "admin",
+            "status": "banned",
             "activation_date": "2023-06-06"
         },
         "kto": {
@@ -35,55 +35,9 @@
             "permissions": "user",
             "status": "active",
             "activation_date": "2023-06-23"
-        },
-        "kto5": {
-            "password": "zxcv",
-            "permissions": "user",
-            "status": "banned",
-            "activation_date": "2023-06-26"
-        },
-        "ktos-tam": {
-            "password": "uiop",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-07-16"
-        },
-        "kto3": {
-            "password": "asdf",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-08-06"
-        },
-        "kto33": {
-            "password": "asdf",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-08-08"
-        },
-        "kto34": {
-            "password": "asdf",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-08-12"
-        },
-        "kto55": {
-            "password": "uiop",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-08-15"
-        },
-        "innt_kto": {
-            "password": "hjkl",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-08-17"
-        },
-        "inny_ktos": {
-            "password": "ktos",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-08-17"
         }
     },
-    "logged_users": []
+    "logged_users": [
+        "marcin"
+    ]
 }

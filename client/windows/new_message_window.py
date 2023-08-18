@@ -19,15 +19,18 @@ class NewMessageWindow(BaseWindow):
         self.middle_window = middle_window
         self.login_window = login_window
         self.message_exceeded = None
+        self.max_msg_length = None
 
     def init_window(self):
+        self.max_msg_length = client_data.MAX_MESSAGE_LENGTH
+
         self.window.border()
         self.window.refresh()
         self.window.addstr(1, 2, "Recipient: ")
         self.window.refresh()
         self.window.addstr(2, 2, "Content: ")
         self.window.refresh()
-        self.window.addstr(10, client_data.NEW_MSG_WIDTH - 9, f'0/250 ')
+        self.window.addstr(10, client_data.NEW_MSG_WIDTH - 9, f'0/{self.max_msg_length}')
         self.window.refresh()
 
     def clear_line(self, y_poz):
@@ -35,14 +38,16 @@ class NewMessageWindow(BaseWindow):
 
     def number_of_chars(self):
         count = len(self.content)
-        if count >= client_data.MAX_MESSAGE_LENGTH:
+        if count >= 250:
             self.window.attron(curses.color_pair(client_data.ERROR_COLOR_PAIR))
         else:
             self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
-        self.window.addstr(10, client_data.NEW_MSG_WIDTH - 9, f'{count}/{client_data.MAX_MESSAGE_LENGTH} ')
+        self.window.addstr(10, client_data.NEW_MSG_WIDTH - 9, f'{count}/{self.max_msg_length} ')
         self.window.refresh()
 
     def get_new_message(self):
+        self.content = ''
+        self.command = {}
         self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
         curses.curs_set(2)
         curses.echo()
@@ -60,9 +65,9 @@ class NewMessageWindow(BaseWindow):
 
         while True:
             key = self.window.getch()
-            if key == 10:  # Enter KEY
+            if key == 10:  # Enter
                 break
-            elif key == curses.KEY_BACKSPACE or key == ord('\b') or key == ord('\x7f'):  # Backspace KEY
+            elif key == curses.KEY_BACKSPACE or key == ord('\b') or key == ord('\x7f'):  # Backspace
                 if content_x > 15:
                     content_x -= 1
                     self.content = self.content[:-1]
@@ -92,7 +97,7 @@ class NewMessageWindow(BaseWindow):
                 pass
             elif key == curses.KEY_DOWN:
                 pass
-            elif key == curses.KEY_DC:  # DEL KEY
+            elif key == curses.KEY_DC:  # DEL
                 if content_x < client_data.NEW_MSG_WIDTH - 2:
                     self.content = self.content[:content_x - 15] + self.content[content_x - 14:]
                     self.window.delch(content_y, content_x)
@@ -104,13 +109,13 @@ class NewMessageWindow(BaseWindow):
                 self.window.move(content_y, content_x)
             else:
                 char = chr(key)
-                if char.isprintable() and len(self.content) < client_data.MAX_MESSAGE_LENGTH:
+                if char.isprintable() and len(self.content) < self.max_msg_length:
                     if content_x == client_data.NEW_MSG_WIDTH - 3:
                         if content_y < client_data.NEW_MSG_HEIGHT - 1:
                             content_y += 1
                             content_x = 15
                     self.content += char
-                    if len(self.content) >= client_data.MAX_MESSAGE_LENGTH:
+                    if len(self.content) >= self.max_msg_length:
                         self.window.move(content_y, content_x)
                     self.window.addch(content_y, content_x, char)
                     content_x += 1
@@ -118,7 +123,7 @@ class NewMessageWindow(BaseWindow):
                 self.number_of_chars()
                 self.window.move(content_y, content_x)
                 self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
-                if len(self.content) >= client_data.MAX_MESSAGE_LENGTH:
+                if len(self.content) >= self.max_msg_length:
                     self.message_exceeded = True
                 else:
                     self.message_exceeded = False
@@ -147,7 +152,6 @@ class NewMessageWindow(BaseWindow):
 
         self.init_window()
         self.get_new_message()
-
         curses.noecho()
         curses.curs_set(0)
         self.window.keypad(0)
