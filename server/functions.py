@@ -29,6 +29,10 @@ class SystemUtilities:
 
     @staticmethod
     def help(permissions):
+        first_help_line = {
+            "line1": "line",
+            "Commands for All": ""
+        }
         user_help_dict = {
             "uptime": "returns the server's live time",
             "info": "returns the version number of the server and the date it was created",
@@ -40,8 +44,9 @@ class SystemUtilities:
             "msg-del [number of message]": "to delete selected message",
             "msg-show [number of message]": "to show details of message (from, date, content)"
         }
-        user_help_dict_line = {
-            "line": ""
+        second_help_dict_line = {
+            "line2": "line",
+            "Commands for Admin only": ""
         }
         admin_help_dict = {
             "stop": "stops both the server and the client",
@@ -54,9 +59,10 @@ class SystemUtilities:
         }
 
         if "user" in permissions:
+            user_help_dict = {**first_help_line, **user_help_dict}
             help_json = json.dumps(user_help_dict)
         elif "admin" in permissions:
-            help_dict = {**user_help_dict, **user_help_dict_line, **admin_help_dict}
+            help_dict = {**first_help_line, **user_help_dict, **second_help_dict_line, **admin_help_dict}
             help_json = json.dumps(help_dict)
         else:
             help_json = json.dumps(server_response.E_WRONG_PERMISSIONS)

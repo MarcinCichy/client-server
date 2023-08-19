@@ -10,6 +10,11 @@
                 "sender": "marcin",
                 "date": "2023-08-17",
                 "content": "Po co do mniepiszesz? piszesz?"
+            },
+            "3": {
+                "sender": "marcin",
+                "date": "2023-08-19",
+                "content": "A tys co za jeden?"
             }
         },
         "administrator": {
@@ -37,18 +42,23 @@
             },
             "2": {
                 "sender": "inny",
-                "date": "2023-07-16",
-                "content": "inny pise tez"
-            },
-            "3": {
-                "sender": "user",
-                "date": "2023-08-08",
-                "content": "TO znowu ja pisze do Ciebie."
-            },
-            "4": {
-                "sender": "inny",
                 "date": "2023-08-12",
                 "content": "Ja ju\u017c mam pe\u0142nazynke. I co mam dlalej z tym zro zrobc? Jk tak dalej bedzie, to nikt nic do mnienie napisze. Daj znac co moge zrobic z ta skrzyna! Blallallslsld ldldld dlvfdvjorfv ofvjofev ojefvo eefovj oefvjoef vfo jeofv jpf jwf2002irv f i0fvfvgevbg"
+            },
+            "3": {
+                "sender": "inny",
+                "date": "2023-08-19",
+                "content": "Pisze nowa wiadomosc."
+            },
+            "4": {
+                "sender": "nobody",
+                "date": "2023-08-19",
+                "content": "Hej! Adminku! Co robisz?"
+            },
+            "5": {
+                "sender": "marcin",
+                "date": "2023-08-19",
+                "content": "Pisze sam do siebie."
             }
         },
         "inny": {
@@ -74,8 +84,8 @@
             },
             "5": {
                 "sender": "marcin",
-                "date": "2023-08-03",
-                "content": "co tam robisz?"
+                "date": "2023-08-19",
+                "content": "ihvf vu0urhv0urh 2 hv023rty g0mr hv0t4rm0 jyvt8u,yk64 y\u0113856umy,j hm68,kyu8 6mhu\u01135ykmh u\u0113 5 u86um 86 8y5mu8 6m8\u011256 uy83t6 y26 \u011356 yh05i8 0y mh05 6tji5yhp39w thpmiwrtyp htytj8h 89tywh 9w-th -9tuh u89tyw h9-wtyh j9ty h9-tyh9t5y h9tuh j29uth =9wthu  gwrt"
             }
         },
         "kto": {
@@ -105,32 +115,6 @@
                 "content": "g 3ry35ht1h h53y1hgte"
             }
         },
-        "kto2": {
-            "1": {
-                "sender": "marcin",
-                "date": "2023-07-01",
-                "content": "egfr fg efg qea"
-            },
-            "2": {
-                "sender": "marcin",
-                "date": "2023-08-08",
-                "content": "A tys co za jeden?"
-            },
-            "3": {
-                "sender": "marcin",
-                "date": "2023-08-11",
-                "content": "juibbuo"
-            },
-            "4": {
-                "sender": "marcin",
-                "date": "2023-08-18",
-                "content": "jnjfv fkne fklefnglqefn blfng lqfblqkfn blkqkfbnqlgfb ldfk bqlfbldkfnlqfb lkdbnldfbnapbk24t kbnqbpqkrb nqp bfkpqrg1p5kgnqpkrtg1\u01b0rk gnpqrg1rgnpqgkp145gkrnpqrgnprg npr g\u01aeqren gqer gnergnpre g\u01aet\u01ae\u01abg neqr gqergnqpergqerngprngqrgqenrgqerngjtegng oejgttbttb"
-            },
-            "5": {
-                "sender": "marcin",
-                "date": "2023-08-18",
-                "content": "Co u Ciebie s\u0142ychc?A co u Ciebie? vbwgb  wgrb wrgbwrolgj bpwrtjbgptr,u0 tibgj wprtigtr bkwrgbh wtr0brw ktbprgtijt bgptwrihg0wpt bnfb pjw0trh jbpjwrh bqjbjq0p qefbnqf0kbkqfnb pqefb iqfbpqifb 0q bnqetbi0 q0b nqpe0b qeb n0qpe bqeb0qnb qpbn0q bqebnqigggg"
-            }
-        }
+        "kto22": {}
     }
 }

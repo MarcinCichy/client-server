@@ -61,7 +61,7 @@ class MiddleWindow(BaseWindow):
             row = 2
 
         for response_keyword, response_content in sentence.items():
-            if response_keyword == "line":
+            if response_content == "line":
                 self.window.hline(client_data.START_POINT + row, 10, 0, self.maxX)
                 row += 1
             else:

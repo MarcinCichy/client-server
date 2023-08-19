@@ -20,8 +20,8 @@
         },
         "inny": {
             "password": "ktos",
-            "permissions": "admin",
-            "status": "banned",
+            "permissions": "user",
+            "status": "active",
             "activation_date": "2023-06-06"
         },
         "kto": {
@@ -30,14 +30,12 @@
             "status": "active",
             "activation_date": "2023-07-06"
         },
-        "kto2": {
-            "password": "ktos",
+        "kto22": {
+            "password": "12345",
             "permissions": "user",
             "status": "active",
-            "activation_date": "2023-06-23"
+            "activation_date": "2023-08-19"
         }
     },
-    "logged_users": [
-        "marcin"
-    ]
+    "logged_users": []
 }
