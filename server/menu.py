@@ -104,10 +104,8 @@ class CommandHandler:
         print(f'EXIT USERNAME = {self.username}')
         print(f'EXIT PERMISSIONS: {self.permissions}')
         print(f'EXIT DATA = {data}')
-        if isinstance(result, dict):
-            return json.dumps(result)
-        else:
-            return result
+
+        return json.dumps(result)
 
 
 database_support = DatabaseSupport()

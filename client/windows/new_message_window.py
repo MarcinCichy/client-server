@@ -138,6 +138,7 @@ class NewMessageWindow(BaseWindow):
                 )
             }
         }
+
         self.window.erase()
         self.window.refresh()
         curses.noecho()

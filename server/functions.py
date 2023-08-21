@@ -21,11 +21,11 @@ class SystemUtilities:
     def uptime():
         now = datetime.now()
         live_time = now - server_data.START_TIME
-        return json.dumps({"uptime": str(live_time).split(".")[0]})
+        return {"uptime": str(live_time).split(".")[0]}
 
     @staticmethod
     def info():
-        return json.dumps({"version": server_data.VERSION, "start_at": str(server_data.DATE)})
+        return {"version": server_data.VERSION, "start_at": str(server_data.DATE)}
 
     @staticmethod
     def help(permissions):
@@ -60,23 +60,23 @@ class SystemUtilities:
 
         if "user" in permissions:
             user_help_dict = {**first_help_line, **user_help_dict}
-            help_json = json.dumps(user_help_dict)
+            help_content = user_help_dict
         elif "admin" in permissions:
             help_dict = {**first_help_line, **user_help_dict, **second_help_dict_line, **admin_help_dict}
-            help_json = json.dumps(help_dict)
+            help_content = help_dict
         else:
-            help_json = json.dumps(server_response.E_WRONG_PERMISSIONS)
+            help_content = server_response.E_WRONG_PERMISSIONS
 
-        return help_json
+        return help_content
 
     @staticmethod
     def unrecognised_command():
-        return json.dumps(server_response.UNRECOGNISED_COMMAND)
+        return server_response.UNRECOGNISED_COMMAND
 
     @staticmethod
     def stop():
-        return json.dumps(server_response.CONNECTION_CLOSE)
+        return server_response.CONNECTION_CLOSE
 
     @staticmethod
     def clear():
-        return json.dumps({"Clear": ""})
+        return {"Clear": ""}

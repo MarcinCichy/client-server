@@ -21,7 +21,7 @@
         "inny": {
             "password": "ktos",
             "permissions": "user",
-            "status": "active",
+            "status": "banned",
             "activation_date": "2023-06-06"
         },
         "kto": {
@@ -29,13 +29,9 @@
             "permissions": "admin",
             "status": "active",
             "activation_date": "2023-07-06"
-        },
-        "kto22": {
-            "password": "12345",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-08-19"
         }
     },
-    "logged_users": []
+    "logged_users": [
+        "marcin"
+    ]
 }

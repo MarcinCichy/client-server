@@ -1,5 +1,3 @@
-import json
-
 import server_data
 import server_response
 from database_support import DatabaseSupport
@@ -31,13 +29,13 @@ class UserAuthentication(DatabaseSupport):
                 db_users['logged_users'].remove(login_username)
             db_users['logged_users'].append(login_username)
             self.database_support.save_db_json(db_users, server_data.USERS_DATABASE)
-            return json.dumps({"Login": "OK", "login_username": login_username, "user_permissions": user_data['permissions']})
+            return {"Login": "OK", "login_username": login_username, "user_permissions": user_data['permissions']}
         elif user_data is not None and user_data['status'] == "banned":
             print(f'Access denied to {login_username}, user banned')
-            return json.dumps(server_response.E_USER_IS_BANNED)
+            return server_response.E_USER_IS_BANNED
         else:
             print(f'Access denied to {login_username}')
-            return json.dumps(server_response.E_INVALID_CREDENTIALS)
+            return server_response.E_INVALID_CREDENTIALS
 
     @handle_db_file_error
     def logout(self, logout_data):
@@ -47,7 +45,7 @@ class UserAuthentication(DatabaseSupport):
             db_users['logged_users'].remove(logout_data)
             self.database_support.save_db_json(db_users, server_data.USERS_DATABASE)
             print(f'{logout_data} is logged out')
-            return json.dumps({"Logout": "Successful"})
+            return {"Logout": "Successful"}
         else:
             pass
 

@@ -42,6 +42,7 @@ class UserAddWindow(BaseWindow):
         self.new_password = self.window.getstr(2, 15).decode(errors="ignore")
         self.init_window()
         self.new_permissions = self.window.getstr(3, 15).decode(errors="ignore")
+
         self.command = {
             self.login_window.login_username:
                 {
@@ -54,6 +55,7 @@ class UserAddWindow(BaseWindow):
                     )
                 }
         }
+
         self.window.erase()
         self.window.refresh()
         curses.noecho()

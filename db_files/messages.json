@@ -54,11 +54,6 @@
                 "sender": "nobody",
                 "date": "2023-08-19",
                 "content": "Hej! Adminku! Co robisz?"
-            },
-            "5": {
-                "sender": "marcin",
-                "date": "2023-08-19",
-                "content": "Pisze sam do siebie."
             }
         },
         "inny": {
@@ -114,7 +109,6 @@
                 "date": "2023-07-06",
                 "content": "g 3ry35ht1h h53y1hgte"
             }
-        },
-        "kto22": {}
+        }
     }
 }

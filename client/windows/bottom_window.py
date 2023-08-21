@@ -25,7 +25,10 @@ class BottomWindow(BaseWindow):
         curses.curs_set(2)
         curses.echo()
         command = self.window.getstr().decode(errors="ignore")
+        command_to_server = self.command_handler(command)
+        return command_to_server
 
+    def command_handler(self, command):
         precommand = command.split()
         if len(precommand) == 0:
             command_type = None
@@ -56,5 +59,5 @@ class BottomWindow(BaseWindow):
             command = command_type
         self.window.move(1, 19)
         self.window.clrtoeol()
-        self.command = {self.login_window.login_username: command}
-        return self.command
+        command = {self.login_window.login_username: command}
+        return command

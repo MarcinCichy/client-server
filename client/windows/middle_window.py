@@ -81,7 +81,9 @@ class MiddleWindow(BaseWindow):
 
     def send_command_to_server_and_receive(self, command):
         server_response = server_communication.ServerCommunication.send_command(command)
+        self.server_response_handler(server_response)
 
+    def server_response_handler(self, server_response):
         if "Error" in server_response:
             self.clear_previous_messages()
             self.window.attron(curses.color_pair(client_data.ERROR_COLOR_PAIR))
