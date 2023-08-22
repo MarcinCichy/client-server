@@ -23,8 +23,8 @@ class Server:
                 with conn:
                     print(f"Connected by {addr}")
                     command = conn.recv(self.srv_buff)
-                    com = self.decode_received_data(command)
-                    result = menu.handler.use_command(com)
+                    com = self.json_decode_received_data(command)
+                    result = self.json_serialize_response(menu.handler.use_command(com))
                     conn.sendall(result.encode(server_data.ENCODE_FORMAT))
 
                     if "Connection" in result:
@@ -33,17 +33,18 @@ class Server:
                             break
 
     @staticmethod
-    def decode_received_data(received_data):
-        if received_data is None:
-            SystemUtilities.unrecognised_command()
-        else:
-            decoded_data = json.loads(received_data)
-            if 'login' in decoded_data['command']:
-                print(f"Command received from Client: login")  # to hide showing login and password
-                return decoded_data["command"]
-            else:
-                print(f"Command received from Client: {decoded_data['command']}")
+    def json_decode_received_data(received_data):
+        decoded_data = json.loads(received_data)
+        if 'login' in decoded_data['command']:
+            print(f"Command received from Client: login")  # to hide showing login and password
             return decoded_data["command"]
+        else:
+            print(f"Command received from Client: {decoded_data['command']}")
+        return decoded_data["command"]
+
+    @staticmethod
+    def json_serialize_response(response):
+        return json.dumps(response)
 
 
 def start():

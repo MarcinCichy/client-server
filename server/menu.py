@@ -98,14 +98,15 @@ class CommandHandler:
             else:
                 result = server_response.E_COMMAND_UNAVAILABLE
         else:
-            result = SystemUtilities.unrecognised_command()
+            result = server_response.UNRECOGNISED_COMMAND
 
         print(f'Server response: {result}')
         print(f'EXIT USERNAME = {self.username}')
         print(f'EXIT PERMISSIONS: {self.permissions}')
         print(f'EXIT DATA = {data}')
 
-        return json.dumps(result)
+        # return json.dumps(result)
+        return result
 
 
 database_support = DatabaseSupport()

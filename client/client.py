@@ -18,7 +18,7 @@ class Client:
                     in_comm = self.input_command(sentence)
                     s.sendall(in_comm)
                     data = s.recv(self.srv_buff)
-                    decoded_data = self.decode_received_data(data)
+                    decoded_data = self.json_decode_received_data(data)
                     if decoded_data.values() == client_data.CLOSE:
                         break
                     else:
@@ -27,17 +27,17 @@ class Client:
                 return {"Error": "Unable to connect to server."}
 
     def input_command(self, command):
-        encoded_command = self.serialize_command(command).encode(client_data.ENCODE_FORMAT)
+        encoded_command = self.json_serialize_command(command).encode(client_data.ENCODE_FORMAT)
         return encoded_command
 
     @staticmethod
-    def serialize_command(comm):
+    def json_serialize_command(comm):
         comm_dict = {"command": comm}
         comm_json = json.dumps(comm_dict)
         return comm_json
 
     @staticmethod
-    def decode_received_data(data):
+    def json_decode_received_data(data):
         decoded_data = json.loads(data)
         return decoded_data
 

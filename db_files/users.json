@@ -32,6 +32,7 @@
         }
     },
     "logged_users": [
+        "nobody",
         "marcin"
     ]
 }

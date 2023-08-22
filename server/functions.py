@@ -70,10 +70,6 @@ class SystemUtilities:
         return help_content
 
     @staticmethod
-    def unrecognised_command():
-        return server_response.UNRECOGNISED_COMMAND
-
-    @staticmethod
     def stop():
         return server_response.CONNECTION_CLOSE
 
