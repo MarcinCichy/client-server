@@ -42,8 +42,8 @@ class Client:
         return decoded_data
 
 
-def start(sent):
+def start(sentence):
     client = Client(client_data.HOST, client_data.PORT, client_data.BUFFER_SIZE)
-    transmit = client.client_connection(sent)
+    transmit = client.client_connection(sentence)
     return transmit
 

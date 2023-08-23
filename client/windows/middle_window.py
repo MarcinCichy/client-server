@@ -4,6 +4,7 @@ import client_data
 import server_communication
 
 from .base_window import BaseWindow
+from handlers import Handlers
 
 
 class MiddleWindow(BaseWindow):
@@ -21,6 +22,7 @@ class MiddleWindow(BaseWindow):
         self.maxY = self.window.getmaxyx()[0]
         self.maxX = self.window.getmaxyx()[1]
         self.console = None
+        self.handler = Handlers(self)
 
     def init_window(self):
         self.window.addstr(1, 2, "Server response: ")
@@ -81,38 +83,7 @@ class MiddleWindow(BaseWindow):
 
     def send_command_to_server_and_receive(self, command):
         server_response = server_communication.ServerCommunication.send_command(command)
-        self.server_response_handler(server_response)
-
-    def server_response_handler(self, server_response):
-        if "Error" in server_response:
-            self.clear_previous_messages()
-            self.window.attron(curses.color_pair(client_data.ERROR_COLOR_PAIR))
-            self.show_sign_by_sign(server_response)
-            self.window.attroff(curses.color_pair(client_data.ERROR_COLOR_PAIR))
-            self.window.refresh()
-        elif "User-add" in server_response:
-            self.clear_previous_messages()
-            self.useradd_window.init_window()
-            self.useradd_window.show()
-            self.init_window()
-        elif "Msg-snd" in server_response:
-            self.clear_previous_messages()
-            self.new_message_window.init_window()
-            self.new_message_window.show()
-            self.init_window()
-        elif "Message to show" in server_response:
-            self.clear_previous_messages()
-            self.show_message_window.init_window()
-            self.show_message_window.show_selected_message(server_response)
-            self.init_window()
-        elif "Logout" in server_response:
-            self.login_window.logged_in = False
-            self.login_window.logged_username = ''
-        elif "Clear" in server_response:
-            self.clear_previous_messages()
-        else:
-            self.clear_previous_messages()
-            self.show_sign_by_sign(server_response)
+        self.handler.server_response_handler(server_response)
         self.previous_message = server_response
 
     def get_command(self):

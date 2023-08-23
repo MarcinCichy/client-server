@@ -3,6 +3,7 @@ import curses
 import client_data
 
 from .base_window import BaseWindow
+from handlers import Handlers
 
 
 class BottomWindow(BaseWindow):
@@ -12,6 +13,7 @@ class BottomWindow(BaseWindow):
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.login_window = login_window
         self.command = ''
+        # self.command_handler = self.command_handler
 
     def init_window(self):
         self.window.hline(0, 1, 0, self.maxX)
@@ -25,39 +27,7 @@ class BottomWindow(BaseWindow):
         curses.curs_set(2)
         curses.echo()
         command = self.window.getstr().decode(errors="ignore")
-        command_to_server = self.command_handler(command)
-        return command_to_server
-
-    def command_handler(self, command):
-        precommand = command.split()
-        if len(precommand) == 0:
-            command_type = None
-        else:
-            command_type = precommand[0]
-
-        if command_type in ("user-del", "msg-del", "msg-show"):
-            if len(precommand) >= 2:
-                command = {command_type: precommand[1]}
-            else:
-                command = {command_type: None}
-        elif command_type == "user-info":
-            if len(precommand) >= 2:
-                command = {command_type: precommand[1]}
-            else:
-                # This is needed, because in "menu.py" if admin permissions are set and data is None,
-                # then command is send without data. So any data is needed.
-                command = {command_type: "_"}
-        elif command_type in ("user-perm", "user-stat"):
-            if len(precommand) >= 3:
-                command = {command_type: {precommand[1]: precommand[2]}}
-            elif len(precommand) >= 2:
-                command = {command_type: {precommand[1]: None}}
-            else:
-                command = {command_type: {None: None}}
-        elif len(precommand) == 1:
-            command_type = precommand[0]
-            command = command_type
+        command_to_server = Handlers.command_handler(command, self.login_window.login_username)
         self.window.move(1, 19)
         self.window.clrtoeol()
-        command = {self.login_window.login_username: command}
-        return command
+        return command_to_server

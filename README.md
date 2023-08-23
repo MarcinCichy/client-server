@@ -23,7 +23,7 @@
     If the User has administrator rights, he can also create a new account, delete an existing one, 
     change the status of another user (active or blocked), he can also change user rights (admin or user).
 
-    Run server.py and run gui.py.
+    Run server.py and run main_gui.py.
 
 
     Below is a complete list of commands that can be used depending on your permissions (admin/user).    

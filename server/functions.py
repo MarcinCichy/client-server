@@ -69,6 +69,8 @@ class SystemUtilities:
 
         return help_content
 
+
+# sprawdzic cczy ponizsze funkcje musza istnieć
     @staticmethod
     def stop():
         return server_response.CONNECTION_CLOSE
