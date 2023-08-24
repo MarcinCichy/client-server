@@ -1,12 +1,12 @@
 import curses
 
 import client_data
-import server_communication
+from server_communication import ServerCommunication
 
 from .base_window import BaseWindow
 
 
-class InfoWindow(BaseWindow, server_communication.ServerCommunication):
+class InfoWindow(BaseWindow):
     def __init__(self, stdscr, login_window):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.INFO_HEIGHT, client_data.INFO_WIDTH, 3, self.maxX - 50)
@@ -21,19 +21,19 @@ class InfoWindow(BaseWindow, server_communication.ServerCommunication):
 
     def show_server_info(self):
         command = {"command": ""}
-        check_connection = self.send_command(command)
+        check_connection = ServerCommunication.send_command(command)
         if "Error" not in check_connection.keys():
             self.window.refresh()
             self.clear_line(1)
 
             command = {self.login_window.login_username: "info"}
-            server_resp = self.send_command(command)
+            server_resp = ServerCommunication.send_command(command)
             self.window.addstr(1, 2, f'Version: {server_resp["version"]}')
             self.clear_line(2)
             self.window.addstr(2, 2, f'Start at: {server_resp["start_at"]}')
             self.clear_line(3)
             command = {self.login_window.login_username: "uptime"}
-            self.window.addstr(3, 2, f'Uptime: {self.send_command(command)["uptime"]}')
+            self.window.addstr(3, 2, f'Uptime: {ServerCommunication.send_command(command)["uptime"]}')
             self.clear_line(4)
             self.window.addstr(4, 1, f' Logged: {self.login_window.login_username}')
             self.clear_line(5)
@@ -42,7 +42,7 @@ class InfoWindow(BaseWindow, server_communication.ServerCommunication):
             self.window.refresh()
 
             command = {self.login_window.login_username: {"msg_count": ""}}
-            server_response = self.send_command(command)
+            server_response = ServerCommunication.send_command(command)
 
             if "Error" in server_response:
                 inbox_msg_count = server_response['Error']

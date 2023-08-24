@@ -24,17 +24,17 @@ class MessageManagement(DatabaseSupport):
 
         if recipient["recipient"] not in db_msgs["messages"].keys():
             return server_response.E_RECIPIENT_DOES_NOT_EXIST
-        elif len(db_msgs["messages"][username]) == 5:
+        elif len(db_msgs["messages"][username]) == server_data.MAX_MSG_IN_INBOX:
             return server_response.E_RECIPIENT_INBOX_IS_FULL
         else:
             inbox_msg_count = len(db_msgs["messages"][username])
             inbox_msg_count += 1
-            new_tem_dict = {
+            new_temp_dict = {
                 **sender,
                 **date,
                 **content
             }
-            db_msgs["messages"][username][inbox_msg_count] = new_tem_dict
+            db_msgs["messages"][username][inbox_msg_count] = new_temp_dict
             self.database_support.save_db_json(db_msgs, server_data.MESSAGES_DATABASE)
             return server_response.MESSAGE_WAS_SENT
 

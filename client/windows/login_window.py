@@ -1,12 +1,11 @@
 import curses
 
 import client_data
-import server_communication
-
+from server_communication import ServerCommunication
 from .base_window import BaseWindow
+from .handlers import Handlers
 
-
-class LoginWindow(BaseWindow, server_communication.ServerCommunication):
+class LoginWindow(BaseWindow):
     def __init__(self, stdscr, middle_window):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.LOGIN_HEIGHT, client_data.LOGIN_WIDTH, self.maxY // 4, self.maxX // 4)
@@ -18,6 +17,7 @@ class LoginWindow(BaseWindow, server_communication.ServerCommunication):
         self.login_permissions = ''
         self.logged_in = False
         self.middle_window = middle_window
+        self.handler = Handlers(self)
 
     def init_window(self):
         self.window.border()
@@ -70,27 +70,12 @@ class LoginWindow(BaseWindow, server_communication.ServerCommunication):
                     )
                 }
         }
-        server_response = self.send_command(self.command)
+        server_response = ServerCommunication.send_command(self.command)
         return server_response
-
-    def login_handler(self):
-        server_response = self.login()
-        if "Error" in server_response:
-            self.window.attron(curses.color_pair(client_data.ERROR_COLOR_PAIR))
-            self.window.addstr(4, 2, server_response['Error'])
-            self.window.clrtoeol()
-            self.window.attroff(curses.color_pair(client_data.ERROR_COLOR_PAIR))
-            self.window.refresh()
-
-        elif 'Login' in server_response:
-            if server_response['Login'] == "OK":
-                self.logged_in = True
-                self.login_username = server_response['login_username']
-                self.login_permissions = server_response['user_permissions']
-                self.window.refresh()
 
     def show(self):
         while not self.logged_in:
             self.init_window()
             self.get_credentials()
-            self.login_handler()
+            response = self.login()
+            self.handler.login_handler(response)

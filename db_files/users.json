@@ -30,8 +30,8 @@
             "status": "active",
             "activation_date": "2023-07-06"
         },
-        "oto": {
-            "password": "toto",
+        "otto": {
+            "password": "hjkl",
             "permissions": "user",
             "status": "active",
             "activation_date": "2023-08-24"

@@ -38,9 +38,9 @@ class UserAddWindow(BaseWindow):
         self.clear_line(2)
         self.clear_line(3)
         self.new_username = self.window.getstr(1, 15).decode(errors="ignore")
-        self.init_window()
+        self.init_window()  # this line is needed to preserve window borders at right side
         self.new_password = self.window.getstr(2, 15).decode(errors="ignore")
-        self.init_window()
+        self.init_window()  # this line is needed to preserve window borders at right side
         self.new_permissions = self.window.getstr(3, 15).decode(errors="ignore")
 
         self.command = {
@@ -59,7 +59,8 @@ class UserAddWindow(BaseWindow):
         self.window.erase()
         self.window.refresh()
         curses.noecho()
-        self.middle_window.send_command_to_server_and_receive(self.command)
+
+        self.middle_window.send_receive_command_and_show_respond(self.command)
 
     def show(self):
         self.init_window()

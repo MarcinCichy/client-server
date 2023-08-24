@@ -105,7 +105,6 @@ class CommandHandler:
         print(f'EXIT PERMISSIONS: {self.permissions}')
         print(f'EXIT DATA = {data}')
 
-        # return json.dumps(result)
         return result
 
 

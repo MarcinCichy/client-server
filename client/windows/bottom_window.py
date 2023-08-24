@@ -3,7 +3,7 @@ import curses
 import client_data
 
 from .base_window import BaseWindow
-from handlers import Handlers
+from .handlers import Handlers
 
 
 class BottomWindow(BaseWindow):
@@ -13,21 +13,19 @@ class BottomWindow(BaseWindow):
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.login_window = login_window
         self.command = ''
-        # self.command_handler = self.command_handler
 
     def init_window(self):
         self.window.hline(0, 1, 0, self.maxX)
-        self.window.addstr(1, 2, "Enter a command: ")
+        self.window.addstr(1, 2, client_data.PROMPT)
         self.window.refresh()
 
     def get_command(self):
-        """
-            Get input from the user
-        """
         curses.curs_set(2)
         curses.echo()
         command = self.window.getstr().decode(errors="ignore")
+
         command_to_server = Handlers.command_handler(command, self.login_window.login_username)
+
         self.window.move(1, 19)
         self.window.clrtoeol()
         return command_to_server

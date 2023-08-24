@@ -19,6 +19,7 @@ MESSAGES_DATABASE = os.path.join(DB_FILES_DIRECTORY, 'messages.json')
 # ----------------------------------------------------
 
 CLOSE = "close"
+MAX_MSG_IN_INBOX = 5
 
 # ----------------------------------------------------
 

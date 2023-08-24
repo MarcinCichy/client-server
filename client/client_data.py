@@ -18,8 +18,10 @@ CLOSE = "close"
 # --------------- CONSOLE CONFIGURATION --------------
 
 CONSOLE_TITLE = 'Client Server System'
+PROMPT = "Enter a command: "
 START_POINT = 2
 MAX_MESSAGE_LENGTH = 250
+
 
 # Color scheme
 COLOR_PAIR = 1

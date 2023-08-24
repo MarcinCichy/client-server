@@ -4,7 +4,7 @@ import client_data
 import server_communication
 
 from .base_window import BaseWindow
-from handlers import Handlers
+from .handlers import Handlers
 
 
 class MiddleWindow(BaseWindow):
@@ -81,10 +81,8 @@ class MiddleWindow(BaseWindow):
                 row += 1
                 column = 0
 
-    def send_command_to_server_and_receive(self, command):
+    def send_receive_command_and_show_respond(self, command):
         server_response = server_communication.ServerCommunication.send_command(command)
         self.handler.server_response_handler(server_response)
         self.previous_message = server_response
 
-    def get_command(self):
-        return self.bottom_window.get_command()
