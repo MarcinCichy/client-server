@@ -24,11 +24,14 @@ class UserAuthentication(DatabaseSupport):
         user_data = self.get_user_data(login_username)
         if user_data is not None and user_data['status'] == "active" and user_data['password'] == login_password:
             print(f'Access granted to {login_username}')
-            db_users = self.database_support.read_db_json(server_data.USERS_DATABASE)
-            if login_username in db_users['logged_users']:
-                db_users['logged_users'].remove(login_username)
-            db_users['logged_users'].append(login_username)
-            self.database_support.save_db_json(db_users, server_data.USERS_DATABASE)
+            #  these three lines below are needed to prevent multiplication of the username added to the key logged_user
+            #  in case the connection with the server is lost and re-established or the client-side application
+            #  stops working and will be restarted
+            user_logged = self.database_support.read_db_json(server_data.USERS_DATABASE)
+            if login_username in user_logged['logged_users']:
+                user_logged['logged_users'].remove(login_username)
+            user_logged['logged_users'].append(login_username)
+            self.database_support.save_db_json(user_logged, server_data.USERS_DATABASE)
             return {"Login": "OK", "login_username": login_username, "user_permissions": user_data['permissions']}
         elif user_data is not None and user_data['status'] == "banned":
             print(f'Access denied to {login_username}, user banned')
