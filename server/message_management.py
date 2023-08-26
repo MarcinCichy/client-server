@@ -1,5 +1,4 @@
 from database_support import DatabaseSupport
-from database_support import handle_db_file_error
 import server_response
 import server_data
 
@@ -12,7 +11,6 @@ class MessageManagement(DatabaseSupport):
     def msg_snd():
         return {'Msg-snd': "OK"}
 
-    @handle_db_file_error
     def new_message(self, data):
         db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
 
@@ -38,7 +36,6 @@ class MessageManagement(DatabaseSupport):
             self.database_support.save_db_json(db_msgs, server_data.MESSAGES_DATABASE)
             return server_response.MESSAGE_WAS_SENT
 
-    @handle_db_file_error
     def msg_list(self, username):  # to show all messages in box in middle window show all msgs in box
         db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
         all_inbox_msgs = db_msgs['messages'][username]
@@ -49,7 +46,6 @@ class MessageManagement(DatabaseSupport):
                 msg_list_dict[message_number] = {'sender': message_data['sender'], 'date': message_data['date']}
         return {"msg": msg_list_dict}
 
-    @handle_db_file_error
     def msg_del(self, data):  # to delete selected message
         db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
         for username, msg_num in data.items():
@@ -67,7 +63,6 @@ class MessageManagement(DatabaseSupport):
             else:
                 return server_response.E_MESSAGE_NOT_FOUND
 
-    @handle_db_file_error
     def msg_show(self, data):  # to show selected message
         db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
         for username, msg_num in data.items():
@@ -77,7 +72,6 @@ class MessageManagement(DatabaseSupport):
             else:
                 return server_response.E_MESSAGE_NOT_FOUND
 
-    @handle_db_file_error
     def msg_count(self, username):  # to count all messages in box
         db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
         inbox_msg_count = len(db_msgs["messages"][username])

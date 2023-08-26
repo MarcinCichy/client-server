@@ -1,14 +1,12 @@
 import server_data
 import server_response
 from database_support import DatabaseSupport
-from database_support import handle_db_file_error
 
 
 class UserAuthentication(DatabaseSupport):
     def __init__(self, database_support):
         self.database_support = database_support
 
-    @handle_db_file_error
     def get_user_data(self, login_username):
         db_users = self.database_support.read_db_json(server_data.USERS_DATABASE)
         if login_username in db_users["users"]:
@@ -16,7 +14,6 @@ class UserAuthentication(DatabaseSupport):
         else:
             return None
 
-    @handle_db_file_error
     def login(self, login_data):
         login_username = login_data[0]['username']
         login_password = login_data[1]['password']
@@ -40,7 +37,6 @@ class UserAuthentication(DatabaseSupport):
             print(f'Access denied to {login_username}')
             return server_response.E_INVALID_CREDENTIALS
 
-    @handle_db_file_error
     def logout(self, logout_data):
         db_users = self.database_support.read_db_json(server_data.USERS_DATABASE)
 
@@ -52,7 +48,6 @@ class UserAuthentication(DatabaseSupport):
         else:
             pass
 
-    @handle_db_file_error
     def get_permissions(self, username):
         user_data = self.get_user_data(username)
         if user_data is not None:

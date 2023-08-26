@@ -1,4 +1,3 @@
-import json
 from database_support import DatabaseSupport
 from functions import SystemUtilities
 from message_management import MessageManagement

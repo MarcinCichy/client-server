@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 from os import name, system
 
@@ -68,7 +67,6 @@ class SystemUtilities:
             help_content = server_response.E_WRONG_PERMISSIONS
 
         return help_content
-
 
 # sprawdzic cczy ponizsze funkcje musza istnieć
     @staticmethod
