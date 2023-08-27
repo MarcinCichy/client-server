@@ -13,7 +13,6 @@ class CommandHandler:
         self.permissions = ""
         self.database_support = database_support
         self.user_auth = UserAuthentication(self.database_support)
-        self.permissions = self.user_auth.get_permissions(self.username)
         self.user_management = UserManagement(self.database_support)
         self.message_management = MessageManagement(self.database_support)
 
@@ -44,9 +43,11 @@ class CommandHandler:
 
     def use_command(self, entrance_comm):
         if isinstance(entrance_comm, dict):
+
             # Extract the first key, which is the username submitted
             self.username = next(iter(entrance_comm))
             # Based on this username, create a new dictionary with the command
+            print(f'MENU username = {self.username}')
             self.comm = entrance_comm.pop(self.username)
             self.permissions = self.user_auth.get_permissions(self.username)
             print(f'NEW_COMMAND  = {self.comm}')

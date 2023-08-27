@@ -9,10 +9,14 @@ class UserAuthentication(DatabaseSupport):
 
     def get_user_data(self, login_username):
         db_users = self.database_support.read_db_json(server_data.USERS_DATABASE)
-        if login_username in db_users["users"]:
-            return db_users["users"][login_username]
+        print(f'DB_USERS from get_user_data = {db_users}')
+        if db_users.keys() == "Error":
+            return db_users
         else:
-            return None
+            if login_username in db_users["users"]:
+                return db_users["users"][login_username]
+            else:
+                return None
 
     def login(self, login_data):
         login_username = login_data[0]['username']
@@ -50,6 +54,9 @@ class UserAuthentication(DatabaseSupport):
 
     def get_permissions(self, username):
         user_data = self.get_user_data(username)
+        print(type(user_data))
+        print(f'get_perm user_data from et_permissions = {user_data}')
+
         if user_data is not None:
             return user_data['permissions']
         else:
