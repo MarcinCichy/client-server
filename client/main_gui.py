@@ -9,7 +9,6 @@ from windows.middle_window import MiddleWindow
 from windows.new_message_window import NewMessageWindow
 from windows.show_message_window import ShowMessageWindow
 from windows.user_add_window import UserAddWindow
-from windows.handlers import Handlers
 
 
 class Console:
@@ -27,9 +26,6 @@ class Console:
         self.show_message_window = ShowMessageWindow(stdscr)
         self.middle_window = MiddleWindow(stdscr, self.bottom_window, self.useradd_window, self.new_message_window, self.show_message_window, self.login_window)
         self.init_curses()
-        self.handler = Handlers(self)
-        self.username = ""
-        self.permissions = ""
 
     def init_curses(self):
         curses.start_color()
@@ -51,8 +47,6 @@ class Console:
                 self.reset()
                 self.login_window.show()
             else:
-                self.username = self.handler.window.login_handler.login_username
-                self.permissions = self.handler.window.login_handler.login_permissions
                 self.init_windows()
                 self.useradd_window.middle_window = self.middle_window
                 self.new_message_window.middle_window = self.middle_window

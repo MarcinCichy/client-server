@@ -13,6 +13,7 @@ class BottomWindow(BaseWindow):
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.login_window = login_window
         self.command = ''
+        self.username = ''
 
     def init_window(self):
         self.window.hline(0, 1, 0, self.maxX)
@@ -24,7 +25,7 @@ class BottomWindow(BaseWindow):
         curses.echo()
         command = self.window.getstr().decode(errors="ignore")
 
-        command_to_server = Handlers.command_handler(command, self.login_window.login_username)
+        command_to_server = Handlers.command_handler(self.login_window.login_username, command)
 
         self.window.move(1, 19)
         self.window.clrtoeol()

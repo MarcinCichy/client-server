@@ -7,7 +7,7 @@ class Handlers:
         self.window = window_instance
 
     @staticmethod
-    def command_handler(command, user_name):
+    def command_handler(user_name, command):
         precommand = command.split()
 
         if not precommand:

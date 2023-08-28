@@ -66,7 +66,6 @@ class CommandHandler:
             match command:
                 case "login":
                     self.username = data[0]['username']
-                    self.permissions = self.user_auth.get_permissions(self.username)
                 case "logout":
                     data = self.username
                     self.username = None
