@@ -1,6 +1,7 @@
 import server_data
 import server_response
 from database_support import DatabaseSupport
+from database_support import handle_db_file_error
 
 
 class UserManagement(DatabaseSupport):
@@ -11,6 +12,7 @@ class UserManagement(DatabaseSupport):
     def user_add():
         return {"User-add": "OK"}
 
+    @handle_db_file_error
     def create_account(self, data):
         db_users = self.database_support.read_db_json(server_data.USERS_DATABASE)
         db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
@@ -42,6 +44,7 @@ class UserManagement(DatabaseSupport):
         else:
             return server_response.E_USER_NAME_NOT_PROVIDED
 
+    @handle_db_file_error
     def user_list(self):
         db_users = self.database_support.read_db_json(server_data.USERS_DATABASE)
         users_to_list = db_users['users']
@@ -65,6 +68,7 @@ class UserManagement(DatabaseSupport):
             exist_user["inbox messages"] = inbox_msg_count
             return {server_response.ACCOUNT_INFO: exist_user}
 
+    @handle_db_file_error
     def user_del(self, user_to_del):
         db_users = self.database_support.read_db_json(server_data.USERS_DATABASE)
         db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
@@ -79,6 +83,7 @@ class UserManagement(DatabaseSupport):
             self.database_support.save_db_json(db_msgs, server_data.MESSAGES_DATABASE)
             return {user_to_del: server_response.USER_DELETED}
 
+    @handle_db_file_error
     def user_perm(self, data):
         for user_to_change_permission, new_permissions in data.items():
             db_users = self.database_support.read_db_json(server_data.USERS_DATABASE)
@@ -93,6 +98,7 @@ class UserManagement(DatabaseSupport):
             self.database_support.save_db_json(db_users, server_data.USERS_DATABASE)
             return {user_to_change_permission: server_response.USER_PERMISSIONS_CHANGED}
 
+    @handle_db_file_error
     def user_stat(self, data):
         for user_to_change_status, new_status in data.items():
             db_users = self.database_support.read_db_json(server_data.USERS_DATABASE)
