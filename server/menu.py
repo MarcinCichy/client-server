@@ -66,6 +66,7 @@ class CommandHandler:
             match command:
                 case "login":
                     self.username = data[0]['username']
+
                 case "logout":
                     data = self.username
                     self.username = None

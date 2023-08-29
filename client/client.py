@@ -23,7 +23,7 @@ class Client:
                         break
                     else:
                         return decoded_data
-            except Exception:
+            except ConnectionError:
                 return {"Error": "Unable to connect to server."}
 
     def input_command(self, command):

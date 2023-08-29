@@ -5,6 +5,7 @@ from server_communication import ServerCommunication
 from .base_window import BaseWindow
 from .handlers import Handlers
 
+
 class LoginWindow(BaseWindow):
     def __init__(self, stdscr, middle_window):
         super().__init__(stdscr)
