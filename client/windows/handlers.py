@@ -1,10 +1,12 @@
 import curses
 import client_data
+from windows.user_state import UserState
 
 
 class Handlers:
-    def __init__(self, window_instance):
+    def __init__(self, window_instance, logged_in_user_data):
         self.window = window_instance
+        self.logged_in_user_data = logged_in_user_data
 
     @staticmethod
     def command_handler(user_name, command):
@@ -76,6 +78,7 @@ class Handlers:
                 self.window.logged_in = True
                 self.window.login_username = server_response['login_username']
                 self.window.login_permissions = server_response['user_permissions']
+                self.logged_in_user_data.set_user_data(self.window.login_username, self.window.login_permissions)
                 self.window.window.refresh()
 
 

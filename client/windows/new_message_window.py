@@ -7,7 +7,7 @@ from .base_window import BaseWindow
 
 
 class NewMessageWindow(BaseWindow):
-    def __init__(self, stdscr, middle_window, login_window):
+    def __init__(self, stdscr, middle_window, login_window, logged_in_user_data):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.NEW_MSG_HEIGHT, client_data.NEW_MSG_WIDTH, self.maxY // 4,
                                          self.maxX // 4)

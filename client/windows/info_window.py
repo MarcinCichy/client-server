@@ -7,7 +7,7 @@ from .base_window import BaseWindow
 
 
 class InfoWindow(BaseWindow):
-    def __init__(self, stdscr, login_window):
+    def __init__(self, stdscr, login_window, logged_in_user_data):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.INFO_HEIGHT, client_data.INFO_WIDTH, 3, self.maxX - 50)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))

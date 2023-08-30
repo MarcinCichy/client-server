@@ -18,7 +18,9 @@ class LoginWindow(BaseWindow):
         self.login_permissions = ''
         self.logged_in = False
         self.middle_window = middle_window
-        self.handler = Handlers(self)
+
+        self.logged_in_user_data = ''
+        self.handler = Handlers(self, self.logged_in_user_data)
 
     def init_window(self):
         self.window.border()
