@@ -33,6 +33,7 @@ class Handlers:
 
         return {user_name: command_data}
 
+
     def server_response_handler(self, server_response):
         if "Error" in server_response:
             self.window.clear_previous_messages()
