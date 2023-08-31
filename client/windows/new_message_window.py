@@ -7,7 +7,7 @@ from .base_window import BaseWindow
 
 
 class NewMessageWindow(BaseWindow):
-    def __init__(self, stdscr, middle_window, login_window, logged_in_user_data):
+    def __init__(self, stdscr, middle_window, logged_in_user_data):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.NEW_MSG_HEIGHT, client_data.NEW_MSG_WIDTH, self.maxY // 4,
                                          self.maxX // 4)
@@ -17,9 +17,9 @@ class NewMessageWindow(BaseWindow):
         self.command = ''
         self.date = datetime.now().strftime("%Y-%m-%d")
         self.middle_window = middle_window
-        self.login_window = login_window
         self.message_exceeded = None
         self.max_msg_length = None
+        self.logged_in_user_data = logged_in_user_data
 
     def init_window(self):
         self.max_msg_length = client_data.MAX_MESSAGE_LENGTH
@@ -46,6 +46,8 @@ class NewMessageWindow(BaseWindow):
         self.window.refresh()
 
     def get_new_message(self):
+        username = self.logged_in_user_data.logged_in_username
+
         self.content = ''
         self.command = {}
         self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
@@ -129,9 +131,9 @@ class NewMessageWindow(BaseWindow):
                     self.message_exceeded = False
 
         self.command = {
-            self.login_window.login_username: {
+            username: {
                 "new_message": (
-                    {'sender': self.login_window.login_username},
+                    {'sender': username },
                     {'date': str(self.date)},
                     {'recipient': self.recipient},
                     {'content': self.content}

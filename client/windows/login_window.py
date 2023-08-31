@@ -7,7 +7,7 @@ from .handlers import Handlers
 
 
 class LoginWindow(BaseWindow):
-    def __init__(self, stdscr, middle_window):
+    def __init__(self, stdscr, middle_window, logged_in_user_data):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.LOGIN_HEIGHT, client_data.LOGIN_WIDTH, self.maxY // 4, self.maxX // 4)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
@@ -18,8 +18,7 @@ class LoginWindow(BaseWindow):
         self.login_permissions = ''
         self.logged_in = False
         self.middle_window = middle_window
-
-        self.logged_in_user_data = ''
+        self.logged_in_user_data = logged_in_user_data
         self.handler = Handlers(self, self.logged_in_user_data)
 
     def init_window(self):

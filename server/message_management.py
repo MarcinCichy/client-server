@@ -4,7 +4,6 @@ import server_response
 import server_data
 
 
-
 class MessageManagement(DatabaseSupport):
     def __init__(self, database_support):
         self.database_support = database_support

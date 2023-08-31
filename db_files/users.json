@@ -35,6 +35,12 @@
             "permissions": "user",
             "status": "active",
             "activation_date": "2023-08-24"
+        },
+        "jako": {
+            "password": "sdfg",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-08-31"
         }
     },
     "logged_users": [

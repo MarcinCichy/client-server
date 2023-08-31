@@ -12,22 +12,24 @@ from windows.user_add_window import UserAddWindow
 from windows.user_state import UserState
 from windows.handlers import Handlers
 
+
 class Console:
     def __init__(self, stdscr):
         self.middle_window = None
         self.stdscr = stdscr
 
         self.logged_in_user_data = UserState()
+        self.handlers = Handlers(self, self.logged_in_user_data)
 
         # Instantiate window subclasses
-        self.login_window = LoginWindow(stdscr, self.middle_window)
+        self.login_window = LoginWindow(stdscr, self.middle_window, self.logged_in_user_data)
         self.header_window = HeaderWindow(stdscr)
-        self.info_window = InfoWindow(stdscr, self.login_window, self.logged_in_user_data)
-        self.bottom_window = BottomWindow(stdscr, self.logged_in_user_data)  #  self.login_window,
-        self.useradd_window = UserAddWindow(stdscr, self.middle_window, self.login_window, self.logged_in_user_data)
-        self.new_message_window = NewMessageWindow(stdscr, self.middle_window, self.login_window, self.logged_in_user_data)
+        self.info_window = InfoWindow(stdscr, self.logged_in_user_data)
+        self.bottom_window = BottomWindow(stdscr, self.logged_in_user_data)
+        self.useradd_window = UserAddWindow(stdscr, self.middle_window, self.logged_in_user_data)
+        self.new_message_window = NewMessageWindow(stdscr, self.middle_window, self.logged_in_user_data)
         self.show_message_window = ShowMessageWindow(stdscr)
-        self.middle_window = MiddleWindow(stdscr, self.bottom_window, self.useradd_window, self.new_message_window, self.show_message_window, self.login_window, self.logged_in_user_data)
+        self.middle_window = MiddleWindow(stdscr, self.bottom_window, self.useradd_window, self.new_message_window, self.show_message_window, self.logged_in_user_data, self.login_window)
         self.init_curses()
 
     def init_curses(self):

@@ -1,6 +1,5 @@
 import curses
 import client_data
-from windows.user_state import UserState
 
 
 class Handlers:
@@ -9,7 +8,7 @@ class Handlers:
         self.logged_in_user_data = logged_in_user_data
 
     @staticmethod
-    def command_handler(user_name, command):
+    def command_handler(user_name, permissions, command):
         precommand = command.split()
 
         if not precommand:
@@ -59,6 +58,8 @@ class Handlers:
         elif "Logout" in server_response:
             self.window.login_window.logged_in = False
             self.window.login_window.logged_username = ''
+            self.logged_in_user_data.clear_user_data()
+            self.logged_in_user_data.clear_user_data()
         elif "Clear" in server_response:
             self.window.clear_previous_messages()
         else:
