@@ -8,7 +8,7 @@ class Handlers:
         self.logged_in_user_data = logged_in_user_data
 
     @staticmethod
-    def command_handler(user_name, permissions, command):
+    def command_handler(user_name, command):  # , permissions
         precommand = command.split()
 
         if not precommand:
@@ -32,7 +32,6 @@ class Handlers:
             command_data = command_type
 
         return {user_name: command_data}
-
 
     def server_response_handler(self, server_response):
         if "Error" in server_response:

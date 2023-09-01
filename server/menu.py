@@ -1,4 +1,3 @@
-from database_support import DatabaseSupport
 from functions import SystemUtilities
 from message_management import MessageManagement
 from user_management import UserManagement
@@ -7,22 +6,23 @@ import server_response
 
 
 class CommandHandler:
-    def __init__(self, database_support):
+    def __init__(self, logged_in_user_data):
+        self.logged_in_user_data = logged_in_user_data
         self.username = ""
         self.comm = ""
         self.permissions = ""
-        self.database_support = database_support
-        self.user_auth = UserAuthentication(self.database_support)
-        self.user_management = UserManagement(self.database_support)
-        self.message_management = MessageManagement(self.database_support)
+        self.user_auth = UserAuthentication(self.logged_in_user_data)
+        self.user_management = UserManagement()
+        self.message_management = MessageManagement()
+        self.sys_utils = SystemUtilities()
 
         self.all_users_commands = {
             "login": self.user_auth.login,
             "logout": self.user_auth.logout,
-            "help": SystemUtilities.help,
-            "info": SystemUtilities.info,
-            "uptime": SystemUtilities.uptime,
-            "clear": SystemUtilities.clear,
+            "help": self.sys_utils.help,
+            "info": self.sys_utils.info,
+            "uptime": self.sys_utils.uptime,
+            "clear": self.sys_utils.clear,
             "msg_count": self.message_management.msg_count,
             "msg-list": self.message_management.msg_list,
             "msg-snd": self.message_management.msg_snd,
@@ -42,6 +42,8 @@ class CommandHandler:
         }
 
     def use_command(self, entrance_comm):
+
+
         if isinstance(entrance_comm, dict):
 
             # Extract the first key, which is the username submitted
@@ -49,7 +51,7 @@ class CommandHandler:
             # Based on this username, create a new dictionary with the command
             print(f'MENU username = {self.username}')
             self.comm = entrance_comm.pop(self.username)
-            self.permissions = self.user_auth.get_permissions(self.username)
+            self.permissions = self.logged_in_user_data.logged_in_permissions
             print(f'NEW_COMMAND  = {self.comm}')
             print(f'ENTRANCE USERNAME = {self.username}')
             print(f'ENTRANCE PERMISSIONS: {self.permissions}')
@@ -105,8 +107,11 @@ class CommandHandler:
         print(f'EXIT PERMISSIONS: {self.permissions}')
         print(f'EXIT DATA = {data}')
 
+        print(f'FROM USER_STATE = {self.logged_in_user_data}')
+        print(f'FROM USER_STATE_USER  = {self.logged_in_user_data.logged_in_username}')
+        print(f'FROM USER_STATE_PERM  = {self.logged_in_user_data.logged_in_permissions}')
         return result
 
 
-database_support = DatabaseSupport()
-handler = CommandHandler(database_support)
+
+

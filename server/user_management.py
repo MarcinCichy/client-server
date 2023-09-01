@@ -4,9 +4,10 @@ from database_support import DatabaseSupport
 from database_support import handle_db_file_error
 
 
-class UserManagement(DatabaseSupport):
-    def __init__(self, database_support):
-        self.database_support = database_support
+class UserManagement:
+    def __init__(self):  # , logged_in_user_data
+        #self.logged_in_user_data = logged_in_user_data
+        self.database_support = DatabaseSupport()
 
     @staticmethod
     def user_add():

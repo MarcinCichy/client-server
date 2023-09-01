@@ -25,8 +25,7 @@ class BottomWindow(BaseWindow):
         command = self.window.getstr().decode(errors="ignore")
 
         username = self.logged_in_user_data.logged_in_username
-        permissions = self.logged_in_user_data.logged_in_permissions
-        command_to_server = Handlers.command_handler(username, permissions, command)
+        command_to_server = Handlers.command_handler(username, command)  # permissions,
 
         self.window.move(1, 19)
         self.window.clrtoeol()

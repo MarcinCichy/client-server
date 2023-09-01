@@ -4,9 +4,12 @@ from database_support import DatabaseSupport
 from database_support import handle_db_file_error
 
 
-class UserAuthentication(DatabaseSupport):
-    def __init__(self, database_support):
-        self.database_support = database_support
+class UserAuthentication:
+    def __init__(self, logged_in_user_data):
+        self.logged_in_user_data = logged_in_user_data
+        self.database_support = DatabaseSupport()
+        self.logged_in_username = None
+        self.logged_in_permissions = None
 
     @handle_db_file_error
     def get_user_data(self, login_username):
@@ -35,6 +38,9 @@ class UserAuthentication(DatabaseSupport):
             # ----------------------------------------------------------------------------------
             user_logged['logged_users'].append(login_username)
             self.database_support.save_db_json(user_logged, server_data.USERS_DATABASE)
+            self.logged_in_username = user_logged['logged_users']
+            self.logged_in_permissions = user_data['permissions']
+            self.logged_in_user_data.set_user_data(self.logged_in_username, self.logged_in_permissions)
             return {"Login": "OK", "login_username": login_username, "user_permissions": user_data['permissions']}
         elif user_data is not None and user_data['status'] == "banned":
             print(f'Access denied to {login_username}, user banned')
@@ -51,18 +57,8 @@ class UserAuthentication(DatabaseSupport):
             db_users['logged_users'].remove(logout_data)
             self.database_support.save_db_json(db_users, server_data.USERS_DATABASE)
             print(f'{logout_data} is logged out')
+            self.logged_in_user_data.clear_user_data()
             return {"Logout": "Successful"}
         else:
             pass
-
-    @handle_db_file_error
-    def get_permissions(self, username):
-        user_data = self.get_user_data(username)
-
-        print(f'get_perm user_data from get_permissions = {user_data}')
-
-        if user_data is not None:
-            return user_data['permissions']
-        else:
-            return None
 

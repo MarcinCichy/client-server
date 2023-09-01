@@ -1,8 +1,9 @@
 import json
 import socket
 import server_data
-import menu
+from menu import CommandHandler
 from functions import SystemUtilities
+from server_user_state import ServerUserState
 
 
 class Server:
@@ -10,6 +11,9 @@ class Server:
         self.srv_host = srv_host
         self.srv_port = srv_port
         self.srv_buff = srv_buff
+
+        self.logged_in_user_data = ServerUserState()
+        self.handler = CommandHandler(self.logged_in_user_data)
 
     def server_connection(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -24,7 +28,7 @@ class Server:
                     print(f"Connected by {addr}")
                     command = conn.recv(self.srv_buff)
                     com = self.json_decode_received_data(command)
-                    result = self.json_serialize_response(menu.handler.use_command(com))
+                    result = self.json_serialize_response(self.handler.use_command(com))  # , self.logged_in_user_data
                     conn.sendall(result.encode(server_data.ENCODE_FORMAT))
 
                     if "Connection" in result:
