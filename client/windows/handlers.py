@@ -3,9 +3,11 @@ import client_data
 
 
 class Handlers:
-    def __init__(self, window_instance, logged_in_user_data):
+    def __init__(self, window_instance):
         self.window = window_instance
-        self.logged_in_user_data = logged_in_user_data
+        # self.logged_in_user_data = logged_in_user_data
+        self.logged_in_username = None
+        self.logged_in_permissions = None
 
     @staticmethod
     def command_handler(user_name, command):  # , permissions
@@ -58,8 +60,6 @@ class Handlers:
         elif "Logout" in server_response:
             self.window.login_window.logged_in = False
             self.window.login_window.logged_username = ''
-            self.logged_in_user_data.clear_user_data()
-            self.logged_in_user_data.clear_user_data()
         elif "Clear" in server_response:
             self.window.clear_previous_messages()
         else:
@@ -76,11 +76,14 @@ class Handlers:
 
         elif 'Login' in server_response:
             if server_response['Login'] == "OK":
+                self.set_user_data(server_response['login_username'], server_response['user_permissions'])
                 self.window.logged_in = True
-                self.window.login_username = server_response['login_username']
-                self.window.login_permissions = server_response['user_permissions']
-                self.logged_in_user_data.set_user_data(self.window.login_username, self.window.login_permissions)
+
+                # self.window.login_username = server_response['login_username']
+                # self.window.login_permissions = server_response['user_permissions']
+
                 self.window.window.refresh()
 
-
-
+    def set_user_data(self, username, permissions):
+        self.logged_in_username = username
+        self.logged_in_permissions = permissions

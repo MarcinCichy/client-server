@@ -21,7 +21,7 @@ class MiddleWindow(BaseWindow):
         self.maxY = self.window.getmaxyx()[0]
         self.maxX = self.window.getmaxyx()[1]
         self.console = None
-        self.handler = Handlers(self, logged_in_user_data)
+        self.handler = logged_in_user_data
         self.login_window = login_window
 
     def init_window(self):

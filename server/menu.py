@@ -6,12 +6,12 @@ import server_response
 
 
 class CommandHandler:
-    def __init__(self, logged_in_user_data):
-        self.logged_in_user_data = logged_in_user_data
+    def __init__(self, server_logged_in_user_data):
+        self.server_logged_in_user_data = server_logged_in_user_data
         self.username = ""
         self.comm = ""
         self.permissions = ""
-        self.user_auth = UserAuthentication(self.logged_in_user_data)
+        self.user_auth = UserAuthentication(self.server_logged_in_user_data)
         self.user_management = UserManagement()
         self.message_management = MessageManagement()
         self.sys_utils = SystemUtilities()
@@ -42,16 +42,13 @@ class CommandHandler:
         }
 
     def use_command(self, entrance_comm):
-
-
         if isinstance(entrance_comm, dict):
-
             # Extract the first key, which is the username submitted
             self.username = next(iter(entrance_comm))
             # Based on this username, create a new dictionary with the command
             print(f'MENU username = {self.username}')
             self.comm = entrance_comm.pop(self.username)
-            self.permissions = self.logged_in_user_data.logged_in_permissions
+            self.permissions = self.server_logged_in_user_data.server_logged_in_permissions
             print(f'NEW_COMMAND  = {self.comm}')
             print(f'ENTRANCE USERNAME = {self.username}')
             print(f'ENTRANCE PERMISSIONS: {self.permissions}')
@@ -107,9 +104,9 @@ class CommandHandler:
         print(f'EXIT PERMISSIONS: {self.permissions}')
         print(f'EXIT DATA = {data}')
 
-        print(f'FROM USER_STATE = {self.logged_in_user_data}')
-        print(f'FROM USER_STATE_USER  = {self.logged_in_user_data.logged_in_username}')
-        print(f'FROM USER_STATE_PERM  = {self.logged_in_user_data.logged_in_permissions}')
+        print(f'FROM USER_STATE = {self.server_logged_in_user_data}')
+        print(f'FROM USER_STATE_USER  = {self.server_logged_in_user_data.server_logged_in_username}')
+        print(f'FROM USER_STATE_PERM  = {self.server_logged_in_user_data.server_logged_in_permissions}')
         return result
 
 

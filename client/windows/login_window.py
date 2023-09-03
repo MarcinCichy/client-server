@@ -14,12 +14,12 @@ class LoginWindow(BaseWindow):
         self.username = ''
         self.password = ''
         self.command = ''
-        self.login_username = ''
-        self.login_permissions = ''
+        # self.login_username = ''
+        # self.login_permissions = ''
         self.logged_in = False
         self.middle_window = middle_window
-        self.logged_in_user_data = logged_in_user_data
-        self.handler = Handlers(self, self.logged_in_user_data)
+        # self.logged_in_user_data = logged_in_user_data
+        self.handler = Handlers(self)
 
     def init_window(self):
         self.window.border()
@@ -81,3 +81,4 @@ class LoginWindow(BaseWindow):
             self.get_credentials()
             response = self.login()
             self.handler.login_handler(response)
+

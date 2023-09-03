@@ -9,17 +9,16 @@ from windows.middle_window import MiddleWindow
 from windows.new_message_window import NewMessageWindow
 from windows.show_message_window import ShowMessageWindow
 from windows.user_add_window import UserAddWindow
-from windows.user_state import UserState
+from windows.user_stateXXX import UserState
 from windows.handlers import Handlers
 
 
 class Console:
     def __init__(self, stdscr):
         self.middle_window = None
-        self.stdscr = stdscr
+        self.window = stdscr
 
-        self.logged_in_user_data = UserState()
-        self.handlers = Handlers(self, self.logged_in_user_data)
+        self.logged_in_user_data = Handlers(self)
 
         # Instantiate window subclasses
         self.login_window = LoginWindow(stdscr, self.middle_window, self.logged_in_user_data)
@@ -39,11 +38,11 @@ class Console:
         curses.noecho()
         curses.cbreak()
         curses.curs_set(0)
-        self.stdscr.keypad(1)
-        self.stdscr.nodelay(1)
-        self.stdscr.attron(curses.color_pair(client_data.COLOR_PAIR))
-        self.stdscr.border()
-        self.stdscr.refresh()
+        self.window.keypad(1)
+        self.window.nodelay(1)
+        self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
+        self.window.border()
+        self.window.refresh()
 
     def start(self):
         while True:
@@ -70,9 +69,9 @@ class Console:
         """
             Reset the console to its initial state. Clear the screen
         """
-        self.stdscr.clear()
-        self.stdscr.border()
-        self.stdscr.refresh()
+        self.window.clear()
+        self.window.border()
+        self.window.refresh()
 
     def run(self):
         while self.login_window.logged_in:

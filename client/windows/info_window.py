@@ -12,8 +12,8 @@ class InfoWindow(BaseWindow):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.INFO_HEIGHT, client_data.INFO_WIDTH, 3, self.maxX - 50)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
-        self.logged_in_user_data = logged_in_user_data
-        self.handler = Handlers(self, self.logged_in_user_data)
+        #  self.logged_in_user_data = logged_in_user_data
+        self.handler = logged_in_user_data
 
     def init_window(self):
         self.window.border()
@@ -22,8 +22,11 @@ class InfoWindow(BaseWindow):
         self.window.addstr(y_poz, 10, client_data.CLEAR_SPACE_INFO_WINDOW)
 
     def show_server_info(self):
-        username = self.logged_in_user_data.logged_in_username
-        permissions = self.logged_in_user_data.logged_in_permissions
+        # username = self.logged_in_user_data.logged_in_username
+        # permissions = self.logged_in_user_data.logged_in_permissions
+
+        username = self.handler.logged_in_username
+        permissions = self.handler.logged_in_permissions
 
         command = {"command": ""}
         check_connection = ServerCommunication.send_command(command)

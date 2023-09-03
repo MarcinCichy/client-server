@@ -5,11 +5,11 @@ from database_support import handle_db_file_error
 
 
 class UserAuthentication:
-    def __init__(self, logged_in_user_data):
-        self.logged_in_user_data = logged_in_user_data
+    def __init__(self, server_logged_in_user_data):
+        self.server_logged_in_user_data = server_logged_in_user_data
         self.database_support = DatabaseSupport()
-        self.logged_in_username = None
-        self.logged_in_permissions = None
+        self.server_logged_in_username = None
+        self.server_logged_in_permissions = None
 
     @handle_db_file_error
     def get_user_data(self, login_username):
@@ -38,9 +38,9 @@ class UserAuthentication:
             # ----------------------------------------------------------------------------------
             user_logged['logged_users'].append(login_username)
             self.database_support.save_db_json(user_logged, server_data.USERS_DATABASE)
-            self.logged_in_username = user_logged['logged_users']
-            self.logged_in_permissions = user_data['permissions']
-            self.logged_in_user_data.set_user_data(self.logged_in_username, self.logged_in_permissions)
+            self.server_logged_in_username = user_logged['logged_users']
+            self.server_logged_in_permissions = user_data['permissions']
+            self.server_logged_in_user_data.set_user_data(self.server_logged_in_username, self.server_logged_in_permissions)
             return {"Login": "OK", "login_username": login_username, "user_permissions": user_data['permissions']}
         elif user_data is not None and user_data['status'] == "banned":
             print(f'Access denied to {login_username}, user banned')
