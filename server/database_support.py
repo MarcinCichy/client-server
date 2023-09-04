@@ -1,7 +1,7 @@
 import json
 from functools import wraps
-
 import server_response
+import server_data
 
 
 def handle_db_file_error(func):
@@ -28,5 +28,21 @@ class DatabaseSupport:
     def save_db_json(db, db_file):
         with open(db_file, 'w') as file:
             json.dump(db, file, indent=4)
+
+    @handle_db_file_error
+    def get_user(self):
+        return self.read_db_json(server_data.USERS_DATABASE)
+
+    @handle_db_file_error
+    def save_user(self, data):
+        self.save_db_json(data, server_data.USERS_DATABASE)
+
+    @handle_db_file_error
+    def get_messages(self):
+        return self.read_db_json(server_data.MESSAGES_DATABASE)
+
+    @handle_db_file_error
+    def save_messages(self, data):
+        self.save_db_json(data, server_data.MESSAGES_DATABASE)
 
 

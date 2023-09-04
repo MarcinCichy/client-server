@@ -1,13 +1,11 @@
 import curses
 from datetime import datetime
-
 import client_data
-
 from .base_window import BaseWindow
 
 
 class NewMessageWindow(BaseWindow):
-    def __init__(self, stdscr, middle_window, logged_in_user_data):
+    def __init__(self, stdscr, middle_window, login_window):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.NEW_MSG_HEIGHT, client_data.NEW_MSG_WIDTH, self.maxY // 4,
                                          self.maxX // 4)
@@ -19,7 +17,7 @@ class NewMessageWindow(BaseWindow):
         self.middle_window = middle_window
         self.message_exceeded = None
         self.max_msg_length = None
-        self.logged_in_user_data = logged_in_user_data
+        self.login_window = login_window
 
     def init_window(self):
         self.max_msg_length = client_data.MAX_MESSAGE_LENGTH
@@ -46,7 +44,7 @@ class NewMessageWindow(BaseWindow):
         self.window.refresh()
 
     def get_new_message(self):
-        username = self.logged_in_user_data.logged_in_username
+        username = self.login_window.logged_username
 
         self.content = ''
         self.command = {}

@@ -1,12 +1,11 @@
-from database_support import DatabaseSupport
 from database_support import handle_db_file_error
 import server_response
 import server_data
 
 
 class MessageManagement:
-    def __init__(self):
-        self.database_support = DatabaseSupport()
+    def __init__(self, database_support):
+        self.database_support = database_support
 
     @staticmethod
     def msg_snd():
@@ -14,7 +13,7 @@ class MessageManagement:
 
     @handle_db_file_error
     def new_message(self, data):
-        db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
+        db_msgs = self.database_support.get_messages()
 
         sender = data[0]
         date = data[1]
@@ -35,12 +34,12 @@ class MessageManagement:
                 **content
             }
             db_msgs["messages"][username][inbox_msg_count] = new_temp_dict
-            self.database_support.save_db_json(db_msgs, server_data.MESSAGES_DATABASE)
+            self.database_support.save_messages(db_msgs)
             return server_response.MESSAGE_WAS_SENT
 
     @handle_db_file_error
     def msg_list(self, username):  # to show all messages in box in middle window show all msgs in box
-        db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
+        db_msgs = self.database_support.get_messages()
         all_inbox_msgs = db_msgs['messages'][username]
 
         msg_list_dict = {}
@@ -51,7 +50,7 @@ class MessageManagement:
 
     @handle_db_file_error
     def msg_del(self, data):  # to delete selected message
-        db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
+        db_msgs = self.database_support.get_messages()
         for username, msg_num in data.items():
             if msg_num in db_msgs['messages'][username]:
                 del db_msgs['messages'][username][msg_num]
@@ -62,14 +61,14 @@ class MessageManagement:
                         updated_msgs[str(new_num)] = msg
                         new_num += 1
                 db_msgs['messages'][username] = updated_msgs
-                self.database_support.save_db_json(db_msgs, server_data.MESSAGES_DATABASE)
+                self.database_support.save_messages(db_msgs)
                 return server_response.MESSAGE_WAD_DELETED
             else:
                 return server_response.E_MESSAGE_NOT_FOUND
 
     @handle_db_file_error
     def msg_show(self, data):  # to show selected message
-        db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
+        db_msgs = self.database_support.get_messages()
         for username, msg_num in data.items():
             if msg_num in db_msgs['messages'][username]:
                 message_to_show = db_msgs['messages'][username][msg_num]
@@ -79,7 +78,7 @@ class MessageManagement:
 
     @handle_db_file_error
     def msg_count(self, username):  # to count all messages in box
-        db_msgs = self.database_support.read_db_json(server_data.MESSAGES_DATABASE)
+        db_msgs = self.database_support.get_messages()
         inbox_msg_count = len(db_msgs["messages"][username])
         if inbox_msg_count >= 5:
             inbox_msg_count = str(inbox_msg_count) + server_response.YOUR_INBOX_IS_FULL

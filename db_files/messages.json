@@ -42,15 +42,10 @@
             },
             "2": {
                 "sender": "inny",
-                "date": "2023-08-12",
-                "content": "Ja ju\u017c mam pe\u0142nazynke. I co mam dlalej z tym zro zrobc? Jk tak dalej bedzie, to nikt nic do mnienie napisze. Daj znac co moge zrobic z ta skrzyna! Blallallslsld ldldld dlvfdvjorfv ofvjofev ojefvo eefovj oefvjoef vfo jeofv jpf jwf2002irv f i0fvfvgevbg"
-            },
-            "3": {
-                "sender": "inny",
                 "date": "2023-08-19",
                 "content": "Pisze nowa wiadomosc."
             },
-            "4": {
+            "3": {
                 "sender": "nobody",
                 "date": "2023-08-19",
                 "content": "Hej! Adminku! Co robisz?"
@@ -115,13 +110,6 @@
                 "sender": "marcin",
                 "date": "2023-08-24",
                 "content": "tys jest tu nowy"
-            }
-        },
-        "jako": {
-            "1": {
-                "sender": "marcin",
-                "date": "2023-08-31",
-                "content": "Czesc, Jestes nowy."
             }
         }
     }

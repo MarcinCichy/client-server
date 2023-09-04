@@ -1,19 +1,15 @@
 import curses
-
 import client_data
 from server_communication import ServerCommunication
-
 from .base_window import BaseWindow
-from .handlers import Handlers
 
 
 class InfoWindow(BaseWindow):
-    def __init__(self, stdscr, logged_in_user_data):
+    def __init__(self, stdscr, login_window):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.INFO_HEIGHT, client_data.INFO_WIDTH, 3, self.maxX - 50)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
-        #  self.logged_in_user_data = logged_in_user_data
-        self.handler = logged_in_user_data
+        self.login_window = login_window
 
     def init_window(self):
         self.window.border()
@@ -22,11 +18,8 @@ class InfoWindow(BaseWindow):
         self.window.addstr(y_poz, 10, client_data.CLEAR_SPACE_INFO_WINDOW)
 
     def show_server_info(self):
-        # username = self.logged_in_user_data.logged_in_username
-        # permissions = self.logged_in_user_data.logged_in_permissions
-
-        username = self.handler.logged_in_username
-        permissions = self.handler.logged_in_permissions
+        username = self.login_window.logged_username
+        permissions = self.login_window.logged_user_permissions
 
         command = {"command": ""}
         check_connection = ServerCommunication.send_command(command)

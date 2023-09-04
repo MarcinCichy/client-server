@@ -1,7 +1,5 @@
 import curses
-
 import client_data
-
 from .base_window import BaseWindow
 
 

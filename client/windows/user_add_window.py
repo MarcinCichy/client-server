@@ -1,14 +1,11 @@
 import curses
 from datetime import datetime
-
 import client_data
-
 from .base_window import BaseWindow
-from .handlers import Handlers
 
 
 class UserAddWindow(BaseWindow):
-    def __init__(self, stdscr, middle_window, logged_in_user_data):
+    def __init__(self, stdscr, middle_window, login_window):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(client_data.ADDUSER_HEIGHT, client_data.ADDUSER_WIDTH, self.maxY // 4,
                                          self.maxX // 4)
@@ -19,7 +16,7 @@ class UserAddWindow(BaseWindow):
         self.command = ''
         self.middle_window = middle_window
         self.activation_date = datetime.now().strftime("%Y-%m-%d")
-        self.logged_in_user_data = logged_in_user_data
+        self.login_window = login_window
 
     def init_window(self):
         self.window.border()
@@ -32,7 +29,7 @@ class UserAddWindow(BaseWindow):
         self.window.addstr(y_poz, 12, client_data.CLEAR_SPACE_ADDUSER_WINDOW)
 
     def get_new_account_data(self):
-        username = self.logged_in_user_data.logged_in_username
+        logged_username = self.login_window.logged_username
         curses.curs_set(2)
         curses.echo()
         self.window.refresh()
@@ -46,7 +43,7 @@ class UserAddWindow(BaseWindow):
         self.new_permissions = self.window.getstr(3, 15).decode(errors="ignore")
 
         self.command = {
-            username:
+            logged_username:
                 {
                     "create_account": (
                         {'username': self.new_username},

@@ -1,14 +1,12 @@
 import curses
-
 import client_data
 import server_communication
-
 from .base_window import BaseWindow
 from .handlers import Handlers
 
 
 class MiddleWindow(BaseWindow):
-    def __init__(self, stdscr, bottom_window, useradd_window, new_message_window, show_message_window, logged_in_user_data, login_window):
+    def __init__(self, stdscr, bottom_window, useradd_window, new_message_window, show_message_window, login_window):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(self.maxY - 5, client_data.MIDDLE_HEIGHT, 2, 1)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
@@ -21,7 +19,7 @@ class MiddleWindow(BaseWindow):
         self.maxY = self.window.getmaxyx()[0]
         self.maxX = self.window.getmaxyx()[1]
         self.console = None
-        self.handler = logged_in_user_data
+        self.handler = Handlers(self)
         self.login_window = login_window
 
     def init_window(self):

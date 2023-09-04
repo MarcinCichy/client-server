@@ -1,7 +1,7 @@
 import json
 import socket
-
 import client_data
+from windows.handlers import Handlers
 
 
 class Client:
@@ -9,6 +9,7 @@ class Client:
         self.srv_host = srv_host
         self.srv_port = srv_port
         self.srv_buff = srv_buff
+        self.handlers = Handlers(self)
 
     def client_connection(self, sentence):
         while True:
@@ -20,6 +21,7 @@ class Client:
                     data = s.recv(self.srv_buff)
                     decoded_data = self.json_decode_received_data(data)
                     if decoded_data.values() == client_data.CLOSE:
+                        self.handlers.server_response_handler("Logout")
                         break
                     else:
                         return decoded_data

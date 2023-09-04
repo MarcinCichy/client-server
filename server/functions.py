@@ -1,6 +1,5 @@
 from datetime import datetime
 from os import name, system
-
 import server_data
 import server_response
 
@@ -68,7 +67,6 @@ class SystemUtilities:
 
         return help_content
 
-# sprawdzic czy ponizsze funkcje musza istnieć
     @staticmethod
     def stop():
         return server_response.CONNECTION_CLOSE
