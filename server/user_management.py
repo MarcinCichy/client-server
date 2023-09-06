@@ -43,6 +43,21 @@ class UserManagement:
             return server_response.E_USER_NAME_NOT_PROVIDED
 
     @handle_db_file_error
+    def user_del(self, user_to_del):
+        db_users = self.database_support.get_user()
+        db_msgs = self.database_support.get_messages()
+        if user_to_del not in db_users['users']:
+            return server_response.E_USER_DOES_NOT_EXIST
+        elif user_to_del in db_users['logged_users']:
+            return server_response.E_USER_LOGGED_CANNOT_BE_DELETED
+        else:
+            del db_users['users'][user_to_del]
+            del db_msgs['messages'][user_to_del]
+            self.database_support.save_user(db_users)
+            self.database_support.save_messages(db_msgs)
+            return {user_to_del: server_response.USER_DELETED}
+
+    @handle_db_file_error
     def user_list(self):
         db_users = self.database_support.get_user()
         users_to_list = db_users['users']
@@ -65,21 +80,6 @@ class UserManagement:
             inbox_msg_count = len(db_msgs["messages"][username])
             exist_user["inbox messages"] = inbox_msg_count
             return {server_response.ACCOUNT_INFO: exist_user}
-
-    @handle_db_file_error
-    def user_del(self, user_to_del):
-        db_users = self.database_support.get_user()
-        db_msgs = self.database_support.get_messages()
-        if user_to_del not in db_users['users']:
-            return server_response.E_USER_DOES_NOT_EXIST
-        elif user_to_del in db_users['logged_users']:
-            return server_response.E_USER_LOGGED_CANNOT_BE_DELETED
-        else:
-            del db_users['users'][user_to_del]
-            del db_msgs['messages'][user_to_del]
-            self.database_support.save_user(db_users)
-            self.database_support.save_messages(db_msgs)
-            return {user_to_del: server_response.USER_DELETED}
 
     @handle_db_file_error
     def user_perm(self, data):

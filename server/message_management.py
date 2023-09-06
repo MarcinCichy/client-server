@@ -21,7 +21,7 @@ class MessageManagement:
         content = data[3]
         username = recipient["recipient"]
 
-        if recipient["recipient"] not in db_msgs["messages"].keys():
+        if username not in db_msgs["messages"].keys():
             return server_response.E_RECIPIENT_DOES_NOT_EXIST
         elif len(db_msgs["messages"][username]) == server_data.MAX_MSG_IN_INBOX:
             return server_response.E_RECIPIENT_INBOX_IS_FULL
@@ -77,7 +77,7 @@ class MessageManagement:
                 return server_response.E_MESSAGE_NOT_FOUND
 
     @handle_db_file_error
-    def msg_count(self, username):  # to count all messages in box
+    def msg_count(self, username):  # to count all messages in inbox
         db_msgs = self.database_support.get_messages()
         inbox_msg_count = len(db_msgs["messages"][username])
         if inbox_msg_count >= 5:

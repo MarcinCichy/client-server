@@ -32,7 +32,6 @@ class Server:
                     conn.sendall(result.encode(server_data.ENCODE_FORMAT))
 
                     if "Connection" in result:
-                        # self.logged_in_user_data.clear_user_data()
                         if (json.loads(result))["Connection"] == server_data.CLOSE:
                             print("Server stopped")
                             break

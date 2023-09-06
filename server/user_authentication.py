@@ -20,7 +20,6 @@ class UserAuthentication:
 
     @handle_db_file_error
     def login(self, login_data):
-       #  self.logged_in_user_data.clear_user_data()
         login_username = login_data[0]['username']
         login_password = login_data[1]['password']
 
@@ -55,8 +54,8 @@ class UserAuthentication:
         if logout_data in db_users['logged_users']:
             db_users['logged_users'].remove(logout_data)
             self.database_support.save_user(db_users)
-            print(f'{logout_data} is logged out')
             self.logged_in_user_data.clear_user_data()
+            print(f'{logout_data} is logged out')
             return {"Logout": "Successful"}
         else:
             pass

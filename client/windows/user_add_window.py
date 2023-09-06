@@ -59,7 +59,7 @@ class UserAddWindow(BaseWindow):
         self.window.refresh()
         curses.noecho()
 
-        self.middle_window.send_receive_command_and_show_respond(self.command)
+        self.middle_window.send_receive_command_and_show_response(self.command)
 
     def show(self):
         self.init_window()

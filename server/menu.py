@@ -11,7 +11,7 @@ class CommandHandler:
         self.database_support = DatabaseSupport()
         self.logged_in_user_data = logged_in_user_data
         self.username = ""
-        self.comm = ""
+        self.new_command = ""
         self.permissions = ""
         self.user_auth = UserAuthentication(self.logged_in_user_data, self.database_support)
         self.user_management = UserManagement(self.database_support)
@@ -43,38 +43,33 @@ class CommandHandler:
             "create_account": self.user_management.create_account
         }
 
-    def use_command(self, entrance_comm):
-
-
-        if isinstance(entrance_comm, dict):
+    def use_command(self, entrance_command):
+        if isinstance(entrance_command, dict):
 
             # Extract the first key, which is the username submitted
-            self.username = next(iter(entrance_comm))
-            # Based on this username, create a new dictionary with the command
+            self.username = next(iter(entrance_command))
             print(f'MENU username = {self.username}')
-            self.comm = entrance_comm.pop(self.username)
+            # Based on this username, create a new dictionary with the command
+            self.new_command = entrance_command.pop(self.username)
             self.permissions = self.logged_in_user_data.logged_in_permissions
-            print(f'NEW_COMMAND  = {self.comm}')
+            print(f'NEW_COMMAND  = {self.new_command}')
             print(f'ENTRANCE USERNAME = {self.username}')
             print(f'ENTRANCE PERMISSIONS: {self.permissions}')
 
-        if isinstance(self.comm, dict):
-            print(f'REAL COMMAND = {list(self.comm.keys())[0]}')
-            command = list(self.comm.keys())[0]
-            data = self.comm[command]
+        if isinstance(self.new_command, dict):
+            print(f'REAL COMMAND = {list(self.new_command.keys())[0]}')
+            command = list(self.new_command.keys())[0]
+            data = self.new_command[command]
         else:
-            command = self.comm
+            command = self.new_command
             data = None
 
         if command in self.all_users_commands:
             match command:
                 case "login":
                     self.username = data[0]['username']
-
                 case "logout":
                     data = self.username
-                    self.username = None
-                    self.permissions = None
                 case "help":
                     data = self.permissions
                 case "msg-list":

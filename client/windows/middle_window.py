@@ -79,7 +79,7 @@ class MiddleWindow(BaseWindow):
                 row += 1
                 column = 0
 
-    def send_receive_command_and_show_respond(self, command):
+    def send_receive_command_and_show_response(self, command):
         server_response = server_communication.ServerCommunication.send_command(command)
         self.handler.server_response_handler(server_response)
         self.previous_message = server_response

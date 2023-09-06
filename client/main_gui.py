@@ -14,6 +14,7 @@ from windows.handlers import Handlers
 
 class Console:
     def __init__(self, stdscr):
+        self.command_to_server = None
         self.middle_window = None
         self.stdscr = stdscr
         self.handlers = Handlers(self)
@@ -28,6 +29,7 @@ class Console:
         self.show_message_window = ShowMessageWindow(stdscr)
         self.middle_window = MiddleWindow(stdscr, self.bottom_window, self.useradd_window, self.new_message_window, self.show_message_window, self.login_window)
         self.init_curses()
+
 
     def init_curses(self):
         curses.start_color()
@@ -74,9 +76,11 @@ class Console:
     def run(self):
         while self.login_window.logged_in:
             self.info_window.show_server_info()
-
-            if self.login_window.logged_in:
-                self.middle_window.send_receive_command_and_show_respond(self.bottom_window.get_command())
+            self.command_to_server = self.bottom_window.get_command()
+            if self.command_to_server in client_data.LOCAL_COMMANDS:
+                self.handlers.client_side_handler(self.command_to_server)
+            else:
+                self.middle_window.send_receive_command_and_show_response(self.command_to_server)
 
     def hide_windows(self):
         self.header_window.window.erase()
