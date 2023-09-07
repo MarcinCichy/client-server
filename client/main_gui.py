@@ -77,10 +77,7 @@ class Console:
         while self.login_window.logged_in:
             self.info_window.show_server_info()
             self.command_to_server = self.bottom_window.get_command()
-            if self.command_to_server in client_data.LOCAL_COMMANDS:
-                self.handlers.client_side_handler(self.command_to_server)
-            else:
-                self.middle_window.send_receive_command_and_show_response(self.command_to_server)
+            self.middle_window.send_receive_command_and_show_response(self.command_to_server)
 
     def hide_windows(self):
         self.header_window.window.erase()

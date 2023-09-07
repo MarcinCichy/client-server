@@ -30,7 +30,7 @@ class Handlers:
                 command_data = {command_type: {None: None}}
         elif len(precommand) == 1:
             command_data = command_type
-            self.client_side_handler(command_type)
+            self.client_side_handler(command_data)
 
         return {user_name: command_data}
 
