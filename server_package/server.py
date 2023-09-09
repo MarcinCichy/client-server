@@ -28,7 +28,7 @@ class Server:
                     print(f"Connected by {addr}")
                     command = conn.recv(self.srv_buff)
                     com = self.json_decode_received_data(command)
-                    result = self.json_serialize_response(self.handler.use_command(com))  # , self.logged_in_user_data
+                    result = self.json_serialize_response(self.handler.use_command(com))
                     conn.sendall(result.encode(server_data.ENCODE_FORMAT))
 
                     if "Connection" in result:

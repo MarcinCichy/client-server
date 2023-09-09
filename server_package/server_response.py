@@ -16,6 +16,7 @@ E_UNABLE_TO_OPEN_DB_FILE = "Error: Unable to open db file."
 E_UNABLE_TO_SAVE_DB_FILE = "Error: Unable to save db file."
 E_FILE_IS_UNAVAILABLE = {"Error": "DB file is unavailable"}
 E_COMMAND_UNAVAILABLE = {"Error": "Command unavailable. No permissions"}
+E_INVALID_DATA = {"Error": "Invalid data."}
 
 
 # -------------- OTHERS RESPONSES -------------------

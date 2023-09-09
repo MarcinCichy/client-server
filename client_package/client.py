@@ -20,7 +20,7 @@ class Client:
                     decoded_data = self.json_decode_received_data(data)
                     return decoded_data
             except ConnectionError:
-                return {"Error": "Unable to connect to server."}
+                return {"Error": "Unable to connect to server_package."}
 
     def input_command(self, command):
         encoded_command = self.json_serialize_command(command).encode(client_data.ENCODE_FORMAT)

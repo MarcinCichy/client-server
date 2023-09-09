@@ -1,6 +1,6 @@
 import curses
-import client_data
-from server_communication import ServerCommunication
+import client_package.client_data as client_data
+from client_package.server_communication import ServerCommunication
 from .base_window import BaseWindow
 
 

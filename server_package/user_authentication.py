@@ -11,6 +11,9 @@ class UserAuthentication:
 
     @handle_db_file_error
     def get_user_data(self, login_username):
+        if not login_username:
+            return server_response.E_INVALID_DATA
+
         db_users = self.database_support.get_user()
         print(f'DB_USERS from get_user_data = {db_users}')
         if login_username in db_users["users"]:
@@ -20,6 +23,9 @@ class UserAuthentication:
 
     @handle_db_file_error
     def login(self, login_data):
+        if not login_data:
+            return server_response.E_INVALID_DATA
+
         login_username = login_data[0]['username']
         login_password = login_data[1]['password']
 
@@ -48,14 +54,17 @@ class UserAuthentication:
             return server_response.E_INVALID_CREDENTIALS
 
     @handle_db_file_error
-    def logout(self, logout_data):
+    def logout(self, logged_in_user):
+        if not logged_in_user:
+            return server_response.E_INVALID_DATA
+
         db_users = self.database_support.get_user()
 
-        if logout_data in db_users['logged_users']:
-            db_users['logged_users'].remove(logout_data)
+        if logged_in_user in db_users['logged_users']:
+            db_users['logged_users'].remove(logged_in_user)
             self.database_support.save_user(db_users)
             self.logged_in_user_data.clear_user_data()
-            print(f'{logout_data} is logged out')
+            print(f'{logged_in_user} is logged out')
             return {"Logout": "Successful"}
         else:
             pass

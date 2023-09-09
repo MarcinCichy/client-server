@@ -104,7 +104,6 @@ class CommandHandler:
         print(f'EXIT PERMISSIONS: {self.permissions}')
         print(f'EXIT DATA = {data}')
 
-        print(f'FROM USER_STATE = {self.logged_in_user_data}')
         print(f'FROM USER_STATE_USER  = {self.logged_in_user_data.logged_in_username}')
         print(f'FROM USER_STATE_PERM  = {self.logged_in_user_data.logged_in_permissions}')
         return result

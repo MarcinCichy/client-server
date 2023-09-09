@@ -1,18 +1,16 @@
 import curses
-import client_data
-import server_communication
+import client_package.client_data as client_data
 from .base_window import BaseWindow
 from .handlers import Handlers
 
 
 class MiddleWindow(BaseWindow):
-    def __init__(self, stdscr, bottom_window, useradd_window, new_message_window, show_message_window, login_window):
+    def __init__(self, stdscr, useradd_window, new_message_window, show_message_window, login_window):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(self.maxY - 5, client_data.MIDDLE_HEIGHT, 2, 1)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.previous_message = ''
         self.command = ''
-        self.bottom_window = bottom_window
         self.useradd_window = useradd_window
         self.new_message_window = new_message_window
         self.show_message_window = show_message_window
@@ -35,9 +33,9 @@ class MiddleWindow(BaseWindow):
             self.window.clrtoeol()
             self.window.refresh()
 
-    def show_sign_by_sign(self, sentence):
+    def show_character_by_character(self, sentence):
         """
-                To show answer from server in terminal.
+                To show answer from server_package in terminal.
                 The answer is displayed letter by letter like in old terminals ;-)
         """
         self.clear_previous_messages()
@@ -79,8 +77,7 @@ class MiddleWindow(BaseWindow):
                 row += 1
                 column = 0
 
-    def send_receive_command_and_show_response(self, command):
-        server_response = server_communication.ServerCommunication.send_command(command)
+    def show_response(self, server_response):
         self.handler.server_response_handler(server_response)
         self.previous_message = server_response
 

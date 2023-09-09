@@ -15,9 +15,10 @@ class UserManagement:
         db_users = self.database_support.get_user()
         db_msgs = self.database_support.get_messages()
 
-        user = {}
+        new_user = {}
         new_key = None
 
+        # !!! sprawdzic poniższa pętlę i jej warunki
         for dictionary in data:
             key = next(iter(dictionary))
             value = dictionary[key]
@@ -29,12 +30,12 @@ class UserManagement:
                 if value not in ['user', 'admin']:
                     return server_response.E_WRONG_PERMISSIONS
                 else:
-                    user[key] = value
-            else:
-                user[key] = value
+                    new_user[key] = value
+            else:  # this is for all others keys in dictionary, as: 'password', 'status, 'activation_date'
+                new_user[key] = value
 
         if len(new_key) > 0:
-            db_users["users"][new_key] = user
+            db_users["users"][new_key] = new_user
             self.database_support.save_user(db_users)
             db_msgs['messages'][new_key] = {}
             self.database_support.save_messages(db_msgs)
@@ -83,8 +84,12 @@ class UserManagement:
 
     @handle_db_file_error
     def user_perm(self, data):
-        for user_to_change_permission, new_permissions in data.items():
-            db_users = self.database_support.get_user()
+        if not data:
+            return server_response.E_INVALID_DATA
+
+        user_to_change_permission, new_permissions = next(iter(data.items()))
+        db_users = self.database_support.get_user()
+
         if user_to_change_permission not in db_users['users']:
             return server_response.E_USER_DOES_NOT_EXIST
         elif user_to_change_permission in db_users['logged_users']:
@@ -98,8 +103,11 @@ class UserManagement:
 
     @handle_db_file_error
     def user_stat(self, data):
-        for user_to_change_status, new_status in data.items():
-            db_users = self.database_support.get_user()
+        if not data:
+            return server_response.E_INVALID_DATA
+        user_to_change_status, new_status = next(iter(data.items()))
+        db_users = self.database_support.get_user()
+
         if user_to_change_status not in db_users['users']:
             return server_response.E_USER_DOES_NOT_EXIST
         elif user_to_change_status in db_users['logged_users']:

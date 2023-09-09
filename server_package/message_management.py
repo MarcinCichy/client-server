@@ -13,6 +13,9 @@ class MessageManagement:
 
     @handle_db_file_error
     def new_message(self, data):
+        if not data:
+            return server_response.E_INVALID_DATA
+
         db_msgs = self.database_support.get_messages()
 
         sender = data[0]
@@ -39,6 +42,9 @@ class MessageManagement:
 
     @handle_db_file_error
     def msg_list(self, username):  # to show all messages in box in middle window show all msgs in box
+        if not username:
+            return server_response.E_INVALID_DATA
+
         db_msgs = self.database_support.get_messages()
         all_inbox_msgs = db_msgs['messages'][username]
 
@@ -50,6 +56,9 @@ class MessageManagement:
 
     @handle_db_file_error
     def msg_del(self, data):  # to delete selected message
+        if not data:
+            return server_response.E_INVALID_DATA
+
         db_msgs = self.database_support.get_messages()
         for username, msg_num in data.items():
             if msg_num in db_msgs['messages'][username]:
@@ -68,6 +77,9 @@ class MessageManagement:
 
     @handle_db_file_error
     def msg_show(self, data):  # to show selected message
+        if not data:
+            return server_response.E_INVALID_DATA
+
         db_msgs = self.database_support.get_messages()
         for username, msg_num in data.items():
             if msg_num in db_msgs['messages'][username]:
@@ -78,6 +90,9 @@ class MessageManagement:
 
     @handle_db_file_error
     def msg_count(self, username):  # to count all messages in inbox
+        if not username:
+            return server_response.E_INVALID_DATA
+
         db_msgs = self.database_support.get_messages()
         inbox_msg_count = len(db_msgs["messages"][username])
         if inbox_msg_count >= 5:

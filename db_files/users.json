@@ -29,15 +29,7 @@
             "permissions": "admin",
             "status": "active",
             "activation_date": "2023-07-06"
-        },
-        "otto": {
-            "password": "hjkl",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-08-24"
         }
     },
-    "logged_users": [
-        "marcin"
-    ]
+    "logged_users": []
 }

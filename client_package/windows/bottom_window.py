@@ -1,5 +1,5 @@
 import curses
-import client_data
+import client_package.client_data as client_data
 from .base_window import BaseWindow
 from .handlers import Handlers
 
@@ -29,3 +29,4 @@ class BottomWindow(BaseWindow):
         self.window.move(1, 19)
         self.window.clrtoeol()
         return command_to_server
+
