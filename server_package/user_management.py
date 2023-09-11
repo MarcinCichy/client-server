@@ -6,9 +6,9 @@ class UserManagement:
     def __init__(self, database_support):
         self.database_support = database_support
 
-    @staticmethod
-    def user_add():
-        return {"User-add": "OK"}
+    # @staticmethod
+    # def user_add():
+    #     return {"User-add": "OK"}
 
     @handle_db_file_error
     def create_account(self, data):

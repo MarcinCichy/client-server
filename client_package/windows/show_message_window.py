@@ -1,6 +1,6 @@
 import curses
 from .base_window import BaseWindow
-import client_data
+import client_package.client_data as client_data
 
 
 class ShowMessageWindow(BaseWindow):

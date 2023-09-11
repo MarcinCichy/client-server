@@ -71,6 +71,6 @@ class SystemUtilities:
     def stop():
         return server_response.CONNECTION_CLOSE
 
-    @staticmethod
-    def clear():
-        return {"Clear": ""}
+    # @staticmethod
+    # def clear():
+    #     return {"Clear": ""}

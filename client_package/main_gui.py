@@ -24,11 +24,11 @@ class Console:
         self.login_window = LoginWindow(stdscr, self.middle_window)
         self.header_window = HeaderWindow(stdscr)
         self.info_window = InfoWindow(stdscr, self.login_window)
-        self.bottom_window = BottomWindow(stdscr, self.login_window)
         self.useradd_window = UserAddWindow(stdscr, self.middle_window, self.login_window)
         self.new_message_window = NewMessageWindow(stdscr, self.middle_window, self.login_window)
         self.show_message_window = ShowMessageWindow(stdscr)
         self.middle_window = MiddleWindow(stdscr, self.useradd_window, self.new_message_window, self.show_message_window, self.login_window)
+        self.bottom_window = BottomWindow(stdscr, self.login_window, self.middle_window)
         self.init_curses()
 
     def init_curses(self):
@@ -76,8 +76,7 @@ class Console:
     def run(self):
         while self.login_window.logged_in:
             self.info_window.show_server_info()
-            command_to_server = self.bottom_window.get_command()
-            server_response = ServerCommunication.send_command(command_to_server)
+            server_response = ServerCommunication.send_command(self.bottom_window.get_command())
             self.middle_window.show_response(server_response)
 
     def hide_windows(self):

@@ -1,7 +1,8 @@
 import curses
 from datetime import datetime
-import client_data
+import client_package.client_data as client_data
 from .base_window import BaseWindow
+from client_package.server_communication import ServerCommunication
 
 
 class UserAddWindow(BaseWindow):
@@ -59,7 +60,9 @@ class UserAddWindow(BaseWindow):
         self.window.refresh()
         curses.noecho()
 
-        self.middle_window.send_receive_command_and_show_response(self.command)
+        # self.middle_window.send_receive_command_and_show_response(self.command)
+        server_response = ServerCommunication.send_command(self.command)
+        self.middle_window.show_response(server_response)
 
     def show(self):
         self.init_window()

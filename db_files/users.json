@@ -29,7 +29,33 @@
             "permissions": "admin",
             "status": "active",
             "activation_date": "2023-07-06"
+        },
+        "asdf": {
+            "password": "efweg",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-09-10"
+        },
+        "frak": {
+            "password": "usedd",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-09-10"
+        },
+        "toto": {
+            "password": "cvbn",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-09-11"
+        },
+        "asa": {
+            "password": "fgdefhg",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-09-11"
         }
     },
-    "logged_users": []
+    "logged_users": [
+        "marcin"
+    ]
 }
