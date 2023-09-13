@@ -7,9 +7,9 @@ class MessageManagement:
     def __init__(self, database_support):
         self.database_support = database_support
 
-    # @staticmethod
-    # def msg_snd():
-    #     return {'Msg-snd': "OK"}
+    @staticmethod
+    def msg_snd():
+        return {'Msg-snd': "OK"}
 
     @handle_db_file_error
     def new_message(self, data):

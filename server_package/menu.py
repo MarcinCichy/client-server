@@ -24,17 +24,17 @@ class CommandHandler:
             "help": self.sys_utils.help,
             "info": self.sys_utils.info,
             "uptime": self.sys_utils.uptime,
-           # "clear": self.sys_utils.clear,
+            "clear": self.sys_utils.clear,
             "msg_count": self.message_management.msg_count,
             "msg-list": self.message_management.msg_list,
-            "msg-snd": self.message_management.new_message,  # nastąpiła zmiana
+            "msg-snd": self.message_management.msg_snd,  # nastąpiła zmiana
             "msg-del": self.message_management.msg_del,
             "new_message": self.message_management.new_message,
             "msg-show": self.message_management.msg_show
         }
         self.admin_commands = {
             "stop": SystemUtilities.stop,
-            "user-add": self.user_management.create_account,  # nastąpiła zmiana
+            "user-add": self.user_management.user_add,  # nastąpiła zmiana
             "user-list": self.user_management.user_list,
             "user-del": self.user_management.user_del,
             "user-perm": self.user_management.user_perm,
