@@ -143,7 +143,6 @@ class NewMessageWindow(BaseWindow):
         self.window.erase()
         self.window.refresh()
         curses.noecho()
-        # self.middle_window.send_receive_command_and_show_response(self.command)
 
         server_response = ServerCommunication.send_command(self.command)
         self.middle_window.show_response(server_response)
