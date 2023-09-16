@@ -12,9 +12,6 @@ class LoginWindow(BaseWindow):
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.username = ''
         self.password = ''
-        self.command = ''
-        self.login_username = ''
-        self.login_permissions = ''
         self.logged_in = False
         self.middle_window = middle_window
         self.handler = Handlers(self)
@@ -61,7 +58,7 @@ class LoginWindow(BaseWindow):
         curses.noecho()
 
     def login(self):
-        self.command = {
+        command = {
             self.username: {
                 "login":
                     (
@@ -70,7 +67,7 @@ class LoginWindow(BaseWindow):
                     )
                 }
         }
-        server_response = ServerCommunication.send_command(self.command)
+        server_response = ServerCommunication.send_command(command)
         return server_response
 
     def show(self):

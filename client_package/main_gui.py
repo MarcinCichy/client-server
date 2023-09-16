@@ -15,12 +15,10 @@ from server_communication import ServerCommunication
 
 class Console:
     def __init__(self, stdscr):
-        self.command_to_server = None
         self.middle_window = None
         self.stdscr = stdscr
         self.handlers = Handlers(self)
 
-        # Instantiate window subclasses
         self.login_window = LoginWindow(stdscr, self.middle_window)
         self.header_window = HeaderWindow(stdscr)
         self.info_window = InfoWindow(stdscr, self.login_window)
@@ -54,7 +52,7 @@ class Console:
                 self.init_windows()
                 self.useradd_window.middle_window = self.middle_window
                 self.new_message_window.middle_window = self.middle_window
-                self.show_message_window.middle_window = self.middle_window
+                # self.show_message_window.middle_window = self.middle_window
                 self.run()
 
     def init_windows(self):

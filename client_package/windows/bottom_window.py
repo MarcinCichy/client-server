@@ -11,7 +11,6 @@ class BottomWindow(BaseWindow):
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.login_window = logged_in_user_data
         self.handler = Handlers(self, middle_window)
-        # self.command = ''
 
     def init_window(self):
         self.window.hline(0, 1, 0, self.maxX)

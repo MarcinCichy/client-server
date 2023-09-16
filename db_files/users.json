@@ -30,53 +30,11 @@
             "status": "active",
             "activation_date": "2023-07-06"
         },
-        "asdf": {
-            "password": "efweg",
+        "jakis": {
+            "password": "inny",
             "permissions": "user",
             "status": "active",
-            "activation_date": "2023-09-10"
-        },
-        "frak": {
-            "password": "usedd",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-09-10"
-        },
-        "toto": {
-            "password": "cvbn",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-09-11"
-        },
-        "asa": {
-            "password": "fgdefhg",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-09-11"
-        },
-        "hjkl": {
-            "password": "asdf",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-09-11"
-        },
-        "ijak": {
-            "password": "ajak",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-09-11"
-        },
-        "utu": {
-            "password": "aty",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-09-11"
-        },
-        "ui": {
-            "password": "dui",
-            "permissions": "user",
-            "status": "active",
-            "activation_date": "2023-09-13"
+            "activation_date": "2023-09-15"
         }
     },
     "logged_users": [

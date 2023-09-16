@@ -13,8 +13,6 @@ class NewMessageWindow(BaseWindow):
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.recipient = ''
         self.content = ''
-        self.command = ''
-        self.date = datetime.now().strftime("%Y-%m-%d")
         self.middle_window = middle_window
         self.message_exceeded = None
         self.max_msg_length = None
@@ -48,7 +46,7 @@ class NewMessageWindow(BaseWindow):
         username = self.login_window.logged_username
 
         self.content = ''
-        self.command = {}
+        # command = {}
         self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
         curses.curs_set(2)
         curses.echo()
@@ -68,84 +66,113 @@ class NewMessageWindow(BaseWindow):
             key = self.window.getch()
             if key == 10:  # Enter
                 break
-            elif key == curses.KEY_BACKSPACE or key == ord('\b') or key == ord('\x7f'):  # Backspace
-                if content_x > 15:
-                    content_x -= 1
-                    self.content = self.content[:-1]
-                    self.window.delch(content_y, content_x)
-                    self.window.insstr(content_y, client_data.NEW_MSG_WIDTH - 2, " ")
-                    if content_x < client_data.NEW_MSG_WIDTH - 2:
-                        self.window.move(content_y, content_x)
-                    self.message_exceeded = False
-                    self.number_of_chars()
-                    self.window.move(content_y, content_x)
-                    self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
-                else:
-                    if content_y > 2:
-                        content_y -= 1
-                        content_x = len(self.content) % (client_data.NEW_MSG_WIDTH - 15) + 15
-                        self.window.move(content_y, content_x)
-                        self.message_exceeded = False
-            elif key == curses.KEY_LEFT:
-                if content_x > 15:
-                    content_x -= 1
-                    self.window.move(content_y, content_x)
-            elif key == curses.KEY_RIGHT:
-                if content_x < client_data.NEW_MSG_WIDTH - 2:
-                    content_x += 1
-                    self.window.move(content_y, content_x)
-            elif key == curses.KEY_UP:
-                pass
-            elif key == curses.KEY_DOWN:
-                pass
-            elif key == curses.KEY_DC:  # DEL
-                if content_x < client_data.NEW_MSG_WIDTH - 2:
-                    self.content = self.content[:content_x - 15] + self.content[content_x - 14:]
-                    self.window.delch(content_y, content_x)
-                    self.window.insstr(content_y, client_data.NEW_MSG_WIDTH - 2, " ")
-                    if content_x < client_data.NEW_MSG_WIDTH - 2:
-                        self.window.move(content_y, content_x)
-                    self.message_exceeded = False
-                    self.number_of_chars()
-                self.window.move(content_y, content_x)
-            else:
-                char = chr(key)
-                if char.isprintable() and len(self.content) < self.max_msg_length:
-                    if content_x == client_data.NEW_MSG_WIDTH - 3:
-                        if content_y < client_data.NEW_MSG_HEIGHT - 1:
-                            content_y += 1
-                            content_x = 15
-                    self.content += char
-                    if len(self.content) >= self.max_msg_length:
-                        self.window.move(content_y, content_x)
-                    self.window.addch(content_y, content_x, char)
-                    content_x += 1
-                    curses.noecho()
-                self.number_of_chars()
-                self.window.move(content_y, content_x)
-                self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
-                if len(self.content) >= self.max_msg_length:
-                    self.message_exceeded = True
-                else:
-                    self.message_exceeded = False
+            content_y, content_x = self.handle_key(key, content_y, content_x)
 
-        self.command = {
+        command = self.build_command(username)
+        self.window.erase()
+        self.window.refresh()
+        curses.noecho()
+
+        server_response = ServerCommunication.send_command(command)
+        self.middle_window.show_response(server_response)
+
+    def handle_key(self, key, content_y, content_x):
+        if key == curses.KEY_BACKSPACE or key == ord('\b') or key == ord('\x7f'):
+            content_y, content_x = self.handle_backspace(content_y, content_x)
+        elif key in [curses.KEY_LEFT, curses.KEY_RIGHT, curses.KEY_UP, curses.KEY_DOWN]:
+            content_y, content_x = self.handle_arrow_keys(key, content_y, content_x)
+        elif key == curses.KEY_DC:
+            content_y, content_x = self.handle_delete(content_y, content_x)
+        else:
+            content_y, content_x = self.handle_char_input(key, content_y, content_x)
+        return content_y, content_x
+
+    def handle_backspace(self, content_y, content_x):
+        if content_x > 15:
+            content_x -= 1
+            self.content = self.content[:-1]
+            self.window.delch(content_y, content_x)
+            self.window.insstr(content_y, client_data.NEW_MSG_WIDTH - 2, " ")
+            if content_x < client_data.NEW_MSG_WIDTH - 2:
+                self.window.move(content_y, content_x)
+            self.message_exceeded = False
+            self.number_of_chars()
+            self.window.move(content_y, content_x)
+            self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
+        else:
+            if content_y > 2:
+                content_y -= 1
+                content_x = len(self.content) % (client_data.NEW_MSG_WIDTH - 15) + 15
+                self.window.move(content_y, content_x)
+                self.message_exceeded = False
+        return content_y, content_x
+
+    def handle_arrow_keys(self, key, content_y, content_x):
+        if key == curses.KEY_LEFT:
+            if content_x > 15:
+                content_x -= 1
+                self.window.move(content_y, content_x)
+        elif key == curses.KEY_RIGHT:
+            if content_x < client_data.NEW_MSG_WIDTH - 2:
+                content_x += 1
+                self.window.move(content_y, content_x)
+        elif key == curses.KEY_UP:
+            if content_y > 2:
+                content_y -= 1
+                self.window.move(content_y, content_x)
+        elif key == curses.KEY_DOWN:
+            if content_y < client_data.NEW_MSG_HEIGHT - 2:
+                content_y += 1
+                self.window.move(content_y, content_x)
+        return content_y, content_x
+
+    def handle_delete(self, content_y, content_x):
+        if content_x < client_data.NEW_MSG_WIDTH - 2:
+            self.content = self.content[:content_x - 15] + self.content[content_x - 14:]
+            self.window.delch(content_y, content_x)
+            self.window.insstr(content_y, client_data.NEW_MSG_WIDTH - 2, " ")
+            if content_x < client_data.NEW_MSG_WIDTH - 2:
+                self.window.move(content_y, content_x)
+            self.message_exceeded = False
+            self.number_of_chars()
+        self.window.move(content_y, content_x)
+        return content_y, content_x
+
+    def handle_char_input(self, key, content_y, content_x):
+        char = chr(key)
+        if char.isprintable() and len(self.content) < self.max_msg_length:
+            if content_x == client_data.NEW_MSG_WIDTH - 3:
+                if content_y < client_data.NEW_MSG_HEIGHT - 1:
+                    content_y += 1
+                    content_x = 15
+            self.content += char
+            if len(self.content) >= self.max_msg_length:
+                self.window.move(content_y, content_x)
+            self.window.addch(content_y, content_x, char)
+            content_x += 1
+            curses.noecho()
+        self.number_of_chars()
+        self.window.move(content_y, content_x)
+        self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
+        if len(self.content) >= self.max_msg_length:
+            self.message_exceeded = True
+        else:
+            self.message_exceeded = False
+        return content_y, content_x
+
+    def build_command(self, username):
+        date = datetime.now().strftime("%Y-%m-%d")
+        command = {
             username: {
                 "new_message": (
-                    {'sender': username },
-                    {'date': str(self.date)},
+                    {'sender': username},
+                    {'date': str(date)},
                     {'recipient': self.recipient},
                     {'content': self.content}
                 )
             }
         }
-
-        self.window.erase()
-        self.window.refresh()
-        curses.noecho()
-
-        server_response = ServerCommunication.send_command(self.command)
-        self.middle_window.show_response(server_response)
+        return command
 
     def show(self):
         self.init_window()
@@ -154,7 +181,6 @@ class NewMessageWindow(BaseWindow):
         curses.curs_set(2)
         curses.echo()
 
-        self.init_window()
         self.get_new_message()
         curses.noecho()
         curses.curs_set(0)

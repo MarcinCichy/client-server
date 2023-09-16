@@ -25,20 +25,25 @@ class InfoWindow(BaseWindow):
         check_connection = ServerCommunication.send_command(command)
         if "Error" not in check_connection.keys():
             self.window.refresh()
-            self.clear_line(1)
 
+            self.clear_line(1)
             command = {username: "info"}
             server_response = ServerCommunication.send_command(command)
             self.window.addstr(1, 2, f'Version: {server_response["version"]}')
+
             self.clear_line(2)
             self.window.addstr(2, 2, f'Start at: {server_response["start_at"]}')
+
             self.clear_line(3)
             command = {username: "uptime"}
             self.window.addstr(3, 2, f'Uptime: {ServerCommunication.send_command(command)["uptime"]}')
+
             self.clear_line(4)
             self.window.addstr(4, 1, f' Logged: {username}')
+
             self.clear_line(5)
             self.window.addstr(5, 1, f' Permissions: {permissions}')
+
             self.clear_line(6)
             self.window.refresh()
 

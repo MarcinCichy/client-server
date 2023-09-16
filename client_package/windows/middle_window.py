@@ -10,14 +10,13 @@ class MiddleWindow(BaseWindow):
         self.window = self.stdscr.subwin(self.maxY - 5, client_data.MIDDLE_HEIGHT, 2, 1)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
         self.previous_message = ''
-        self.command = ''
-        self.useradd_window = useradd_window
-        self.new_message_window = new_message_window
-        self.show_message_window = show_message_window
         self.maxY = self.window.getmaxyx()[0]
         self.maxX = self.window.getmaxyx()[1]
         self.console = None
         self.handler = Handlers(self)
+        self.useradd_window = useradd_window
+        self.new_message_window = new_message_window
+        self.show_message_window = show_message_window
         self.login_window = login_window
 
     def init_window(self):

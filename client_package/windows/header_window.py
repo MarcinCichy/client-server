@@ -1,5 +1,5 @@
 import curses
-import client_data
+import client_package.client_data as client_data
 from .base_window import BaseWindow
 
 

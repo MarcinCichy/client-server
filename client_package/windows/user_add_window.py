@@ -14,7 +14,6 @@ class UserAddWindow(BaseWindow):
         self.new_username = ''
         self.new_password = ''
         self.new_permissions = ''
-        self.command = ''
         self.middle_window = middle_window
         self.activation_date = datetime.now().strftime("%Y-%m-%d")
         self.login_window = login_window
@@ -43,7 +42,7 @@ class UserAddWindow(BaseWindow):
         self.init_window()  # this line is needed to preserve window borders at right side
         self.new_permissions = self.window.getstr(3, 15).decode(errors="ignore")
 
-        self.command = {
+        command = {
             logged_username:
                 {
                     "create_account": (
@@ -60,7 +59,7 @@ class UserAddWindow(BaseWindow):
         self.window.refresh()
         curses.noecho()
 
-        server_response = ServerCommunication.send_command(self.command)
+        server_response = ServerCommunication.send_command(command)
         self.middle_window.show_response(server_response)
 
     def show(self):

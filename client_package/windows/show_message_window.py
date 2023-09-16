@@ -27,11 +27,11 @@ class ShowMessageWindow(BaseWindow):
         self.content = message_content["Message to show"]["content"]
 
         self.init_window()
-        self.small_show_sign_by_sign(1, self.sender)
+        self.small_show_character_by_character(1, self.sender)
         self.window.refresh()
-        self.small_show_sign_by_sign(2, self.date)
+        self.small_show_character_by_character(2, self.date)
         self.window.refresh()
-        self.small_show_sign_by_sign(3, self.content)
+        self.small_show_character_by_character(3, self.content)
         self.window.refresh()
 
         curses.curs_set(0)
@@ -43,7 +43,7 @@ class ShowMessageWindow(BaseWindow):
                 self.window.refresh()
                 break
 
-    def small_show_sign_by_sign(self, row, text):
+    def small_show_character_by_character(self, row, text):
         column = 0
         self.window.refresh()
         for char in str(text):
