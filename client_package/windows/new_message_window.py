@@ -15,7 +15,7 @@ class NewMessageWindow(BaseWindow):
         self.content = ''
         self.middle_window = middle_window
         self.message_exceeded = None
-        self.max_msg_length = None
+        self.max_msg_length = None      # in the new instance the attribute must be reset
         self.login_window = login_window
 
     def init_window(self):
@@ -144,7 +144,7 @@ class NewMessageWindow(BaseWindow):
                 if content_y < client_data.NEW_MSG_HEIGHT - 1:
                     content_y += 1
                     content_x = 15
-            self.content += char
+            self.content = self.content[:content_x - 15] + char + self.content[content_x - 14:]
             if len(self.content) >= self.max_msg_length:
                 self.window.move(content_y, content_x)
             self.window.addch(content_y, content_x, char)
