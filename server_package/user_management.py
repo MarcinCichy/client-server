@@ -18,7 +18,6 @@ class UserManagement:
         new_user = {}
         new_key = None
 
-        # !!! sprawdzic poniższa pętlę i jej warunki
         for dictionary in data:
             key = next(iter(dictionary))
             value = dictionary[key]

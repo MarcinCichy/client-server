@@ -10,7 +10,7 @@ from windows.new_message_window import NewMessageWindow
 from windows.show_message_window import ShowMessageWindow
 from windows.user_add_window import UserAddWindow
 from windows.handlers import Handlers
-from server_communication import ServerCommunication
+from client_communication import ClientCommunication
 
 
 class Console:
@@ -52,7 +52,6 @@ class Console:
                 self.init_windows()
                 self.useradd_window.middle_window = self.middle_window
                 self.new_message_window.middle_window = self.middle_window
-                # self.show_message_window.middle_window = self.middle_window
                 self.run()
 
     def init_windows(self):
@@ -74,7 +73,7 @@ class Console:
     def run(self):
         while self.login_window.logged_in:
             self.info_window.show_server_info()
-            server_response = ServerCommunication.send_command(self.bottom_window.get_command())
+            server_response = ClientCommunication.send_command(self.bottom_window.get_command())
             self.middle_window.show_response(server_response)
 
     def hide_windows(self):

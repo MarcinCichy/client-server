@@ -2,7 +2,7 @@ import curses
 from datetime import datetime
 import client_package.client_data as client_data
 from .base_window import BaseWindow
-from client_package.server_communication import ServerCommunication
+from client_package.client_communication import ClientCommunication
 
 
 class NewMessageWindow(BaseWindow):
@@ -43,10 +43,9 @@ class NewMessageWindow(BaseWindow):
         self.window.refresh()
 
     def get_new_message(self):
-        username = self.login_window.logged_username
+        logged_username = self.login_window.logged_username
 
         self.content = ''
-        # command = {}
         self.window.attron(curses.color_pair(client_data.COLOR_PAIR))
         curses.curs_set(2)
         curses.echo()
@@ -68,12 +67,12 @@ class NewMessageWindow(BaseWindow):
                 break
             content_y, content_x = self.handle_key(key, content_y, content_x)
 
-        command = self.build_command(username)
+        command = self.build_command(logged_username)
         self.window.erase()
         self.window.refresh()
         curses.noecho()
 
-        server_response = ServerCommunication.send_command(command)
+        server_response = ClientCommunication.send_command(command)
         self.middle_window.show_response(server_response)
 
     def handle_key(self, key, content_y, content_x):
@@ -90,7 +89,7 @@ class NewMessageWindow(BaseWindow):
     def handle_backspace(self, content_y, content_x):
         if content_x > 15:
             content_x -= 1
-            self.content = self.content[:-1]
+            self.content = self.content[:content_x - 15] + self.content[content_x - 14:]
             self.window.delch(content_y, content_x)
             self.window.insstr(content_y, client_data.NEW_MSG_WIDTH - 2, " ")
             if content_x < client_data.NEW_MSG_WIDTH - 2:
@@ -160,13 +159,13 @@ class NewMessageWindow(BaseWindow):
             self.message_exceeded = False
         return content_y, content_x
 
-    def build_command(self, username):
-        date = datetime.now().strftime("%Y-%m-%d")
+    def build_command(self, logged_username):
+        message_date = datetime.now().strftime("%Y-%m-%d")
         command = {
-            username: {
+            logged_username: {
                 "new_message": (
-                    {'sender': username},
-                    {'date': str(date)},
+                    {'sender': logged_username},
+                    {'date': message_date},
                     {'recipient': self.recipient},
                     {'content': self.content}
                 )

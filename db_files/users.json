@@ -35,6 +35,12 @@
             "permissions": "user",
             "status": "active",
             "activation_date": "2023-09-15"
+        },
+        "oto": {
+            "password": "kto",
+            "permissions": "user",
+            "status": "active",
+            "activation_date": "2023-09-17"
         }
     },
     "logged_users": [

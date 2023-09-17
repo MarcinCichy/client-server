@@ -1,6 +1,6 @@
 import curses
 import client_package.client_data as client_data
-from client_package.server_communication import ServerCommunication
+from client_package.client_communication import ClientCommunication
 from .base_window import BaseWindow
 
 
@@ -22,13 +22,13 @@ class InfoWindow(BaseWindow):
         permissions = self.login_window.logged_user_permissions
 
         command = {"command": ""}
-        check_connection = ServerCommunication.send_command(command)
+        check_connection = ClientCommunication.send_command(command)
         if "Error" not in check_connection.keys():
             self.window.refresh()
 
             self.clear_line(1)
             command = {username: "info"}
-            server_response = ServerCommunication.send_command(command)
+            server_response = ClientCommunication.send_command(command)
             self.window.addstr(1, 2, f'Version: {server_response["version"]}')
 
             self.clear_line(2)
@@ -36,7 +36,7 @@ class InfoWindow(BaseWindow):
 
             self.clear_line(3)
             command = {username: "uptime"}
-            self.window.addstr(3, 2, f'Uptime: {ServerCommunication.send_command(command)["uptime"]}')
+            self.window.addstr(3, 2, f'Uptime: {ClientCommunication.send_command(command)["uptime"]}')
 
             self.clear_line(4)
             self.window.addstr(4, 1, f' Logged: {username}')
@@ -48,7 +48,7 @@ class InfoWindow(BaseWindow):
             self.window.refresh()
 
             command = {username: {"msg_count": ""}}
-            server_response = ServerCommunication.send_command(command)
+            server_response = ClientCommunication.send_command(command)
 
             if "Error" in server_response:
                 inbox_msg_count = server_response['Error']

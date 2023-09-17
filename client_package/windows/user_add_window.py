@@ -2,7 +2,7 @@ import curses
 from datetime import datetime
 import client_package.client_data as client_data
 from .base_window import BaseWindow
-from client_package.server_communication import ServerCommunication
+from client_package.client_communication import ClientCommunication
 
 
 class UserAddWindow(BaseWindow):
@@ -15,7 +15,7 @@ class UserAddWindow(BaseWindow):
         self.new_password = ''
         self.new_permissions = ''
         self.middle_window = middle_window
-        self.activation_date = datetime.now().strftime("%Y-%m-%d")
+        #  self.activation_date = datetime.now().strftime("%Y-%m-%d")
         self.login_window = login_window
 
     def init_window(self):
@@ -42,25 +42,29 @@ class UserAddWindow(BaseWindow):
         self.init_window()  # this line is needed to preserve window borders at right side
         self.new_permissions = self.window.getstr(3, 15).decode(errors="ignore")
 
+        command = self.build_command(logged_username)
+        self.window.erase()
+        self.window.refresh()
+        curses.noecho()
+
+        server_response = ClientCommunication.send_command(command)
+        self.middle_window.show_response(server_response)
+
+    def build_command(self, logged_username):
+        activation_date = datetime.now().strftime("%Y-%m-%d")
+
         command = {
-            logged_username:
-                {
+            logged_username: {
                     "create_account": (
                         {'username': self.new_username},
                         {'password': self.new_password},
                         {'permissions': self.new_permissions},
                         {'status': "active"},
-                        {'activation_date': self.activation_date}
+                        {'activation_date': activation_date}
                     )
                 }
         }
-
-        self.window.erase()
-        self.window.refresh()
-        curses.noecho()
-
-        server_response = ServerCommunication.send_command(command)
-        self.middle_window.show_response(server_response)
+        return command
 
     def show(self):
         self.init_window()

@@ -1,10 +1,11 @@
 import client
-from windows.handlers import Handlers
+# from windows.handlers import Handlers
 
 
-class ServerCommunication:
+class ClientCommunication:
     def __init__(self):
-        self.handler = Handlers(self)
+        pass
+        # self.handler = Handlers(self)
 
     @staticmethod
     def send_command(command): 

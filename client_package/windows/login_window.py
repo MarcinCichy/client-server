@@ -1,6 +1,6 @@
 import curses
 import client_package.client_data as client_data
-from client_package.server_communication import ServerCommunication
+from client_package.client_communication import ClientCommunication
 from .base_window import BaseWindow
 from .handlers import Handlers
 
@@ -67,7 +67,7 @@ class LoginWindow(BaseWindow):
                     )
                 }
         }
-        server_response = ServerCommunication.send_command(command)
+        server_response = ClientCommunication.send_command(command)
         return server_response
 
     def show(self):
