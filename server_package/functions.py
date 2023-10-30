@@ -1,7 +1,7 @@
 from datetime import datetime
 from os import name, system
-import server_data
-import server_response
+import server_package.server_data as server_data
+import server_package.server_response as server_response
 
 
 class SystemUtilities:
