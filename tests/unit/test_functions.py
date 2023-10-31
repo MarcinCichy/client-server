@@ -11,6 +11,20 @@ class TestSystemUtilities(unittest.TestCase):
     def setUp(self):
         self.util = SystemUtilities()
 
+    @patch("server_package.functions.system")
+    @patch("server_package.functions.name")
+    def test_clear_screen_windows(self, mock_name, mock_system):
+        mock_name.return_value = "nt"
+        self.util.clear_screen()
+        mock_system.assert_called_with("cls")
+
+    @patch("server_package.functions.system")
+    @patch("server_package.functions.name")
+    def test_clear_screen_other(self, mock_name, mock_system):
+        mock_name.return_value = "posix"  # for UNIX
+        self.util.clear_screen()
+        mock_system.assert_called_with("clear")
+
     def test_uptime(self):
         mocked_time = datetime.now() - timedelta(hours=1, minutes=30)
         with patch.object(server_data, "START_TIME", new=mocked_time):
@@ -35,9 +49,17 @@ class TestSystemUtilities(unittest.TestCase):
         self.assertIn("info", result)
         self.assertIn("stop", result)
 
+    def test_help_invalid_permission(self):
+        result = self.util.help(["unknown"])
+        self.assertEqual(result, server_response.E_WRONG_PERMISSIONS)
+
     def test_stop(self):
         result = self.util.stop()
         self.assertEqual(result, server_response.CONNECTION_CLOSE)
+
+    def test_clear(self):
+        result = self.util.clear()
+        self.assertEqual(result, {"Clear": ""})
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 from datetime import datetime
-from os import name, system
+# from os import name, system
+import os
 import server_package.server_data as server_data
 import server_package.server_response as server_response
 
@@ -10,10 +11,10 @@ class SystemUtilities:
         """Clear the screen in depends on operating system
         (Windows, Linux or iOS)."""
 
-        if name == "nt":
-            _ = system("cls")
+        if os.name == "nt":
+            os.system("cls")
         else:
-            _ = system("clear")
+            os.system("clear")
 
     @staticmethod
     def uptime():
