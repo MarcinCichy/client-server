@@ -43,5 +43,7 @@
             "activation_date": "2023-09-17"
         }
     },
-    "logged_users": []
+    "logged_users": [
+        "marcin"
+    ]
 }

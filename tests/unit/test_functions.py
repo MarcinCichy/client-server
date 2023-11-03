@@ -1,3 +1,4 @@
+import os
 import unittest
 from unittest.mock import patch
 import server_package.server_data as server_data
@@ -11,17 +12,15 @@ class TestSystemUtilities(unittest.TestCase):
     def setUp(self):
         self.util = SystemUtilities()
 
-    @patch("server_package.functions.system")
-    @patch("server_package.functions.name")
-    def test_clear_screen_windows(self, mock_name, mock_system):
-        mock_name.return_value = "nt"
+    @patch("os.system")
+    @patch.object(os, "name", "nt")
+    def test_clear_screen_windows(self, mock_system):
         self.util.clear_screen()
         mock_system.assert_called_with("cls")
 
-    @patch("server_package.functions.system")
-    @patch("server_package.functions.name")
-    def test_clear_screen_other(self, mock_name, mock_system):
-        mock_name.return_value = "posix"  # for UNIX
+    @patch("os.system")
+    @patch.object(os, "name", "posix")
+    def test_clear_screen_other(self, mock_system):
         self.util.clear_screen()
         mock_system.assert_called_with("clear")
 
@@ -37,17 +36,35 @@ class TestSystemUtilities(unittest.TestCase):
                 result = self.util.info()
                 self.assertEqual(result, {"version": "1.0.0", "start_at": "2023-01-01"})
 
+    # def test_help_user(self):
+    #     result = self.util.help(["user"])
+    #     self.assertIn("uptime", result)
+    #     self.assertIn("info", result)
+    #     self.assertNotIn("stop", result)
+    #
+    # def test_help_admin(self):
+    #     result = self.util.help(["admin"])
+    #     self.assertIn("uptime", result)
+    #     self.assertIn("info", result)
+    #     self.assertIn("stop", result)
+    #
     def test_help_user(self):
         result = self.util.help(["user"])
         self.assertIn("uptime", result)
         self.assertIn("info", result)
+        self.assertIn("logout", result)
+        self.assertIn("msg-list", result)
         self.assertNotIn("stop", result)
+        self.assertNotIn("user-add", result)
+        self.assertNotIn("user-list", result)
 
     def test_help_admin(self):
         result = self.util.help(["admin"])
         self.assertIn("uptime", result)
         self.assertIn("info", result)
         self.assertIn("stop", result)
+        self.assertIn("user-add", result)
+        self.assertIn("user-list", result)
 
     def test_help_invalid_permission(self):
         result = self.util.help(["unknown"])

@@ -31,3 +31,28 @@ USER_STATUS_CHANGED = " - user status was changed"
 YOUR_INBOX_IS_FULL = " / Your Inbox is full"
 CONNECTION_CLOSE = {"Connection": "close"}
 UNRECOGNISED_COMMAND = {"Unrecognised command": "Please correct or type <help>."}
+
+
+# -------------- HELP RESPONSES -------------------
+
+USER_HELP_DICT = {
+            "uptime": "returns the server's live time",
+            "info": "returns the version number of the server and the date it was created",
+            "help": "returns the list of available commands with short description",
+            "logout": "to log out the User",
+            "clear": " to clear the screen",
+            "msg-list": "to show content of inbox",
+            "msg-snd": " to create and send message",
+            "msg-del [number of message]": "to delete selected message",
+            "msg-show [number of message]": "to show details of message (from, date, content)"
+}
+
+ADMIN_HELP_DICT = {
+            "stop": "stops both the server and the client",
+            "user-add": "create an account",
+            "user-list": "shows the list of existing accounts",
+            "user-del [username]": "deletes the selected account",
+            "user-perm [username] [permission]": "change permissions [user] or [admin]",
+            "user-stat [username] [status]": "change user status [active] or [banned]",
+            "user-info [username]": "to show information about account of selected user"
+}

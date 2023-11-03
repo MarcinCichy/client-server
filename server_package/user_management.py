@@ -1,5 +1,5 @@
-import server_response
-from database_support import handle_db_file_error
+import server_package.server_response as server_response
+from server_package.database_support import handle_db_file_error
 
 
 class UserManagement:

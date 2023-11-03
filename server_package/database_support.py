@@ -1,7 +1,7 @@
 import json
 from functools import wraps
-import server_response
-import server_data
+import server_package.server_response as server_response
+import server_package.server_data as server_data
 
 
 def handle_db_file_error(func):
