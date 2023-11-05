@@ -44,6 +44,7 @@ class CommandHandler:
         }
 
     def use_command(self, entrance_command):
+        print(f"ENTRANCE COMMAND: {entrance_command}")
         if isinstance(entrance_command, dict):
 
             # Extract the first key, which is the username submitted
@@ -62,9 +63,11 @@ class CommandHandler:
             data = self.new_command[command]
         else:
             command = self.new_command
+            print(f"OTHER COMMAND: {command}")
             data = None
 
         if command in self.all_users_commands:
+            print(f"Yes, command: {command} is in self.all_users_commands")
             match command:
                 case "login":
                     self.username = data[0]['username']
@@ -72,6 +75,7 @@ class CommandHandler:
                     data = self.username
                 case "help":
                     data = self.permissions
+                    print(f'help data: {data}')
                 case "msg-list":
                     data = self.username
                 case "msg-del":
@@ -99,7 +103,7 @@ class CommandHandler:
         else:
             result = server_response.UNRECOGNISED_COMMAND
 
-        print(f'Server response: {result}')
+        # print(f'Server response: {result}')
         print(f'EXIT USERNAME = {self.username}')
         print(f'EXIT PERMISSIONS: {self.permissions}')
         print(f'EXIT DATA = {data}')

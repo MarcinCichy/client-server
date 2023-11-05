@@ -12,7 +12,7 @@ class Server:
         self.srv_port = srv_port
         self.srv_buff = srv_buff
 
-        self.logged_in_user_data = ServerUserState()
+        self.logged_in_user_data = ServerUserState
         self.handler = CommandHandler(self.logged_in_user_data)
 
     def server_connection(self):
