@@ -27,14 +27,14 @@ class CommandHandler:
             "clear": self.sys_utils.clear,
             "msg_count": self.message_management.msg_count,
             "msg-list": self.message_management.msg_list,
-            "msg-snd": self.message_management.msg_snd,  # nastąpiła zmiana
+            "msg-snd": self.message_management.msg_snd,
             "msg-del": self.message_management.msg_del,
             "new_message": self.message_management.new_message,
             "msg-show": self.message_management.msg_show
         }
         self.admin_commands = {
             "stop": SystemUtilities.stop,
-            "user-add": self.user_management.user_add,  # nastąpiła zmiana
+            "user-add": self.user_management.user_add,
             "user-list": self.user_management.user_list,
             "user-del": self.user_management.user_del,
             "user-perm": self.user_management.user_perm,
@@ -51,6 +51,8 @@ class CommandHandler:
             self.username = next(iter(entrance_command))
             print(f'MENU username = {self.username}')
             # Based on this username, create a new dictionary with the command
+            print(f'LOGGD_IN_USER_DATA: {self.logged_in_user_data}')
+            print(f'TYPE LOGGD_IN_USER_DATA: {type(self.logged_in_user_data)}')
             self.new_command = entrance_command.pop(self.username)
             self.permissions = self.logged_in_user_data.logged_in_permissions
             print(f'NEW_COMMAND  = {self.new_command}')
@@ -109,7 +111,9 @@ class CommandHandler:
         print(f'EXIT DATA = {data}')
 
         print(f'FROM USER_STATE_USER  = {self.logged_in_user_data.logged_in_username}')
+        print(type(self.logged_in_user_data.logged_in_username))
         print(f'FROM USER_STATE_PERM  = {self.logged_in_user_data.logged_in_permissions}')
+        print(type(self.logged_in_user_data.logged_in_permissions))
         return result
 
 

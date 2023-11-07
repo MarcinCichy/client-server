@@ -20,7 +20,7 @@ class TestSystemUtilities(unittest.TestCase):
 
     @patch("os.system")
     @patch.object(os, "name", "posix")
-    def test_clear_screen_other(self, mock_system):
+    def test_clear_screen_other_os(self, mock_system):
         self.util.clear_screen()
         mock_system.assert_called_with("clear")
 
@@ -36,18 +36,6 @@ class TestSystemUtilities(unittest.TestCase):
                 result = self.util.info()
                 self.assertEqual(result, {"version": "1.0.0", "start_at": "2023-01-01"})
 
-    # def test_help_user(self):
-    #     result = self.util.help(["user"])
-    #     self.assertIn("uptime", result)
-    #     self.assertIn("info", result)
-    #     self.assertNotIn("stop", result)
-    #
-    # def test_help_admin(self):
-    #     result = self.util.help(["admin"])
-    #     self.assertIn("uptime", result)
-    #     self.assertIn("info", result)
-    #     self.assertIn("stop", result)
-    #
     def test_help_user(self):
         result = self.util.help(["user"])
         self.assertIn("uptime", result)
@@ -78,6 +66,3 @@ class TestSystemUtilities(unittest.TestCase):
         result = self.util.clear()
         self.assertEqual(result, {"Clear": ""})
 
-
-if __name__ == "__main__":
-    unittest.main(verbosity=2)
