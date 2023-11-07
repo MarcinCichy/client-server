@@ -3,6 +3,7 @@ from datetime import datetime
 import os
 import server_package.server_data as server_data
 import server_package.server_response as server_response
+from itertools import islice
 
 
 class SystemUtilities:
@@ -32,21 +33,21 @@ class SystemUtilities:
         #     "line1": "line",
         #     "Commands for All": ""
         # }
-        server_response.USER_HELP_DICT
+        # server_response.USER_HELP_DICT
 
         # second_help_dict_line = {
         #     "line2": "line",
         #     "Commands for Admin only": ""
         # }
-        server_response.ADMIN_HELP_DICT
+        # server_response.ADMIN_HELP_DICT
 
         if "user" in permissions:
             # user_help_dict = {**first_help_line, **server_response.USER_HELP_DICT}
-            user_help_dict = {**server_response.USER_HELP_DICT}
+            user_help_dict = dict(islice(server_response.HELP_DICT.items(), 9))
             help_content = user_help_dict
         elif "admin" in permissions:
             # help_dict = {**first_help_line, **server_response.USER_HELP_DICT, **second_help_dict_line, **server_response.ADMIN_HELP_DICT}
-            help_dict = {**server_response.USER_HELP_DICT, **server_response.ADMIN_HELP_DICT}
+            help_dict = server_response.HELP_DICT
             help_content = help_dict
         else:
             help_content = server_response.E_WRONG_PERMISSIONS

@@ -35,7 +35,7 @@ UNRECOGNISED_COMMAND = {"Unrecognised command": "Please correct or type <help>."
 
 # -------------- HELP RESPONSES -------------------
 
-USER_HELP_DICT = {
+HELP_DICT = {
             "uptime": "returns the server's live time",
             "info": "returns the version number of the server and the date it was created",
             "help": "returns the list of available commands with short description",
@@ -44,10 +44,7 @@ USER_HELP_DICT = {
             "msg-list": "to show content of inbox",
             "msg-snd": " to create and send message",
             "msg-del [number of message]": "to delete selected message",
-            "msg-show [number of message]": "to show details of message (from, date, content)"
-}
-
-ADMIN_HELP_DICT = {
+            "msg-show [number of message]": "to show details of message (from, date, content)",
             "stop": "stops both the server and the client",
             "user-add": "create an account",
             "user-list": "shows the list of existing accounts",

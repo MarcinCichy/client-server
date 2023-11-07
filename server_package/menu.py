@@ -51,8 +51,6 @@ class CommandHandler:
             self.username = next(iter(entrance_command))
             print(f'MENU username = {self.username}')
             # Based on this username, create a new dictionary with the command
-            print(f'LOGGD_IN_USER_DATA: {self.logged_in_user_data}')
-            print(f'TYPE LOGGD_IN_USER_DATA: {type(self.logged_in_user_data)}')
             self.new_command = entrance_command.pop(self.username)
             self.permissions = self.logged_in_user_data.logged_in_permissions
             print(f'NEW_COMMAND  = {self.new_command}')
@@ -111,9 +109,7 @@ class CommandHandler:
         print(f'EXIT DATA = {data}')
 
         print(f'FROM USER_STATE_USER  = {self.logged_in_user_data.logged_in_username}')
-        print(type(self.logged_in_user_data.logged_in_username))
         print(f'FROM USER_STATE_PERM  = {self.logged_in_user_data.logged_in_permissions}')
-        print(type(self.logged_in_user_data.logged_in_permissions))
         return result
 
 
