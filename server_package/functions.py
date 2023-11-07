@@ -28,23 +28,25 @@ class SystemUtilities:
 
     @staticmethod
     def help(permissions):
-        first_help_line = {
-            "line1": "line",
-            "Commands for All": ""
-        }
+        # first_help_line = {
+        #     "line1": "line",
+        #     "Commands for All": ""
+        # }
         server_response.USER_HELP_DICT
 
-        second_help_dict_line = {
-            "line2": "line",
-            "Commands for Admin only": ""
-        }
+        # second_help_dict_line = {
+        #     "line2": "line",
+        #     "Commands for Admin only": ""
+        # }
         server_response.ADMIN_HELP_DICT
 
         if "user" in permissions:
-            user_help_dict = {**first_help_line, **server_response.USER_HELP_DICT}
+            # user_help_dict = {**first_help_line, **server_response.USER_HELP_DICT}
+            user_help_dict = {**server_response.USER_HELP_DICT}
             help_content = user_help_dict
         elif "admin" in permissions:
-            help_dict = {**first_help_line, **server_response.USER_HELP_DICT, **second_help_dict_line, **server_response.ADMIN_HELP_DICT}
+            # help_dict = {**first_help_line, **server_response.USER_HELP_DICT, **second_help_dict_line, **server_response.ADMIN_HELP_DICT}
+            help_dict = {**server_response.USER_HELP_DICT, **server_response.ADMIN_HELP_DICT}
             help_content = help_dict
         else:
             help_content = server_response.E_WRONG_PERMISSIONS
