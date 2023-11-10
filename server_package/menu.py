@@ -33,7 +33,7 @@ class CommandHandler:
             "msg-show": self.message_management.msg_show
         }
         self.admin_commands = {
-            "stop": SystemUtilities.stop,
+            "stop": self.sys_utils.stop,
             "user-add": self.user_management.user_add,
             "user-list": self.user_management.user_list,
             "user-del": self.user_management.user_del,
@@ -111,6 +111,7 @@ class CommandHandler:
         print(f'FROM USER_STATE_USER  = {self.logged_in_user_data.logged_in_username}')
         print(f'FROM USER_STATE_PERM  = {self.logged_in_user_data.logged_in_permissions}')
         return result
+
 
 
 
