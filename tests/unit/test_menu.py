@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 from server_package.menu import CommandHandler
 from server_package.server_user_state import ServerUserState
-import server_package.server_response as server_response
+# import server_package.server_response as server_response
 
 
 class TestMenu(unittest.TestCase):
@@ -50,6 +50,7 @@ class TestMenu(unittest.TestCase):
     def test_admin_commands_stop_with_different_user_permissions(self, mock_sys_utils):
         expected_stop_output_admin = {'Connection': 'close'}
         expected_stop_output_user = {"Error": "Command unavailable. No permissions"}
+        expected_stop_output_unknown = {"Error": "Command unavailable. No permissions"}
         mock_sys_utils.return_value.stop.return_value = expected_stop_output_admin
 
         admin_data = ServerUserState()
@@ -68,6 +69,13 @@ class TestMenu(unittest.TestCase):
         user_result = user_command_handler.use_command({'command': 'stop'})
         self.assertEqual(user_result, expected_stop_output_user)
 
+        unknown_data = ServerUserState()
+        unknown_data.logged_in_username = 'username'
+        unknown_data.logged_in_permissions = 'unknown'
+        unknown_command_handler = CommandHandler(unknown_data)
+
+        unknown_result = unknown_command_handler.use_command({'command': 'stop'})
+        self.assertEqual(unknown_result, expected_stop_output_unknown)
 
 
 if __name__ == "__main__":
