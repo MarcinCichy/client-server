@@ -11,17 +11,18 @@ class TestMessageManagement(unittest.TestCase):
         self.message_management = MessageManagement(self.database_support_mock)
 
     def test_new_message_valid_data(self):
-        self.database_support_mock.get_messages.return_value = {
-            'messages': {
-                'username': []
-            }
+        self.database_support_mock.get_messages.return_value = {'messages':
+            {
+                'RECIPIENT': {
+                    1: {'sender': 'user2', 'date': '2023-01-01', 'content': 'Hello'},
+                    2: {'sender': 'user3', 'date': '2023-01-02', 'content': 'Hi'},
+                    }
+                }
         }
-        # server_data.MAX_MSG_IN_INBOX = 10
-
-        sender = 'sendername'
-        date = 'YYYY-MM-DD'
-        recipient = 'recipient'
-        content = 'MSG CONTENT'
+        sender = {'sender': 'sendername'}
+        date = {'date': 'YYYY-MM-DD'}
+        recipient = {'recipient': 'RECIPIENT'}
+        content = {'content': 'MSG CONTENT'}
         data = [sender, date, recipient, content]
 
         result = self.message_management.new_message(data)
@@ -50,4 +51,39 @@ class TestMessageManagement(unittest.TestCase):
         }
         result = self.message_management.msg_list('username')
         self.assertNotEqual(result, {"msg": {}})
+
+    def test_msg_del_existing_message(self):
+        self.database_support_mock.get_messages.return_value = {'messages': {'username': {'1': 'message1'}}}
+        result = self.message_management.msg_del({'username': '1'})
+        self.assertEqual(result, server_response.MESSAGE_WAD_DELETED)
+
+    def test_msg_del_non_existing_message(self):
+        self.database_support_mock.get_messages.return_value = {'messages': {'username': {}}}
+        result = self.message_management.msg_del({'username': '1'})
+        self.assertEqual(result, server_response.E_MESSAGE_NOT_FOUND)
+
+    def test_msg_show_existing(self):
+        self.database_support_mock.get_messages.return_value = {'messages': {'username': {'1': 'message1'}}}
+        result = self.message_management.msg_show({'username': '1'})
+        self.assertEqual(result, {"Message to show": 'message1'})
+
+    def test_msg_show_non_existing(self):
+        self.database_support_mock.get_messages.return_value = {'messages': {'username': {}}}
+        result = self.message_management.msg_show({'username': '1'})
+        self.assertEqual(result, server_response.E_MESSAGE_NOT_FOUND)
+
+    def test_msg_count(self):
+        self.database_support_mock.get_messages.return_value = {
+            'messages': {'username': {'1': 'message1', '2': 'message2'}}}
+        result = self.message_management.msg_count('username')
+        self.assertEqual(result, {"msg-inbox-count": 2})
+
+    def test_new_message_too_long_content(self):
+        long_string = 'a' * 300
+        result = self.message_management.new_message([long_string, 'date', {'recipient': 'username'}, 'content'])
+        self.assertIn(result, [server_response.MESSAGE_WAS_SENT, server_response.E_INVALID_DATA])
+        
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
 
