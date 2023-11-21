@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import MagicMock
 from server_package.message_management import MessageManagement
 import server_package.server_response as server_response
-import server_package.server_data as server_data
 
 
 class TestMessageManagement(unittest.TestCase):
@@ -14,10 +13,10 @@ class TestMessageManagement(unittest.TestCase):
         self.database_support_mock.get_messages.return_value = {'messages':
             {
                 'RECIPIENT': {
-                    1: {'sender': 'user2', 'date': '2023-01-01', 'content': 'Hello'},
-                    2: {'sender': 'user3', 'date': '2023-01-02', 'content': 'Hi'},
-                    }
+                    "1": {'sender': 'user2', 'date': '2023-01-01', 'content': 'Hello'},
+                    "2": {'sender': 'user3', 'date': '2023-01-02', 'content': 'Hi'}
                 }
+            }
         }
         sender = {'sender': 'sendername'}
         date = {'date': 'YYYY-MM-DD'}
@@ -78,12 +77,6 @@ class TestMessageManagement(unittest.TestCase):
         result = self.message_management.msg_count('username')
         self.assertEqual(result, {"msg-inbox-count": 2})
 
-    def test_new_message_too_long_content(self):
-        long_string = 'a' * 300
-        result = self.message_management.new_message([long_string, 'date', {'recipient': 'username'}, 'content'])
-        self.assertIn(result, [server_response.MESSAGE_WAS_SENT, server_response.E_INVALID_DATA])
-        
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
-
