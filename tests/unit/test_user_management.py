@@ -4,7 +4,7 @@ from server_package.user_management import UserManagement
 import server_package.server_response as server_response
 
 
-class TestMessageManagement(unittest.TestCase):
+class TestUserManagement(unittest.TestCase):
     def setUp(self):
         self.database_support_mock = MagicMock()
         self.user_management = UserManagement(self.database_support_mock)
@@ -155,3 +155,12 @@ class TestMessageManagement(unittest.TestCase):
         self.assertEqual(result, {user_to_change_permission: server_response.USER_PERMISSIONS_CHANGED})
 
     # the user_stat() method is very similar to the user_perm() method, so no tests are needed.
+
+    def test_user_list(self):
+        expected_result = {server_response.EXISTING_ACCOUNTS: {
+            "username1": {"permissions": "user", "status": "active"},
+            "logged_username": {"permissions": "admin", "status": "active"}
+        }
+                           }
+        result = self.user_management.user_list()
+        self.assertEqual(result, expected_result)
