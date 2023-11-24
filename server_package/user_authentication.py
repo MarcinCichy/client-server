@@ -23,11 +23,13 @@ class UserAuthentication:
 
     @handle_db_file_error
     def login(self, login_data):
+        print(f'LOGIN_DATA: {login_data}')
         if not login_data:
             return server_response.E_INVALID_DATA
 
         login_username = login_data[0]['username']
         login_password = login_data[1]['password']
+        print(f'ld = {str(login_username), str(login_password)}')
 
         user_data = self.get_user_data(login_username)
         if user_data is not None and user_data['status'] == "active" and user_data['password'] == login_password:
@@ -55,6 +57,7 @@ class UserAuthentication:
 
     @handle_db_file_error
     def logout(self, logged_in_user):
+        print(f'LOGGEDIN_USER = {logged_in_user}')
         if not logged_in_user:
             return server_response.E_INVALID_DATA
 
