@@ -1,9 +1,9 @@
 import json
 import socket
-import server_data
-from menu import CommandHandler
-from functions import SystemUtilities
-from server_user_state import ServerUserState
+from server_package import server_data
+from server_package.menu import CommandHandler
+from server_package.functions import SystemUtilities
+from server_package.server_user_state import ServerUserState
 
 
 class Server:
