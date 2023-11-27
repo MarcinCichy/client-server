@@ -5,7 +5,6 @@ from server_package.menu import CommandHandler
 from server_package.functions import SystemUtilities
 from server_package.server_user_state import ServerUserState
 
-
 class Server:
     def __init__(self, srv_host, srv_port, srv_buff):
         self.srv_host = srv_host
@@ -20,27 +19,31 @@ class Server:
             s.bind((self.srv_host, self.srv_port))
             s.listen()
             print("Server started.")
-            print("-" * 17)
             while True:
                 conn, addr = s.accept()
                 SystemUtilities.clear_screen()
                 with conn:
                     print(f"Connected by {addr}")
-                    command = conn.recv(self.srv_buff)
-                    com = self.json_decode_received_data(command)
-                    result = self.json_serialize_response(self.handler.use_command(com))
+                    data = conn.recv(self.srv_buff)
+                    result = self.handle_connection(data)
                     conn.sendall(result.encode(server_data.ENCODE_FORMAT))
 
                     if "Connection" in result:
-                        if (json.loads(result))["Connection"] == server_data.CLOSE:
+                        if json.loads(result)["Connection"] == server_data.CLOSE:
                             print("Server stopped")
                             break
+
+    def handle_connection(self, data):
+        """ Obsługuje dane przychodzące od klienta. """
+        com = self.json_decode_received_data(data)
+        result = self.json_serialize_response(self.handler.use_command(com))
+        return result
 
     @staticmethod
     def json_decode_received_data(received_data):
         decoded_data = json.loads(received_data)
         if 'login' in decoded_data['command']:
-            print(f"Command received from Client: login")  # to hide showing login and password
+            print(f"Command received from Client: login")
             return decoded_data["command"]
         else:
             print(f"Command received from Client: {decoded_data['command']}")
@@ -57,4 +60,5 @@ def start():
     server.server_connection()
 
 
-start()
+if __name__ == '__main__':
+    start()

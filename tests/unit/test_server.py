@@ -1,19 +1,17 @@
-import unittest
 import json
-from unittest.mock import patch
+import unittest
 from server_package.server import Server
+import server_package.server_response as server_response
 
 
-class TestServerInitialization(unittest.TestCase):
-    @patch('server_package.server.Server.server_connection')
-    def test_initialization(self):
-        test_host = "127.0.0.1"
-        test_port = 65432
-        test_buff = 1024
-        server = Server(test_host, test_port, test_buff)
-        self.assertEqual(server.srv_host, test_host)
-        self.assertEqual(server.srv_port, test_port)
-        self.assertEqual(server.srv_buff, test_buff)
+
+class TestServer(unittest.TestCase):
+    def test_handle_connection(self):
+        server = Server('127.0.0.1', 65432, 1024)
+        test_data = json.dumps({"command": "test_command"}).encode('utf-8')
+        result = server.handle_connection(test_data)
+        expected_result = "Command not found"
+        self.assertIn(expected_result, result)
 
 
 class TestDataHandling(unittest.TestCase):
@@ -24,6 +22,11 @@ class TestDataHandling(unittest.TestCase):
 
     def test_json_serialize_response(self):
         test_response = {"status": "success"}
+        serialized_response = Server.json_serialize_response(test_response)
+        self.assertEqual(json.loads(serialized_response), test_response)
+
+    def test_json_serialize_response_Stop_Server(self):
+        test_response = {"Connection": "close"}
         serialized_response = Server.json_serialize_response(test_response)
         self.assertEqual(json.loads(serialized_response), test_response)
 
