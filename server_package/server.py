@@ -5,6 +5,7 @@ from server_package.menu import CommandHandler
 from server_package.functions import SystemUtilities
 from server_package.server_user_state import ServerUserState
 
+
 class Server:
     def __init__(self, srv_host, srv_port, srv_buff):
         self.srv_host = srv_host
@@ -25,6 +26,7 @@ class Server:
                 with conn:
                     print(f"Connected by {addr}")
                     data = conn.recv(self.srv_buff)
+                    print(data)
                     result = self.handle_connection(data)
                     conn.sendall(result.encode(server_data.ENCODE_FORMAT))
 
@@ -34,7 +36,6 @@ class Server:
                             break
 
     def handle_connection(self, data):
-        """ Obsługuje dane przychodzące od klienta. """
         com = self.json_decode_received_data(data)
         result = self.json_serialize_response(self.handler.use_command(com))
         return result

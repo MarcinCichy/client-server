@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import patch
 from server_package.menu import CommandHandler
 from server_package.server_user_state import ServerUserState
-# import server_package.server_response as server_response
 
 
 class TestMenu(unittest.TestCase):
