@@ -1,7 +1,6 @@
 import json
 import unittest
 from server_package.server import Server
-import server_package.server_response as server_response
 
 
 class TestServerInitialization(unittest.TestCase):
