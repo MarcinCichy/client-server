@@ -1,4 +1,3 @@
-import json
 import unittest
 from client_package.client import Client
 import server_package.server_response as server_response

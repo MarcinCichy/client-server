@@ -44,30 +44,22 @@ class CommandHandler:
         }
 
     def use_command(self, entrance_command):
-        print(f"ENTRANCE COMMAND: {entrance_command}")
-        if isinstance(entrance_command, dict):
-
+        if isinstance(entrance_command, dict):\
             # Extract the first key, which is the username submitted
             self.username = next(iter(entrance_command))
-            print(f'MENU username = {self.username}')
             # Based on this username, create a new dictionary with the command
             self.new_command = entrance_command.pop(self.username)
             self.permissions = self.logged_in_user_data.logged_in_permissions
-            print(f'NEW_COMMAND  = {self.new_command}')
-            print(f'ENTRANCE USERNAME = {self.username}')
-            print(f'ENTRANCE PERMISSIONS: {self.permissions}')
 
         if isinstance(self.new_command, dict):
-            print(f'REAL COMMAND = {list(self.new_command.keys())[0]}')
+            # print(f'REAL COMMAND = {list(self.new_command.keys())[0]}')
             command = list(self.new_command.keys())[0]
             data = self.new_command[command]
         else:
             command = self.new_command
-            print(f"OTHER COMMAND: {command}")
             data = None
 
         if command in self.all_users_commands:
-            print(f"Yes, command: {command} is in self.all_users_commands")
             match command:
                 case "login":
                     self.username = data[0]['username']
@@ -75,7 +67,6 @@ class CommandHandler:
                     data = self.username
                 case "help":
                     data = self.permissions
-                    print(f'help data: {data}')
                 case "msg-list":
                     data = self.username
                 case "msg-del":

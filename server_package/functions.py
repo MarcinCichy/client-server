@@ -31,15 +31,11 @@ class SystemUtilities:
         if "user" in permissions:
             user_help_dict = dict(islice(server_response.HELP_DICT.items(), 9))
             help_content = user_help_dict
-            print(f'Used Help with user perm')
         elif "admin" in permissions:
             help_dict = server_response.HELP_DICT
             help_content = help_dict
-            print(f'Used Help with admin perm')
         else:
             help_content = server_response.E_WRONG_PERMISSIONS
-
-        print(f"help_content: {help_content}")
         return help_content
 
     @staticmethod
