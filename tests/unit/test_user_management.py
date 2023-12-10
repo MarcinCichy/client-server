@@ -26,16 +26,16 @@ class TestUserManagement(unittest.TestCase):
             "logged_users": [
                 "username_invalid",
                 "logged_username"
-    ]
+            ]
         }
 
         self.database_support_mock.get_messages.return_value = {'messages': {
-            "username1": {
-                "1": {'sender': 'user2', 'date': '2023-01-01', 'content': 'Hello'},
-                "2": {'sender': 'user3', 'date': '2023-01-02', 'content': 'Hi'}
+                "username1": {
+                    "1": {'sender': 'user2', 'date': '2023-01-01', 'content': 'Hello'},
+                    "2": {'sender': 'user3', 'date': '2023-01-02', 'content': 'Hi'}
 
+                }
             }
-        }
         }
 
     def test_create_account_valid_data(self):
@@ -161,6 +161,6 @@ class TestUserManagement(unittest.TestCase):
             "username1": {"permissions": "user", "status": "active"},
             "logged_username": {"permissions": "admin", "status": "active"}
         }
-                           }
+        }
         result = self.user_management.user_list()
         self.assertEqual(result, expected_result)

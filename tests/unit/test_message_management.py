@@ -8,8 +8,6 @@ class TestMessageManagement(unittest.TestCase):
     def setUp(self):
         self.database_support_mock = MagicMock()
         self.message_management = MessageManagement(self.database_support_mock)
-
-    def test_new_message_valid_data(self):
         self.database_support_mock.get_messages.return_value = {'messages':
             {
                 'RECIPIENT': {
@@ -18,6 +16,8 @@ class TestMessageManagement(unittest.TestCase):
                 }
             }
         }
+
+    def test_new_message_valid_data(self):
         sender = {'sender': 'sendername'}
         date = {'date': 'YYYY-MM-DD'}
         recipient = {'recipient': 'RECIPIENT'}
@@ -37,18 +37,7 @@ class TestMessageManagement(unittest.TestCase):
         self.assertEqual(result, {"msg": {}})
 
     def test_msg_list_with_messages(self):
-        self.database_support_mock.get_messages.return_value = {
-            'messages': {
-                'username': {
-                    '1': {
-                        'sender': 'sendername',
-                        'date': 'YYYY-MM-DD',
-                        'content': 'MSG CONTENT'
-                    }
-                }
-            }
-        }
-        result = self.message_management.msg_list('username')
+        result = self.message_management.msg_list('RECIPIENT')
         self.assertNotEqual(result, {"msg": {}})
 
     def test_msg_del_existing_message(self):
@@ -80,3 +69,4 @@ class TestMessageManagement(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+a
