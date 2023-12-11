@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from server_package.message_management import MessageManagement
+from server_package import server_data as server_data
 import server_package.server_response as server_response
 
 
@@ -30,6 +31,22 @@ class TestMessageManagement(unittest.TestCase):
     def test_new_message_invalid_data(self):
         result = self.message_management.new_message(None)
         self.assertEqual(result, server_response.E_INVALID_DATA)
+
+    def test_new_message_full_inbox(self):
+        # full_inbox = {str(i): 'message' for i in range(1, server_data.MAX_MSG_IN_INBOX + 1)}
+        full_inbox = {}
+        for i in range(1, server_data.MAX_MSG_IN_INBOX + 1):
+            full_inbox[str(i)] = 'message'
+        self.database_support_mock.get_messages.return_value = {'messages': {'FULL_INBOX_USER': full_inbox}}
+
+        sender = {'sender': 'sendername'}
+        date = {'date': 'YYYY-MM-DD'}
+        recipient = {'recipient': 'FULL_INBOX_USER'}
+        content = {'content': 'MSG CONTENT'}
+        data = [sender, date, recipient, content]
+
+        result = self.message_management.new_message(data)
+        self.assertEqual(result, server_response.E_RECIPIENT_INBOX_IS_FULL)
 
     def test_msg_list_no_messages(self):
         self.database_support_mock.get_messages.return_value = {'messages': {'username': {}}}
@@ -69,4 +86,3 @@ class TestMessageManagement(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
-a

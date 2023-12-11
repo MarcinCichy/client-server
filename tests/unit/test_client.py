@@ -6,7 +6,7 @@ import server_package.server_response as server_response
 class TestClientInitialization(unittest.TestCase):
     def test_initialization(self):
         test_host = "127.0.0.1"
-        test_port = 8000
+        test_port = 65432
         test_buff = 1024
         client = Client(test_host, test_port, test_buff)
         self.assertEqual(client.srv_host, test_host)
@@ -17,7 +17,7 @@ class TestClientInitialization(unittest.TestCase):
 class TestClient(unittest.TestCase):
     def test_handle_connection_unrecognised_command(self):
         client = Client('127.0.0.1', 65432, 1024)
-        result = client.client_connection({"command": "test_command"})
+        result = client.client_connection({"username": {"command": "test_command"}})
         expected_result = server_response.UNRECOGNISED_COMMAND
         self.assertEqual(result, expected_result)
 
