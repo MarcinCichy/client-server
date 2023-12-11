@@ -10,6 +10,7 @@ class CommandHandler:
     def __init__(self, logged_in_user_data):
         self.database_support = DatabaseSupport()
         self.logged_in_user_data = logged_in_user_data
+        print(f'LOGGED_DATA: {self.logged_in_user_data}')
         self.username = ""
         self.new_command = ""
         self.permissions = ""
@@ -44,7 +45,7 @@ class CommandHandler:
         }
 
     def use_command(self, entrance_command):
-        if isinstance(entrance_command, dict):\
+        if isinstance(entrance_command, dict):
             # Extract the first key, which is the username submitted
             self.username = next(iter(entrance_command))
             # Based on this username, create a new dictionary with the command

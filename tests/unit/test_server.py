@@ -29,12 +29,12 @@ class TestServer(unittest.TestCase):
         expected_result = "version"
         self.assertIn(expected_result, result)
 
-    # def test_handle_connection_stop_command(self):
-    #     server = Server('127.0.0.1', 65432, 1024)
-    #     test_data = json.dumps({"command": {"admin": "stop"}}).encode('utf-8')
-    #     result = server.handle_connection(test_data)
-    #     expected_result = {"Connection": "close"}
-    #     self.assertEqual(expected_result, result)
+    def test_handle_connection_stop_command(self):
+        server = Server('127.0.0.1', 65432, 1024)
+        test_data = json.dumps({"command": {"admin": "stop"}, "perm": "admin"}).encode('utf-8')
+        result = server.handle_connection(test_data)
+        expected_result = {"Connection": "close"}
+        self.assertEqual(expected_result, result)
 
 
 class TestDataHandling(unittest.TestCase):
