@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 from client_package.client import Client
 import server_package.server_response as server_response
 
@@ -16,9 +15,7 @@ class TestClientInitialization(unittest.TestCase):
 
 
 class TestClient(unittest.TestCase):
-    @patch('socket.socket')
-    def test_handle_connection_unrecognised_command(self, mock_socket):
-        mock_socket.return_value.recv.return_value = b'{"Unrecognised command": "Please correct or type <help>."}'
+    def test_handle_connection_unrecognised_command(self):
         client = Client('127.0.0.1', 65432, 1024)
         result = client.client_connection({"username": {"command": "test_command"}})
         expected_result = server_response.UNRECOGNISED_COMMAND
