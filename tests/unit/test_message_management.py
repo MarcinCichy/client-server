@@ -1,24 +1,26 @@
 import unittest
 from server_package.message_management import MessageManagement
 import server_package.server_response as server_response
+from server_package.database_support import DatabaseSupport
 
 
 class TestMessageManagement(unittest.TestCase):
     def setUp(self):
-        self.database_support_dummy = {'messages':
-            {
-                'RECIPIENT': {
-                    "1": {'sender': 'user2', 'date': '2023-01-01', 'content': 'Hello'},
-                    "2": {'sender': 'user3', 'date': '2023-01-02', 'content': 'Hi'}
-                }
-            }
-        }
-        self.msg_mgmt = MessageManagement(self.database_support_dummy)
+        # self.database_support_dummy = {'messages':
+        #     {
+        #         'RECIPIENT': {
+        #             "1": {'sender': 'user2', 'date': '2023-01-01', 'content': 'Hello'},
+        #             "2": {'sender': 'user3', 'date': '2023-01-02', 'content': 'Hi'}
+        #         }
+        #     }
+        # }
+        self.database_support = DatabaseSupport()
+        self.msg_mgmt = MessageManagement(self.database_support)
 
     def test_new_message_valid_data(self):
         sender = {'sender': 'sendername'}
         date = {'date': 'YYYY-MM-DD'}
-        recipient = {'recipient': 'RECIPIENT'}
+        recipient = {'recipient': 'marcin'}
         content = {'content': 'MSG CONTENT'}
         data = [sender, date, recipient, content]
         # data = ['sender', 'date', {'recipient': 'username'}, 'content']
