@@ -13,6 +13,12 @@ class DatabaseSupportDummy:
                     "permissions": "admin",
                     "status": "banned",
                     "activation_date": "2023-04-06"
+                },
+                "logged_username": {
+                    "password": "pass3",
+                    "permissions": "admin",
+                    "status": "active",
+                    "activation_date": "2023-04-06"
                 }
             },
             "logged_users": [
@@ -35,7 +41,10 @@ class DatabaseSupportDummy:
                     "5": {'sender': 'user3', 'date': '2023-01-02', 'content': 'Hi'},
                 },
                 'NO_MSGS_USER': {
-            }
+                },
+                "other_user": {
+
+                }
             }
         }
 
