@@ -7,12 +7,13 @@ from server_package.server_user_state import ServerUserState
 
 
 class Server:
-    def __init__(self, srv_host, srv_port, srv_buff):
+    def __init__(self, srv_host, srv_port, srv_buff, user_state=None):
         self.srv_host = srv_host
         self.srv_port = srv_port
         self.srv_buff = srv_buff
+        self.logged_in_user_data = user_state if user_state is not None else ServerUserState()
 
-        self.logged_in_user_data = ServerUserState()
+        # self.logged_in_user_data = ServerUserState()
         self.handler = CommandHandler(self.logged_in_user_data)
 
     def server_connection(self):
@@ -26,7 +27,7 @@ class Server:
                 with conn:
                     print(f"Connected by {addr}")
                     data = conn.recv(self.srv_buff)
-                    print(data)
+                    print(f'Server USER DATA = {data}')
                     result = self.handle_connection(data)
                     conn.sendall(result.encode(server_data.ENCODE_FORMAT))
 

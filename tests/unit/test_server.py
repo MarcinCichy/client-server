@@ -3,7 +3,6 @@ import unittest
 from server_package.server import Server
 import server_package.server_response as server_response
 from database_support_dummy import DatabaseSupportDummy
-from server_package import server_data as server_dats
 from server_package.server_user_state import ServerUserState
 
 
@@ -15,7 +14,6 @@ class TestServerInitialization(unittest.TestCase):
         self.server = Server(self.test_host, self.test_port, self.test_buff)
         self.logged_in_user_data = ServerUserState()
         self.db_support_dummy = DatabaseSupportDummy()
-        self.permissions = self.logged_in_user_data.logged_in_permissions
 
     def test_initialization(self):
         self.assertEqual(self.server.srv_host, self.test_host)
@@ -28,9 +26,11 @@ class TestServer(unittest.TestCase):
         self.test_host = "127.0.0.1"
         self.test_port = 8000
         self.test_buff = 1024
-        self.server = Server(self.test_host, self.test_port, self.test_buff)
-        self.logged_in_user_data = ServerUserState()
+
         self.db_support_dummy = DatabaseSupportDummy()
+        self.logged_in_user_data = ServerUserState()
+        self.logged_in_user_data.set_user_data("logged_username", "admin")
+        self.server = Server(self.test_host, self.test_port, self.test_buff, self.logged_in_user_data)
 
     def test_handle_connection_unrecognised_command(self):
         test_data = json.dumps({"command": {"RECIPIENT": "inforrr"}}).encode('utf-8')
@@ -46,10 +46,12 @@ class TestServer(unittest.TestCase):
         self.assertIn(expected_result, result)
 
     def test_handle_connection_stop_command(self):
+
         test_data = json.dumps({"command": {"logged_username": "stop"}}).encode('utf-8')
         result = self.server.handle_connection(test_data)
+        result_dick = json.loads(result)
         expected_result = {"Connection": "close"}
-        self.assertEqual(expected_result, result)
+        self.assertEqual(expected_result, result_dick)
 
 
 class TestDataHandling(unittest.TestCase):

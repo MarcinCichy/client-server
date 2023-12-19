@@ -10,7 +10,6 @@ class CommandHandler:
     def __init__(self, logged_in_user_data):
         self.database_support = DatabaseSupport()
         self.logged_in_user_data = logged_in_user_data
-        print(f'LOGGED_DATA: {self.logged_in_user_data}')
         self.username = ""
         self.new_command = ""
         self.permissions = ""
@@ -51,6 +50,7 @@ class CommandHandler:
             # Based on this username, create a new dictionary with the command
             self.new_command = entrance_command.pop(self.username)
             self.permissions = self.logged_in_user_data.logged_in_permissions
+            print(f'PERMISIONS FROM MENU = {self.permissions}')
 
         if isinstance(self.new_command, dict):
             # print(f'REAL COMMAND = {list(self.new_command.keys())[0]}')

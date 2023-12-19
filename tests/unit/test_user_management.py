@@ -67,25 +67,6 @@ class TestMessageManagement(unittest.TestCase):
         user_to_del = "username_invalid"
         result = self.usr_mgmt.user_del(user_to_del)
         self.assertEqual(result, server_response.E_USER_DOES_NOT_EXIST)
-#######
-    # def test_user_info_exist_user(self):
-    #     exist_user_info = "RECIPIENT"
-    #     result = self.usr_mgmt.user_info(exist_user_info)
-    #
-    #     mock_user_data = self.database_support_mock.get_user.return_value['users'][exist_user_info]
-    #     mock_msg_count = len(self.database_support_mock.get_messages.return_value['messages'][exist_user_info])
-    #
-    #     expected_result = {
-    #         server_response.ACCOUNT_INFO: {
-    #             'username': exist_user_info,
-    #             'inbox messages': mock_msg_count
-    #         }
-    #     }
-    #
-    #     for key, value in mock_user_data.items():
-    #         expected_result[server_response.ACCOUNT_INFO][key] = value
-    #
-    #     self.assertEqual(result, expected_result)
 
     def test_user_info_not_exist_user(self):
         not_exist_user_info = "username2"
