@@ -66,3 +66,6 @@ class TestSystemUtilities(unittest.TestCase):
         result = self.util.clear()
         self.assertEqual(result, {"Clear": ""})
 
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

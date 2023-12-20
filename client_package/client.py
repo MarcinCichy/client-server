@@ -9,10 +9,13 @@ class Client:
         self.srv_port = srv_port
         self.srv_buff = srv_buff
 
+    def create_socket(self):
+        return socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
     def client_connection(self, sentence):
         while True:
             try:
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                with self.create_socket() as s:
                     s.connect((self.srv_host, int(self.srv_port)))
                     in_comm = self.input_command(sentence)
                     s.sendall(in_comm)
