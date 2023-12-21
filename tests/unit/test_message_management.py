@@ -25,7 +25,6 @@ class TestMessageManagement(unittest.TestCase):
         self.assertEqual(response, server_response.E_INVALID_DATA)
 
     def test_new_message_full_inbox(self):
-        # full_inbox = {str(i): 'message' for i in range(1, server_data.MAX_MSG_IN_INBOX + 1)}
         full_inbox = {}
         for i in range(1, server_data.MAX_MSG_IN_INBOX + 1):
             full_inbox[str(i)] = 'message'

@@ -50,18 +50,18 @@ class TestServer(unittest.TestCase):
         self.server = Server(self.test_host, self.test_port, self.test_buff, self.logged_in_user_data)
         test_data = json.dumps({"command": {"logged_username": "stop"}}).encode('utf-8')
         result = self.server.handle_connection(test_data)
-        result_dick = json.loads(result)
+        result_dict = json.loads(result)
         expected_result = {"Connection": "close"}
-        self.assertEqual(expected_result, result_dick)
+        self.assertEqual(expected_result, result_dict)
 
     def test_handle_connection_stop_command_invalid_permissions(self):
         self.logged_in_user_data.set_user_data("logged_username", "user")
         self.server = Server(self.test_host, self.test_port, self.test_buff, self.logged_in_user_data)
         test_data = json.dumps({"command": {"logged_username": "stop"}}).encode('utf-8')
         result = self.server.handle_connection(test_data)
-        result_dick = json.loads(result)
+        result_dict = json.loads(result)
         expected_result = server_response.E_COMMAND_UNAVAILABLE
-        self.assertEqual(expected_result, result_dick)
+        self.assertEqual(expected_result, result_dict)
 
 
 class TestDataHandling(unittest.TestCase):
