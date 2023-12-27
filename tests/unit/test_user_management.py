@@ -113,7 +113,7 @@ class TestMessageManagement(unittest.TestCase):
             "RECIPIENT": {"permissions": "user", "status": "active"},
             "other_user": {"permissions": "admin", "status": "banned"},
             "logged_username": {"permissions": "admin", "status": "active"}
-        }
+            }
         }
         result = self.usr_mgmt.user_list()
         self.assertEqual(result, expected_result)

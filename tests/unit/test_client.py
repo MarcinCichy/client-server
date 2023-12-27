@@ -6,28 +6,47 @@ import server_package.server_data as server_data
 
 
 class TestClientInitialization(unittest.TestCase):
+    def setUp(self):
+        self.test_host = "127.0.0.1"
+        self.test_port = 8000
+        self.test_buff = 1024
+        self.client = Client(self.test_host, self.test_port, self.test_buff)
+
     def test_initialization(self):
-        test_host = "127.0.0.1"
-        test_port = 65432
-        test_buff = 1024
-        client = Client(test_host, test_port, test_buff)
-        self.assertEqual(client.srv_host, test_host)
-        self.assertEqual(client.srv_port, test_port)
-        self.assertEqual(client.srv_buff, test_buff)
+        self.assertEqual(self.client.srv_host, self.test_host)
+        self.assertEqual(self.client.srv_port, self.test_port)
+        self.assertEqual(self.client.srv_buff, self.test_buff)
 
 
-# class TestClient(unittest.TestCase):
-#     def test_handle_connection_unrecognised_command(self):
-#         client = Client('127.0.0.1', 65432, 1024)
-#         result = client.client_connection({"username": {"command": "test_command"}})
-#         expected_result = server_response.UNRECOGNISED_COMMAND
-#         self.assertEqual(result, expected_result)
-#
-#     def test_handle_connection_valid_command(self):
-#         client = Client('127.0.0.1', 65432, 1024)
-#         result = client.client_connection({"command": "info"})
-#         expected_result = "version"
-#         self.assertIn(expected_result, result)
+class TestClient(unittest.TestCase):
+    def setUp(self):
+        self.test_host = "127.0.0.1"
+        self.test_port = 65432
+        self.test_buff = 1024
+        self.client = Client(self.test_host, self.test_port, self.test_buff)
+
+    def test_handle_connection_unrecognised_command(self):
+        # result = self.client.process_command({"username": {"command": "test_command"}})
+        # expected_result = server_response.UNRECOGNISED_COMMAND
+        # self.assertEqual(result, expected_result)
+
+        def dummy_connect_and_send_failure(command):
+            raise ConnectionError()
+
+        self.client.connect_and_send = dummy_connect_and_send_failure
+        response = self.client.process_command({"command": "test"})
+        expected_result = server_response.UNRECOGNISED_COMMAND
+        self.assertEqual(response, expected_result)
+
+    def test_handle_connection_valid_command(self):
+        self.client.connect_and_send = lambda x: json.dumps({"response": "ok"}).encode()
+        response = self.client.process_command({"command": "test"})
+        self.assertEqual(response, {"response": "ok"})
+
+    def test_handle_no_connection_to_server(self):
+        result = self.client.process_command({"command": "info"})
+        expected_result = {"Error": "Unable to connect to server"}
+        self.assertEqual(result, expected_result)
 
 
 class TestDataHandling(unittest.TestCase):

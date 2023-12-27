@@ -12,18 +12,32 @@ class Client:
     def create_socket(self):
         return socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def client_connection(self, sentence):
-        while True:
-            try:
-                with self.create_socket() as s:
-                    s.connect((self.srv_host, int(self.srv_port)))
-                    in_comm = self.input_command(sentence)
-                    s.sendall(in_comm)
-                    data = s.recv(self.srv_buff)
-                    decoded_data = self.json_decode_received_data(data)
-                    return decoded_data
-            except ConnectionError:
-                return {"Error": "Unable to connect to server"}
+    # def client_connection(self, sentence):
+    #     while True:
+    #         try:
+    #             with self.create_socket() as s:
+    #                 s.connect((self.srv_host, int(self.srv_port)))
+    #                 in_comm = self.input_command(sentence)
+    #                 s.sendall(in_comm)
+    #                 data = s.recv(self.srv_buff)
+    #                 decoded_data = self.json_decode_received_data(data)
+    #                 return decoded_data
+    #         except ConnectionError:
+    #             return {"Error": "Unable to connect to server"}
+
+    def connect_and_send(self, command):
+        with self.create_socket() as s:
+            s.connect((self.srv_host, int(self.srv_port)))
+            s.sendall(command)
+            return s.recv(self.srv_buff)
+
+    def process_command(self, sentence):
+        in_comm = self.input_command(sentence)
+        try:
+            response = self.connect_and_send(in_comm)
+            return self.json_decode_received_data(response)
+        except ConnectionError:
+            return {"Error": "Unable to connect to server"}
 
     def input_command(self, command):
         encoded_command = self.json_serialize_command(command).encode(client_data.ENCODE_FORMAT)
@@ -43,6 +57,6 @@ class Client:
 
 def start(sentence):
     client = Client(client_data.HOST, client_data.PORT, client_data.BUFFER_SIZE)
-    transmit = client.client_connection(sentence)
+    transmit = client.process_command(sentence)
     return transmit
 

@@ -13,7 +13,6 @@ class Server:
         self.srv_buff = srv_buff
         self.logged_in_user_data = user_state if user_state is not None else ServerUserState()
 
-        # self.logged_in_user_data = ServerUserState()
         self.handler = CommandHandler(self.logged_in_user_data)
 
     def server_connection(self):
