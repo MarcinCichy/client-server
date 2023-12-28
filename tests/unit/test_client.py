@@ -25,15 +25,11 @@ class TestClient(unittest.TestCase):
         self.test_buff = 1024
         self.client = Client(self.test_host, self.test_port, self.test_buff)
 
+    def dummy_connect_and_send(self, command):
+        return json.dumps({'Unrecognised command': 'Please correct or type <help>.'}).encode()
+
     def test_handle_connection_unrecognised_command(self):
-        # result = self.client.process_command({"username": {"command": "test_command"}})
-        # expected_result = server_response.UNRECOGNISED_COMMAND
-        # self.assertEqual(result, expected_result)
-
-        def dummy_connect_and_send_failure(command):
-            raise ConnectionError()
-
-        self.client.connect_and_send = dummy_connect_and_send_failure
+        self.client.connect_and_send = self.dummy_connect_and_send
         response = self.client.process_command({"command": "test"})
         expected_result = server_response.UNRECOGNISED_COMMAND
         self.assertEqual(response, expected_result)
