@@ -60,5 +60,4 @@ class DatabaseSupportDummy:
     def save_messages(self, data):
         self.messages_data = data
 
-    # Metody read_db_json i save_db_json nie są potrzebne, ponieważ operujemy bezpośrednio na danych w pamięci
 
