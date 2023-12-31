@@ -58,8 +58,8 @@ class TestDataHandling(unittest.TestCase):
 
     def test_json_serialize_response_Stop_Server(self):
         test_response = {"Connection": "close"}
-        serialized_response = Client.json_serialize_command(test_response)
-        self.assertEqual(json.loads(serialized_response), {'command': test_response})
+        serialized_command = Client.json_serialize_command(test_response)
+        self.assertEqual(json.loads(serialized_command), {'command': test_response})
 
 
 if __name__ == "__main__":
