@@ -45,6 +45,12 @@ class TestServer(unittest.TestCase):
         expected_result = "version"
         self.assertIn(expected_result, result)
 
+    def test_handle_connection_correct_command2(self):
+        test_data = json.dumps({"command": {"RECIPIENT": "info"}}).encode('utf-8')
+        result = self.server.handle_connection(test_data)
+        expected_result = json.dumps({"version": "0.1.8", "start_at": "2024-01-01"})
+        self.assertEqual(expected_result, result)
+
     def test_handle_connection_stop_command(self):
         self.logged_in_user_data.set_user_data("logged_username", "admin")
         self.server = Server(self.test_host, self.test_port, self.test_buff, self.logged_in_user_data)

@@ -48,6 +48,8 @@
             user-stat [username] [status] - change user status [active] or [banned]
             user-info [username] - to show information about account of selected user
 
+    - v 0.2.0 Added support for PostgreSQL databases
+
     - v 0.1.8 Improved command handling after server connection is lost and re-established
               New functionality added - user-info, to show information 
               about account of selected user
