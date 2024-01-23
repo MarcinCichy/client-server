@@ -4,6 +4,15 @@ import server_package.server_response as server_response
 import server_package.server_data as server_data
 
 
+"""
+    do obslugi SQLa potrzebuje komend:
+    - INSERT - wstawia nowe rekordy podczs dodawania uzytkownika lub wiadomosci
+    - SELECT - odczytuje istniejace rekordy podczas pobierania danych o uzytkowniku lub wiadomosciach
+    - UPDATE - aktualizuje dane podczas zmiany uprawnien, statusu
+    - DELETE - kasuje rekordy podczas usuwania uzytkownika lub wiadomosci
+"""
+
+
 def handle_db_file_error(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

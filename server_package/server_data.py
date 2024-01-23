@@ -12,6 +12,8 @@ PORT = 65432
 BUFFER_SIZE = 1024
 ENCODE_FORMAT = "utf-8"
 
+
+# czy w chwili wprowadzenia SQL poniższe linijki kodu będą potrzebne?
 DB_FILES_DIRECTORY = os.path.join(os.path.dirname(__file__), '..', 'db_files')
 USERS_DATABASE = os.path.join(DB_FILES_DIRECTORY, 'users.json')
 MESSAGES_DATABASE = os.path.join(DB_FILES_DIRECTORY, 'messages.json')
@@ -25,7 +27,7 @@ MAX_MSG_IN_INBOX = 5
 
 START_TIME = datetime.now()
 DATE = datetime.now().strftime("%Y-%m-%d")
-VERSION = "0.1.8"
+VERSION = "0.2.0"
 
 # ----------------------------------------------------
 
