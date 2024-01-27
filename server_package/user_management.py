@@ -59,12 +59,27 @@ class UserManagement:
 
     @handle_db_file_error
     def user_list(self):
-        db_users = self.database_support.get_user()
+        db_users = self.database_support.get_user()  #***************************
         users_to_list = db_users['users']
         exist_users = {}
         for key, value in users_to_list.items():
             exist_users[key] = {"permissions": value["permissions"], "status": value["status"]}
         return {server_response.EXISTING_ACCOUNTS: exist_users}
+
+    # def user_info(self, username):
+    #     db_users = self.database_support.get_user()
+    #     db_msgs = self.database_support.get_messages()
+    #
+    #     if username not in db_users['users']:
+    #         return server_response.E_USER_DOES_NOT_EXIST
+    #     else:
+    #         user_to_check = db_users['users'][username]
+    #         exist_user = {"username": username}
+    #         for key, value in user_to_check.items():
+    #             exist_user[key] = value
+    #         inbox_msg_count = len(db_msgs["messages"][username])
+    #         exist_user["inbox messages"] = inbox_msg_count
+    #         return {server_response.ACCOUNT_INFO: exist_user}
 
     def user_info(self, username):
         db_users = self.database_support.get_user()
@@ -81,39 +96,41 @@ class UserManagement:
             exist_user["inbox messages"] = inbox_msg_count
             return {server_response.ACCOUNT_INFO: exist_user}
 
+
     @handle_db_file_error
     def user_perm(self, data):
         if not data:
             return server_response.E_INVALID_DATA
+        else:
+            user_to_change_permission, new_permissions = next(iter(data.items()))
+            print(f'User name to change permissions: {user_to_change_permission}, to new permissions: {new_permissions}')
 
-        user_to_change_permission, new_permissions = next(iter(data.items()))
-        db_users = self.database_support.get_user()
-
-        if user_to_change_permission not in db_users['users']:
+        if self.database_support.check_if_user_exist(user_to_change_permission):
             return server_response.E_USER_DOES_NOT_EXIST
-        elif user_to_change_permission in db_users['logged_users']:
-            return server_response.E_USER_LOGGED_CANNOT_CHANGE_PERMISSIONS
+        # elif user_to_change_status in db_users['logged_users']:
+        #     return server_response.E_USER_LOGGED_CANNOT_CHANGE_STATUS
         elif new_permissions not in ['user', 'admin']:
             return server_response.E_WRONG_PERMISSIONS
         else:
-            db_users['users'][user_to_change_permission]['permissions'] = new_permissions
-            self.database_support.save_user(db_users)
+            self.database_support.data_update('users', 'permissions', user_to_change_permission, new_permissions)
             return {user_to_change_permission: server_response.USER_PERMISSIONS_CHANGED}
+
 
     @handle_db_file_error
     def user_stat(self, data):
         if not data:
             return server_response.E_INVALID_DATA
-        user_to_change_status, new_status = next(iter(data.items()))
-        db_users = self.database_support.get_user()
+        else:
+            user_to_change_status, new_status = next(iter(data.items()))
+            print(f'User name to change status: {user_to_change_status}, to new status: {new_status}')
 
-        if user_to_change_status not in db_users['users']:
+        if self.database_support.check_if_user_exist(user_to_change_status):
             return server_response.E_USER_DOES_NOT_EXIST
-        elif user_to_change_status in db_users['logged_users']:
-            return server_response.E_USER_LOGGED_CANNOT_CHANGE_STATUS
+        # elif user_to_change_status in db_users['logged_users']:
+        #     return server_response.E_USER_LOGGED_CANNOT_CHANGE_STATUS
         elif new_status not in ['banned', 'active']:
             return server_response.E_WRONG_STATUS
         else:
-            db_users['users'][user_to_change_status]['status'] = new_status
-            self.database_support.save_user(db_users)
+            self.database_support.data_update('users', 'status', user_to_change_status, new_status)
             return {user_to_change_status: server_response.USER_STATUS_CHANGED}
+

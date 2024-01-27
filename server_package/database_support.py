@@ -2,6 +2,8 @@ import json
 from functools import wraps
 import server_package.server_response as server_response
 import server_package.server_data as server_data
+from server_package.connect import connect
+from psycopg2 import sql
 
 
 """
@@ -25,7 +27,7 @@ def handle_db_file_error(func):
     return wrapper
 
 
-class DatabaseSupport:
+class JSONDatabaseSupport:
     @staticmethod
     @handle_db_file_error
     def read_db_json(db_file):
@@ -54,4 +56,43 @@ class DatabaseSupport:
     def save_messages(self, data):
         self.save_db_json(data, server_data.MESSAGES_DATABASE)
 
+    def data_update(self, table, column, user_name, new_value):
+        cur, conn = connect()
+        try:
+            query = sql.SQL("UPDATE {table} SET {column} = %s WHERE user_id = %s").format(table=sql.Identifier(table), column=sql.Identifier(column))
+            # cur.execute("UPDATE %s SET %s = %s WHERE user_id = %s", (table, column, new_value, user_name))
+            cur.execute(query, (new_value, user_name))
+            conn.commit()
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
 
+    def get_info_about_user(self, user_name):
+        cur, conn = connect()
+        try:
+            cur.execute("SELECT * FROM users WHERE user_id=%s", (user_name))
+            conn.commit()
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
+
+    def check_if_user_exist(self, user_name):
+        cur, conn = connect()
+        try:
+            cur.execute("SELECT 1 FROM users WHERE user_id = %s", (user_name))
+            if cur.fetchone():
+                return True  # User exist
+            else:
+                return False  # User not exist
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()

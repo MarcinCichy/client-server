@@ -44,6 +44,7 @@
         }
     },
     "logged_users": [
-        "nobody"
+        "nobody",
+        "marcin"
     ]
 }

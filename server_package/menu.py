@@ -2,13 +2,13 @@ from server_package.functions import SystemUtilities
 from server_package.message_management import MessageManagement
 from server_package.user_management import UserManagement
 from server_package.user_authentication import UserAuthentication
-from server_package.database_support import DatabaseSupport
+from server_package.database_support import JSONDatabaseSupport
 import server_package.server_response as server_response
 
 
 class CommandHandler:
     def __init__(self, logged_in_user_data):
-        self.database_support = DatabaseSupport()
+        self.database_support = JSONDatabaseSupport()
         self.logged_in_user_data = logged_in_user_data
         self.username = ""
         self.new_command = ""
