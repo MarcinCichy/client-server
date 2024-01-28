@@ -4,6 +4,7 @@ import server_package.server_response as server_response
 import server_package.server_data as server_data
 from server_package.connect import connect
 from psycopg2 import sql
+from psycopg2.extras import DictCursor
 
 
 """
@@ -60,7 +61,6 @@ class JSONDatabaseSupport:
         cur, conn = connect()
         try:
             query = sql.SQL("UPDATE {table} SET {column} = %s WHERE user_id = %s").format(table=sql.Identifier(table), column=sql.Identifier(column))
-            # cur.execute("UPDATE %s SET %s = %s WHERE user_id = %s", (table, column, new_value, user_name))
             cur.execute(query, (new_value, user_name))
             conn.commit()
         except Exception as e:
@@ -73,8 +73,16 @@ class JSONDatabaseSupport:
     def get_info_about_user(self, user_name):
         cur, conn = connect()
         try:
-            cur.execute("SELECT * FROM users WHERE user_id=%s", (user_name))
-            conn.commit()
+            cur.execute("SELECT * FROM users WHERE user_id = %s", (user_name,))
+            result = cur.fetchone()
+
+            column_names = [desc[0] for desc in cur.description]
+
+            result_dict = dict(zip(column_names, result)) if result else None
+
+            print(result_dict)
+            return result_dict
+
         except Exception as e:
             print(f"Error: {e}")
             conn.rollback()
@@ -85,7 +93,7 @@ class JSONDatabaseSupport:
     def check_if_user_exist(self, user_name):
         cur, conn = connect()
         try:
-            cur.execute("SELECT 1 FROM users WHERE user_id = %s", (user_name))
+            cur.execute("SELECT 1 FROM users WHERE user_id = %s", (user_name,))
             if cur.fetchone():
                 return True  # User exist
             else:

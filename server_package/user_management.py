@@ -1,5 +1,7 @@
+import datetime
 import server_package.server_response as server_response
 from server_package.database_support import handle_db_file_error
+
 
 
 class UserManagement:
@@ -66,35 +68,18 @@ class UserManagement:
             exist_users[key] = {"permissions": value["permissions"], "status": value["status"]}
         return {server_response.EXISTING_ACCOUNTS: exist_users}
 
-    # def user_info(self, username):
-    #     db_users = self.database_support.get_user()
-    #     db_msgs = self.database_support.get_messages()
-    #
-    #     if username not in db_users['users']:
-    #         return server_response.E_USER_DOES_NOT_EXIST
-    #     else:
-    #         user_to_check = db_users['users'][username]
-    #         exist_user = {"username": username}
-    #         for key, value in user_to_check.items():
-    #             exist_user[key] = value
-    #         inbox_msg_count = len(db_msgs["messages"][username])
-    #         exist_user["inbox messages"] = inbox_msg_count
-    #         return {server_response.ACCOUNT_INFO: exist_user}
-
     def user_info(self, username):
-        db_users = self.database_support.get_user()
-        db_msgs = self.database_support.get_messages()
-
-        if username not in db_users['users']:
+        if not self.database_support.check_if_user_exist(username):
             return server_response.E_USER_DOES_NOT_EXIST
         else:
-            user_to_check = db_users['users'][username]
-            exist_user = {"username": username}
-            for key, value in user_to_check.items():
-                exist_user[key] = value
-            inbox_msg_count = len(db_msgs["messages"][username])
-            exist_user["inbox messages"] = inbox_msg_count
-            return {server_response.ACCOUNT_INFO: exist_user}
+            exist_user = self.database_support.get_info_about_user(username)
+            exist_user_temp = {'user': exist_user.pop('user_id')}
+            exist_user_temp.update(exist_user)
+            exist_user_temp['activation_date'] = self.convert_datetime_date_to_string_date(exist_user['activation_date'])
+            # inbox_msg_count = len(db_msgs["messages"][username])
+            # exist_user["inbox messages"] = inbox_msg_count
+
+            return {server_response.ACCOUNT_INFO: exist_user_temp}
 
 
     @handle_db_file_error
@@ -105,8 +90,9 @@ class UserManagement:
             user_to_change_permission, new_permissions = next(iter(data.items()))
             print(f'User name to change permissions: {user_to_change_permission}, to new permissions: {new_permissions}')
 
-        if self.database_support.check_if_user_exist(user_to_change_permission):
+        if not self.database_support.check_if_user_exist(user_to_change_permission):
             return server_response.E_USER_DOES_NOT_EXIST
+
         # elif user_to_change_status in db_users['logged_users']:
         #     return server_response.E_USER_LOGGED_CANNOT_CHANGE_STATUS
         elif new_permissions not in ['user', 'admin']:
@@ -124,7 +110,7 @@ class UserManagement:
             user_to_change_status, new_status = next(iter(data.items()))
             print(f'User name to change status: {user_to_change_status}, to new status: {new_status}')
 
-        if self.database_support.check_if_user_exist(user_to_change_status):
+        if not self.database_support.check_if_user_exist(user_to_change_status):
             return server_response.E_USER_DOES_NOT_EXIST
         # elif user_to_change_status in db_users['logged_users']:
         #     return server_response.E_USER_LOGGED_CANNOT_CHANGE_STATUS
@@ -134,3 +120,6 @@ class UserManagement:
             self.database_support.data_update('users', 'status', user_to_change_status, new_status)
             return {user_to_change_status: server_response.USER_STATUS_CHANGED}
 
+    def convert_datetime_date_to_string_date(self, date_from_db):
+        converted_date = date_from_db.strftime('%Y-%m-%d')
+        return converted_date
