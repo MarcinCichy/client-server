@@ -56,6 +56,7 @@ class JSONDatabaseSupport:
     @handle_db_file_error
     def save_messages(self, data):
         self.save_db_json(data, server_data.MESSAGES_DATABASE)
+# ----------------------------------------------------------------------------------------------
 
     def data_update(self, table, column, user_name, new_value):
         cur, conn = connect()
@@ -90,6 +91,20 @@ class JSONDatabaseSupport:
             cur.close()
             conn.close()
 
+    def get_all_users_list(self):
+        cur, conn = connect()
+        try:
+            cur.execute("SELECT user_id, permissions, status FROM users")
+            result = cur.fetchall()
+            print(result)
+            return result
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
+
     def check_if_user_exist(self, user_name):
         cur, conn = connect()
         try:
@@ -98,6 +113,23 @@ class JSONDatabaseSupport:
                 return True  # User exist
             else:
                 return False  # User not exist
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
+
+    def inbox_msg_counting(self, recipient_id):
+        cur, conn = connect()
+        try:
+            cur.execute("SELECT COUNT(*) FROM messages WHERE recipient_id = %s", (recipient_id,))
+
+            # Pobranie wyniku
+            count = cur.fetchone()[0]
+
+            return count
+
         except Exception as e:
             print(f"Error: {e}")
             conn.rollback()

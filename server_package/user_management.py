@@ -61,25 +61,25 @@ class UserManagement:
 
     @handle_db_file_error
     def user_list(self):
-        db_users = self.database_support.get_user()  #***************************
-        users_to_list = db_users['users']
-        exist_users = {}
-        for key, value in users_to_list.items():
-            exist_users[key] = {"permissions": value["permissions"], "status": value["status"]}
-        return {server_response.EXISTING_ACCOUNTS: exist_users}
+        all_user_data = self.database_support.get_all_users_list()
+        users_dict = {}
+        for row in all_user_data:
+            user_id, permissions, status = row
+            users_dict[user_id] = {'permissions': permissions, 'status': status}
+        return {server_response.EXISTING_ACCOUNTS: users_dict}
 
     def user_info(self, username):
         if not self.database_support.check_if_user_exist(username):
             return server_response.E_USER_DOES_NOT_EXIST
         else:
-            exist_user = self.database_support.get_info_about_user(username)
-            exist_user_temp = {'user': exist_user.pop('user_id')}
-            exist_user_temp.update(exist_user)
-            exist_user_temp['activation_date'] = self.convert_datetime_date_to_string_date(exist_user['activation_date'])
-            # inbox_msg_count = len(db_msgs["messages"][username])
-            # exist_user["inbox messages"] = inbox_msg_count
+            selected_user_data = self.database_support.get_info_about_user(username)
+            new_selected_user_data = {'user': selected_user_data.pop('user_id')}
+            new_selected_user_data.update(selected_user_data)
+            new_selected_user_data['activation_date'] = self.convert_datetime_date_to_string_date(selected_user_data['activation_date'])
+            inbox_msg_count = self.database_support.inbox_msg_counting(username)
+            new_selected_user_data["inbox messages"] = inbox_msg_count
 
-            return {server_response.ACCOUNT_INFO: exist_user_temp}
+            return {server_response.ACCOUNT_INFO: new_selected_user_data}
 
 
     @handle_db_file_error
