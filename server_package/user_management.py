@@ -93,8 +93,8 @@ class UserManagement:
         if not self.database_support.check_if_user_exist(user_to_change_permission):
             return server_response.E_USER_DOES_NOT_EXIST
 
-        # elif user_to_change_status in db_users['logged_users']:
-        #     return server_response.E_USER_LOGGED_CANNOT_CHANGE_STATUS
+        elif self.database_support.check_if_user_is_logged_in(user_to_change_permission):
+            return server_response.E_USER_LOGGED_CANNOT_CHANGE_PERMISSIONS
         elif new_permissions not in ['user', 'admin']:
             return server_response.E_WRONG_PERMISSIONS
         else:
@@ -112,8 +112,8 @@ class UserManagement:
 
         if not self.database_support.check_if_user_exist(user_to_change_status):
             return server_response.E_USER_DOES_NOT_EXIST
-        # elif user_to_change_status in db_users['logged_users']:
-        #     return server_response.E_USER_LOGGED_CANNOT_CHANGE_STATUS
+        elif self.database_support.check_if_user_is_logged_in(user_to_change_status):
+            return server_response.E_USER_LOGGED_CANNOT_CHANGE_STATUS
         elif new_status not in ['banned', 'active']:
             return server_response.E_WRONG_STATUS
         else:

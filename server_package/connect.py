@@ -9,7 +9,7 @@ def connect():
         params = config()
         print('Connecting to the PostgreSQL database...')
         conn = psycopg2.connect(**params)
-        return conn.cursor(), conn  # Zwróć kursor i połączenie
+        return conn.cursor(), conn
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
         if conn is not None:

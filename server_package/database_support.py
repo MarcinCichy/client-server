@@ -124,15 +124,27 @@ class JSONDatabaseSupport:
         cur, conn = connect()
         try:
             cur.execute("SELECT COUNT(*) FROM messages WHERE recipient_id = %s", (recipient_id,))
-
-            # Pobranie wyniku
             count = cur.fetchone()[0]
-
             return count
-
         except Exception as e:
             print(f"Error: {e}")
             conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
+
+    def check_if_user_is_logged_in(self, user_name):
+        cur, conn = connect()
+        try:
+            cur.execute("SELECT login_time FROM users WHERE user_id = %s", (user_name,))
+            result = cur.fetchone()
+            if result and result[0] is not None:
+                return True  # Użytkownik jest zalogowany
+            else:
+                return False  # Użytkownik nie jest zalogowany
+        except Exception as e:
+                print(f"Error: {e}")
+                conn.rollback()
         finally:
             cur.close()
             conn.close()
