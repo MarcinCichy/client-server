@@ -61,7 +61,7 @@ class JSONDatabaseSupport:
     def data_update(self, table, column, user_name, new_value):
         cur, conn = connect()
         try:
-            query = sql.SQL("UPDATE {table} SET {column} = %s WHERE user_id = %s").format(table=sql.Identifier(table), column=sql.Identifier(column))
+            query = sql.SQL("UPDATE {table} SET {column} = %s WHERE user_name = %s").format(table=sql.Identifier(table), column=sql.Identifier(column))
             cur.execute(query, (new_value, user_name))
             conn.commit()
         except Exception as e:
@@ -74,7 +74,7 @@ class JSONDatabaseSupport:
     def get_info_about_user(self, user_name):
         cur, conn = connect()
         try:
-            cur.execute("SELECT * FROM users WHERE user_id = %s", (user_name,))
+            cur.execute("SELECT * FROM users WHERE user_name = %s", (user_name,))
             result = cur.fetchone()
 
             column_names = [desc[0] for desc in cur.description]
@@ -94,7 +94,7 @@ class JSONDatabaseSupport:
     def get_all_users_list(self):
         cur, conn = connect()
         try:
-            cur.execute("SELECT user_id, permissions, status FROM users")
+            cur.execute("SELECT user_name, permissions, status FROM users ORDER BY user_id")
             result = cur.fetchall()
             print(result)
             return result
@@ -108,7 +108,7 @@ class JSONDatabaseSupport:
     def check_if_user_exist(self, user_name):
         cur, conn = connect()
         try:
-            cur.execute("SELECT 1 FROM users WHERE user_id = %s", (user_name,))
+            cur.execute("SELECT 2 FROM users WHERE user_name = %s", (user_name,))
             if cur.fetchone():
                 return True  # User exist
             else:
@@ -136,7 +136,7 @@ class JSONDatabaseSupport:
     def check_if_user_is_logged_in(self, user_name):
         cur, conn = connect()
         try:
-            cur.execute("SELECT login_time FROM users WHERE user_id = %s", (user_name,))
+            cur.execute("SELECT login_time FROM users WHERE user_name = %s", (user_name,))
             result = cur.fetchone()
             if result and result[0] is not None:
                 return True  # Użytkownik jest zalogowany

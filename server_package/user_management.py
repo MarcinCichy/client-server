@@ -13,6 +13,14 @@ class UserManagement:
         return {"User-add": "OK"}
 
     @handle_db_file_error
+
+    #  INSERT INTO users (user_name, password, permissions, status, activation_date, login_time)
+    # SELECT user_name, password, permissions, status, activation_date, login_time
+    # FROM users;
+
+    # Dane z add user: [{'username': 'atos'}, {'password': 'portos'}, {'permissions': 'user'},
+    # {'status': 'active'}, {'activation_date': '2024-01-31'}]
+
     def create_account(self, data):
         db_users = self.database_support.get_user()
         db_msgs = self.database_support.get_messages()
@@ -21,6 +29,7 @@ class UserManagement:
         new_key = None
 
         for dictionary in data:
+            print(f'Dane z add user: {data}')
             key = next(iter(dictionary))
             value = dictionary[key]
             if key == 'username':
@@ -64,8 +73,8 @@ class UserManagement:
         all_user_data = self.database_support.get_all_users_list()
         users_dict = {}
         for row in all_user_data:
-            user_id, permissions, status = row
-            users_dict[user_id] = {'permissions': permissions, 'status': status}
+            user_name, permissions, status = row
+            users_dict[user_name] = {'permissions': permissions, 'status': status}
         return {server_response.EXISTING_ACCOUNTS: users_dict}
 
     def user_info(self, username):
@@ -73,11 +82,12 @@ class UserManagement:
             return server_response.E_USER_DOES_NOT_EXIST
         else:
             selected_user_data = self.database_support.get_info_about_user(username)
-            new_selected_user_data = {'user': selected_user_data.pop('user_id')}
+            new_selected_user_data = {'user': selected_user_data.pop('user_name')}
             new_selected_user_data.update(selected_user_data)
             new_selected_user_data['activation_date'] = self.convert_datetime_date_to_string_date(selected_user_data['activation_date'])
             inbox_msg_count = self.database_support.inbox_msg_counting(username)
             new_selected_user_data["inbox messages"] = inbox_msg_count
+            new_selected_user_data['login_time'] = self.convert_datetime_datetime_to_string_date(selected_user_data['login_time'])
 
             return {server_response.ACCOUNT_INFO: new_selected_user_data}
 
@@ -123,3 +133,10 @@ class UserManagement:
     def convert_datetime_date_to_string_date(self, date_from_db):
         converted_date = date_from_db.strftime('%Y-%m-%d')
         return converted_date
+
+    def convert_datetime_datetime_to_string_date(self, datetime_from_db):
+        if not datetime_from_db:
+            return None
+        else:
+            converted_datetime = datetime_from_db.strftime('%Y-%m-%d')
+            return converted_datetime
