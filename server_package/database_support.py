@@ -108,7 +108,7 @@ class JSONDatabaseSupport:
     def check_if_user_exist(self, user_name):
         cur, conn = connect()
         try:
-            cur.execute("SELECT 2 FROM users WHERE user_name = %s", (user_name,))
+            cur.execute("SELECT 1 FROM users WHERE user_name = %s", (user_name,))
             if cur.fetchone():
                 return True  # User exist
             else:
@@ -145,6 +145,20 @@ class JSONDatabaseSupport:
         except Exception as e:
                 print(f"Error: {e}")
                 conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
+
+    def create_db_account(self,  table, new_user_data):
+        cur, conn = connect()
+        try:
+            query = sql.SQL("INSERT INTO {} (user_name, password, permissions, status, activation_date) VALUES (%s)").format(table=sql.Identifier(table))
+            # cur.executemany("INSERT INTO {table} (user_name, password, permissions, status, activation_date) VALUES (%s)", (new_user_data,))
+            cur.executemany(query, new_user_data)
+            conn.commit()
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
         finally:
             cur.close()
             conn.close()
