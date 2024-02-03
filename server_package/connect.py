@@ -1,5 +1,5 @@
 import psycopg2
-from config import config
+from server_package.config import config
 
 
 def connect():
@@ -14,4 +14,4 @@ def connect():
         print(error)
         if conn is not None:
             conn.close()
-        print('Database connection closed.')
+            print('Database connection closed.')

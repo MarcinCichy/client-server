@@ -139,22 +139,21 @@ class JSONDatabaseSupport:
             cur.execute("SELECT login_time FROM users WHERE user_name = %s", (user_name,))
             result = cur.fetchone()
             if result and result[0] is not None:
-                return True  # Użytkownik jest zalogowany
+                return True  # User is looged in
             else:
-                return False  # Użytkownik nie jest zalogowany
+                return False  # User is not logged in
         except Exception as e:
-                print(f"Error: {e}")
-                conn.rollback()
+            print(f"Error: {e}")
+            conn.rollback()
         finally:
             cur.close()
             conn.close()
 
-    def create_db_account(self,  table, new_user_data):
+    def create_db_account(self, table, new_user_data):
         cur, conn = connect()
         try:
-            query = sql.SQL("INSERT INTO {} (user_name, password, permissions, status, activation_date) VALUES (%s)").format(table=sql.Identifier(table))
-            # cur.executemany("INSERT INTO {table} (user_name, password, permissions, status, activation_date) VALUES (%s)", (new_user_data,))
-            cur.executemany(query, new_user_data)
+            query = sql.SQL("INSERT INTO {} (user_name, password, permissions, status, activation_date) VALUES (%s, %s, %s, %s, %s)").format(sql.Identifier(table))
+            cur.execute(query.as_string(conn), new_user_data)
             conn.commit()
         except Exception as e:
             print(f"Error: {e}")

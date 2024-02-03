@@ -1,7 +1,5 @@
-import datetime
 import server_package.server_response as server_response
 from server_package.database_support import handle_db_file_error
-
 
 
 class UserManagement:
@@ -13,75 +11,33 @@ class UserManagement:
         return {"User-add": "OK"}
 
     @handle_db_file_error
-
-    #  INSERT INTO users (user_name, password, permissions, status, activation_date, login_time)
-    # SELECT user_name, password, permissions, status, activation_date, login_time
-    # FROM users;
-
-    # Dane z add user: [{'username': 'atos'}, {'password': 'portos'}, {'permissions': 'user'},
-    # {'status': 'active'}, {'activation_date': '2024-01-31'}]
-
     def create_account(self, data):
-        # db_users = self.database_support.get_user()
-        # db_msgs = self.database_support.get_messages()
-
-        new_user = {}
-        new_key = None
-
-        print(f'Dane z add user: {data}')
-
-        lista_wartosci = [list(d.values())[0] for d in data]
-
-        print(lista_wartosci)
-        print(type(lista_wartosci))
-
-        username = lista_wartosci[0]
-
         if not data:
             return server_response.E_INVALID_DATA
 
-        if self.database_support.check_if_user_exist(username):
-            return server_response.E_ACCOUNT_EXIST
-        else:
-            self.database_support.create_db_account('users', lista_wartosci)
+        print(f'Dane z add user: {data}')
 
+        new_user_data = tuple(d[next(iter(d))] for d in data)
+        if new_user_data:
+            username = new_user_data[0]
+            permissions = new_user_data[2]
 
-        # for dictionary in data:
-        #     lista_wartosci = list(data.values())
-        #     print(lista_wartosci)
-        #     print(type(lista_wartosci))
+        print(f'COLUMNS = {new_user_data}')
+        print(type(new_user_data))
+        print(f'username = {username}')
+        print(f'permissions = {permissions}')
 
-
-        #     key = next(iter(dictionary))
-        #     value = dictionary[key]
-        #     if key == 'username':
-        #         new_key = value
-        #         if self.database_support.check_if_user_exist(new_key):
-        #             return server_response.E_ACCOUNT_EXIST
-        #     elif key == "permissions":
-        #         if value not in ['user', 'admin']:
-        #             return server_response.E_WRONG_PERMISSIONS
-        #         else:
-        #             new_user[key] = value
-        #     else:  # this is for all others keys in dictionary, as: 'password', 'status, 'activation_date'
-        #         new_user[key] = value
-        #
-        # print(new_user)
-        # print(type(new_user))
-        # lista_wartosci = list(new_user.values())
-        # print(lista_wartosci)
-        # print(type(lista_wartosci))
-    """
-        if len(new_key) > 0:
-            # db_users["users"][new_key] = new_user
-            # self.database_support.save_user(db_users)
-            # db_msgs['messages'][new_key] = {}
-            # self.database_support.save_messages(db_msgs)
-            self.database_support.create_account(new_user)
-            return server_response.NEW_ACCOUNT_CREATED
+        if len(username) > 0:
+            if self.database_support.check_if_user_exist(username):
+                return server_response.E_ACCOUNT_EXIST
+            if permissions not in ['user', 'admin']:
+                return server_response.E_WRONG_PERMISSIONS
+            else:
+                self.database_support.create_db_account('users', new_user_data)
+                return server_response.NEW_ACCOUNT_CREATED
         else:
             return server_response.E_USER_NAME_NOT_PROVIDED
-    """
+
     @handle_db_file_error
     def user_del(self, user_to_del):
         db_users = self.database_support.get_user()
