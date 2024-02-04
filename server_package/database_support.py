@@ -96,7 +96,6 @@ class JSONDatabaseSupport:
         try:
             cur.execute("SELECT user_name, permissions, status FROM users ORDER BY user_id")
             result = cur.fetchall()
-            print(result)
             return result
         except Exception as e:
             print(f"Error: {e}")
@@ -149,11 +148,11 @@ class JSONDatabaseSupport:
             cur.close()
             conn.close()
 
-    def create_db_account(self, table, new_user_data):
+    def add_record_to_db(self, table, new_data):
         cur, conn = connect()
         try:
             query = sql.SQL("INSERT INTO {} (user_name, password, permissions, status, activation_date) VALUES (%s, %s, %s, %s, %s)").format(sql.Identifier(table))
-            cur.execute(query.as_string(conn), new_user_data)
+            cur.execute(query.as_string(conn), new_data)
             conn.commit()
         except Exception as e:
             print(f"Error: {e}")
@@ -161,3 +160,33 @@ class JSONDatabaseSupport:
         finally:
             cur.close()
             conn.close()
+
+    def delete_record_from_db(self, table, data):
+        cur, conn = connect()
+        try:
+            query = sql.SQL("DELETE FROM {table} WHERE user_name = %s").format(table=sql.Identifier(table))
+            cur.execute(query, (data,))
+            conn.commit()
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
+
+    def show_all_messages_inbox(self, username):
+        cur, conn = connect()
+        try:
+            query = sql.SQL("SELECT message_id, sender_id, date FROM messages WHERE recipient_id = %s ORDER BY message_id")
+            cur.execute(query, (username,))
+            result = cur.fetchall()
+            return result
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
+
+    def show_selected_message(self, username, msg_num):
+        pass

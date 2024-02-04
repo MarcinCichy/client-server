@@ -15,17 +15,10 @@ class UserManagement:
         if not data:
             return server_response.E_INVALID_DATA
 
-        print(f'Dane z add user: {data}')
-
         new_user_data = tuple(d[next(iter(d))] for d in data)
         if new_user_data:
             username = new_user_data[0]
             permissions = new_user_data[2]
-
-        print(f'COLUMNS = {new_user_data}')
-        print(type(new_user_data))
-        print(f'username = {username}')
-        print(f'permissions = {permissions}')
 
         if len(username) > 0:
             if self.database_support.check_if_user_exist(username):
@@ -33,24 +26,22 @@ class UserManagement:
             if permissions not in ['user', 'admin']:
                 return server_response.E_WRONG_PERMISSIONS
             else:
-                self.database_support.create_db_account('users', new_user_data)
+                self.database_support.add_record_to_db('users', new_user_data)
                 return server_response.NEW_ACCOUNT_CREATED
         else:
             return server_response.E_USER_NAME_NOT_PROVIDED
 
     @handle_db_file_error
     def user_del(self, user_to_del):
-        db_users = self.database_support.get_user()
-        db_msgs = self.database_support.get_messages()
-        if user_to_del not in db_users['users']:
+        print(f'User to delete = {user_to_del}')
+        if not self.database_support.check_if_user_exist(user_to_del):
             return server_response.E_USER_DOES_NOT_EXIST
-        elif user_to_del in db_users['logged_users']:
+        elif self.database_support.check_if_user_is_logged_in(user_to_del):
             return server_response.E_USER_LOGGED_CANNOT_BE_DELETED
         else:
-            del db_users['users'][user_to_del]
-            del db_msgs['messages'][user_to_del]
-            self.database_support.save_user(db_users)
-            self.database_support.save_messages(db_msgs)
+            # del db_msgs['messages'][user_to_del]
+            # self.database_support.save_messages(db_msgs)
+            self.database_support.delete_record_from_db('users', user_to_del)
             return {user_to_del: server_response.USER_DELETED}
 
     @handle_db_file_error
@@ -69,7 +60,7 @@ class UserManagement:
             selected_user_data = self.database_support.get_info_about_user(username)
             new_selected_user_data = {'user': selected_user_data.pop('user_name')}
             new_selected_user_data.update(selected_user_data)
-            new_selected_user_data['activation_date'] = self.convert_datetime_date_to_string_date(selected_user_data['activation_date'])
+            new_selected_user_data['activation_date'] = self.convert_datetime_datetime_to_string_date(selected_user_data['activation_date'])
             inbox_msg_count = self.database_support.inbox_msg_counting(username)
             new_selected_user_data["inbox messages"] = inbox_msg_count
             new_selected_user_data['login_time'] = self.convert_datetime_datetime_to_string_date(selected_user_data['login_time'])
@@ -115,9 +106,9 @@ class UserManagement:
             self.database_support.data_update('users', 'status', user_to_change_status, new_status)
             return {user_to_change_status: server_response.USER_STATUS_CHANGED}
 
-    def convert_datetime_date_to_string_date(self, date_from_db):
-        converted_date = date_from_db.strftime('%Y-%m-%d')
-        return converted_date
+    # def convert_datetime_date_to_string_date(self, date_from_db):
+    #     converted_date = date_from_db.strftime('%Y-%m-%d')
+    #     return converted_date
 
     def convert_datetime_datetime_to_string_date(self, datetime_from_db):
         if not datetime_from_db:
