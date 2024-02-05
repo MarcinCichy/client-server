@@ -148,11 +148,11 @@ class JSONDatabaseSupport:
             cur.close()
             conn.close()
 
-    def add_record_to_db(self, table, new_data):
+    def add_account_to_db(self, new_data):
         cur, conn = connect()
         try:
-            query = sql.SQL("INSERT INTO {} (user_name, password, permissions, status, activation_date) VALUES (%s, %s, %s, %s, %s)").format(sql.Identifier(table))
-            cur.execute(query.as_string(conn), new_data)
+            query = sql.SQL("INSERT INTO users (user_name, password, permissions, status, activation_date) VALUES (%s, %s, %s, %s, %s)")
+            cur.execute(query, new_data)
             conn.commit()
         except Exception as e:
             print(f"Error: {e}")
@@ -188,5 +188,49 @@ class JSONDatabaseSupport:
             cur.close()
             conn.close()
 
-    def show_selected_message(self, username, msg_num):
-        pass
+    def show_selected_message(self, msg_id):
+        cur, conn = connect()
+        try:
+            cur.execute("SELECT * FROM messages WHERE message_id = %s", (msg_id,))
+            result = cur.fetchone()
+
+            column_names = [desc[0] for desc in cur.description]
+
+            result_dict = dict(zip(column_names, result)) if result else None
+
+            print(result_dict)
+            return result_dict
+
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
+
+    def delete_selected_message(self, msg_id):
+        cur, conn = connect()
+        try:
+            query = sql.SQL(
+                "DELETE FROM messages WHERE message_id = %s")
+            cur.execute(query, (msg_id,))
+            conn.commit()
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
+
+    def add_new_message_to_db(self, new_data):
+        cur, conn = connect()
+        try:
+            query = sql.SQL("INSERT INTO messages (sender_id, date, recipient_id, content) VALUES (%s, %s, %s, %s)")
+            cur.execute(query, new_data)
+            conn.commit()
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()

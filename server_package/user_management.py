@@ -26,7 +26,7 @@ class UserManagement:
             if permissions not in ['user', 'admin']:
                 return server_response.E_WRONG_PERMISSIONS
             else:
-                self.database_support.add_record_to_db('users', new_user_data)
+                self.database_support.add_account_to_db(new_user_data)
                 return server_response.NEW_ACCOUNT_CREATED
         else:
             return server_response.E_USER_NAME_NOT_PROVIDED

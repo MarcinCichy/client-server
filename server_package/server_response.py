@@ -21,7 +21,7 @@ E_INVALID_DATA = {"Error": "Invalid data."}
 
 # -------------- OTHERS RESPONSES -------------------
 MESSAGE_WAS_SENT = {"Message": "was sent"}
-MESSAGE_WAD_DELETED = {"Message": "was deleted"}
+MESSAGE_WAS_DELETED = {"Message": "was deleted"}
 NEW_ACCOUNT_CREATED = {"New account": "was created"}
 EXISTING_ACCOUNTS = "Existing_accounts"
 ACCOUNT_INFO = "Account_info"
