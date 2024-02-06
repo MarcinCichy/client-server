@@ -4,16 +4,6 @@ import server_package.server_response as server_response
 import server_package.server_data as server_data
 from server_package.connect import connect
 from psycopg2 import sql
-from psycopg2.extras import DictCursor
-
-
-"""
-    do obslugi SQLa potrzebuje komend:
-    - INSERT - wstawia nowe rekordy podczs dodawania uzytkownika lub wiadomosci
-    - SELECT - odczytuje istniejace rekordy podczas pobierania danych o uzytkowniku lub wiadomosciach
-    - UPDATE - aktualizuje dane podczas zmiany uprawnien, statusu
-    - DELETE - kasuje rekordy podczas usuwania uzytkownika lub wiadomosci
-"""
 
 
 def handle_db_file_error(func):
@@ -58,7 +48,9 @@ class JSONDatabaseSupport:
         self.save_db_json(data, server_data.MESSAGES_DATABASE)
 # ----------------------------------------------------------------------------------------------
 
-    def data_update(self, table, column, user_name, new_value):
+
+class DatabaseSupport:
+    def data_update(self, table, column, user_name, new_value=None):
         cur, conn = connect()
         try:
             query = sql.SQL("UPDATE {table} SET {column} = %s WHERE user_name = %s").format(table=sql.Identifier(table), column=sql.Identifier(column))
@@ -198,7 +190,7 @@ class JSONDatabaseSupport:
 
             result_dict = dict(zip(column_names, result)) if result else None
 
-            print(result_dict)
+            print(f'RESULT = {result_dict}')
             return result_dict
 
         except Exception as e:
@@ -222,6 +214,20 @@ class JSONDatabaseSupport:
             cur.close()
             conn.close()
 
+    def delete_all_user_messages(self, user_to_del):
+        cur, conn = connect()
+        try:
+            query = sql.SQL(
+                "DELETE FROM messages WHERE recipient_id = %s")
+            cur.execute(query, (user_to_del,))
+            conn.commit()
+        except Exception as e:
+            print(f"Error: {e}")
+            conn.rollback()
+        finally:
+            cur.close()
+            conn.close()
+
     def add_new_message_to_db(self, new_data):
         cur, conn = connect()
         try:
@@ -234,3 +240,6 @@ class JSONDatabaseSupport:
         finally:
             cur.close()
             conn.close()
+
+
+

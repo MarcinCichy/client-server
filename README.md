@@ -1,4 +1,4 @@
-    Client/Server application.
+    Client/Server application - PostgreSQL version.
 
     It is a simple client server application.
     The app uses JSON to send commands and server responses.
@@ -24,6 +24,9 @@
     change the status of another user (active or blocked), he can also change user rights (admin or user).
 
     Run server.py and run main_gui.py.
+    Data to login (for test only):
+    username = marcin
+    password = 12345
 
 
     Below is a complete list of commands that can be used depending on your permissions (admin/user).    
@@ -48,7 +51,7 @@
             user-stat [username] [status] - change user status [active] or [banned]
             user-info [username] - to show information about account of selected user
 
-    - v 0.2.0 Added support for PostgreSQL databases
+    - v 0.2.0 Added support for PostgreSQL databases. Bye, bye JSON format database ;)
 
     - v 0.1.8 Improved command handling after server connection is lost and re-established
               New functionality added - user-info, to show information 

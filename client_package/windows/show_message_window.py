@@ -22,7 +22,7 @@ class ShowMessageWindow(BaseWindow):
         self.window.refresh()
 
     def show_selected_message(self, message_content):
-        self.sender = message_content["Message to show"]["sender"]
+        self.sender = message_content["Message to show"]["sender_id"]
         self.date = message_content["Message to show"]["date"]
         self.content = message_content["Message to show"]["content"]
 

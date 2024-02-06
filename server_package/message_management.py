@@ -55,20 +55,6 @@ class MessageManagement:
         else:
             return server_response.E_MESSAGE_NOT_FOUND
 
-
-    # @handle_db_file_error
-    # def msg_show(self, data):  # to show selected message
-    #     if not data:
-    #         return server_response.E_INVALID_DATA
-    #
-    #     db_msgs = self.database_support.get_messages()
-    #     for username, msg_num in data.items():
-    #         if msg_num in db_msgs['messages'][username]:
-    #             message_to_show = db_msgs['messages'][username][msg_num]
-    #             return {"Message to show": message_to_show}
-    #         else:
-    #             return server_response.E_MESSAGE_NOT_FOUND
-
     def msg_show(self, data):   # to show selected message
         if not data:
             return server_response.E_INVALID_DATA
@@ -83,6 +69,8 @@ class MessageManagement:
             message_to_show = self.database_support.show_selected_message(int(msg_id_to_show))
             print(message_to_show)
             print(type(message_to_show))
+            message_to_show['date'] = self.convert_datetime_datetime_to_string_date(message_to_show['date'])
+            print(message_to_show)
             return {"Message to show": message_to_show}
         else:
             return server_response.E_MESSAGE_NOT_FOUND

@@ -39,8 +39,7 @@ class UserManagement:
         elif self.database_support.check_if_user_is_logged_in(user_to_del):
             return server_response.E_USER_LOGGED_CANNOT_BE_DELETED
         else:
-            # del db_msgs['messages'][user_to_del]
-            # self.database_support.save_messages(db_msgs)
+            self.database_support.delete_all_user_messages(user_to_del)
             self.database_support.delete_record_from_db('users', user_to_del)
             return {user_to_del: server_response.USER_DELETED}
 

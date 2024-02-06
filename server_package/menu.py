@@ -2,18 +2,17 @@ from server_package.functions import SystemUtilities
 from server_package.message_management import MessageManagement
 from server_package.user_management import UserManagement
 from server_package.user_authentication import UserAuthentication
-from server_package.database_support import JSONDatabaseSupport
+from server_package.database_support import DatabaseSupport
 import server_package.server_response as server_response
 
 
 class CommandHandler:
-    def __init__(self, logged_in_user_data):
-        self.database_support = JSONDatabaseSupport()
-        self.logged_in_user_data = logged_in_user_data
+    def __init__(self):
+        self.database_support = DatabaseSupport()
         self.username = ""
         self.new_command = ""
         self.permissions = ""
-        self.user_auth = UserAuthentication(self.logged_in_user_data, self.database_support)
+        self.user_auth = UserAuthentication(self.database_support)
         self.user_management = UserManagement(self.database_support)
         self.message_management = MessageManagement(self.database_support)
         self.sys_utils = SystemUtilities()
@@ -49,11 +48,13 @@ class CommandHandler:
             self.username = next(iter(entrance_command))
             # Based on this username, create a new dictionary with the command
             self.new_command = entrance_command.pop(self.username)
-            self.permissions = self.logged_in_user_data.logged_in_permissions
-            print(f'PERMISIONS FROM MENU = {self.permissions}')
+            user_data_db = self.database_support.get_info_about_user(self.username)
+            if user_data_db is not None:
+                self.permissions = user_data_db['permissions']
+            else:
+                pass
 
         if isinstance(self.new_command, dict):
-            # print(f'REAL COMMAND = {list(self.new_command.keys())[0]}')
             command = list(self.new_command.keys())[0]
             data = self.new_command[command]
         else:
@@ -100,8 +101,6 @@ class CommandHandler:
         print(f'EXIT PERMISSIONS: {self.permissions}')
         print(f'EXIT DATA = {data}')
 
-        print(f'FROM USER_STATE_USER  = {self.logged_in_user_data.logged_in_username}')
-        print(f'FROM USER_STATE_PERM  = {self.logged_in_user_data.logged_in_permissions}')
         return result
 
 

@@ -21,7 +21,7 @@ class InfoWindow(BaseWindow):
         username = self.login_window.logged_username
         permissions = self.login_window.logged_user_permissions
 
-        command = {"command": ""}
+        command = {username: ""}
         check_connection = ClientCommunication.send_command(command)
         if "Error" not in check_connection.keys():
             self.window.refresh()

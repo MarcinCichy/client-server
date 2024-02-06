@@ -3,17 +3,14 @@ import socket
 from server_package import server_data
 from server_package.menu import CommandHandler
 from server_package.functions import SystemUtilities
-from server_package.server_user_state import ServerUserState
 
 
 class Server:
-    def __init__(self, srv_host, srv_port, srv_buff, user_state=None):
+    def __init__(self, srv_host, srv_port, srv_buff):
         self.srv_host = srv_host
         self.srv_port = srv_port
         self.srv_buff = srv_buff
-        self.logged_in_user_data = user_state if user_state is not None else ServerUserState()
-
-        self.handler = CommandHandler(self.logged_in_user_data)
+        self.handler = CommandHandler()
 
     def server_connection(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
