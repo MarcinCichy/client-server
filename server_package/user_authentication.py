@@ -1,5 +1,5 @@
 import server_package.server_response as server_response
-from server_package.database_support import handle_db_file_error
+# from server_package.database_support import handle_db_file_error
 
 
 class UserAuthentication:
@@ -8,7 +8,7 @@ class UserAuthentication:
         self.logged_in_username = None
         self.logged_in_permissions = None
 
-    @handle_db_file_error
+    # @handle_db_file_error
     def login(self, login_data):
         if not login_data:
             return server_response.E_INVALID_DATA
@@ -29,7 +29,7 @@ class UserAuthentication:
             print(f'Access denied to {login_username}, invalid credentials')
             return server_response.E_INVALID_CREDENTIALS
 
-    @handle_db_file_error
+    # @handle_db_file_error
     def logout(self, logged_in_user):
         if not logged_in_user:
             return server_response.E_INVALID_DATA

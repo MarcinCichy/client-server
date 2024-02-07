@@ -6,15 +6,14 @@ from server_package.connect import connect
 from psycopg2 import sql
 
 
-def handle_db_file_error(func):
+def handle_db_errors(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         try:
-            return func(*args, **kwargs)
-        # If a file is unreachable, it means that the key in that file is also unreachable.
-        # Therefore, exceptions for no file and no key were used.
-        except (FileNotFoundError, KeyError):
-            return server_response.E_FILE_IS_UNAVAILABLE
+            return {"success": True, "data": func(*args, **kwargs)}
+        except Exception as e:
+            print(f"Error: {e}")
+            return {"success": False, "error": str(e)}
     return wrapper
 
 
@@ -70,10 +69,7 @@ class DatabaseSupport:
             result = cur.fetchone()
 
             column_names = [desc[0] for desc in cur.description]
-
             result_dict = dict(zip(column_names, result)) if result else None
-
-            print(result_dict)
             return result_dict
 
         except Exception as e:

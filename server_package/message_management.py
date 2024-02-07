@@ -75,7 +75,7 @@ class MessageManagement:
         else:
             return server_response.E_MESSAGE_NOT_FOUND
 
-    @handle_db_file_error
+    # @handle_db_file_error
     def msg_count(self, username):  # to count all messages in inbox
         if not username:
             return server_response.E_INVALID_DATA

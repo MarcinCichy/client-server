@@ -10,7 +10,7 @@ class UserManagement:
     def user_add():
         return {"User-add": "OK"}
 
-    @handle_db_file_error
+  #   @handle_db_file_error
     def create_account(self, data):
         if not data:
             return server_response.E_INVALID_DATA
@@ -31,7 +31,7 @@ class UserManagement:
         else:
             return server_response.E_USER_NAME_NOT_PROVIDED
 
-    @handle_db_file_error
+   #  @handle_db_file_error
     def user_del(self, user_to_del):
         print(f'User to delete = {user_to_del}')
         if not self.database_support.check_if_user_exist(user_to_del):
@@ -43,7 +43,7 @@ class UserManagement:
             self.database_support.delete_record_from_db('users', user_to_del)
             return {user_to_del: server_response.USER_DELETED}
 
-    @handle_db_file_error
+   # @handle_db_file_error
     def user_list(self):
         all_user_data = self.database_support.get_all_users_list()
         users_dict = {}
@@ -67,7 +67,7 @@ class UserManagement:
             return {server_response.ACCOUNT_INFO: new_selected_user_data}
 
 
-    @handle_db_file_error
+    # @handle_db_file_error
     def user_perm(self, data):
         if not data:
             return server_response.E_INVALID_DATA
@@ -87,7 +87,7 @@ class UserManagement:
             return {user_to_change_permission: server_response.USER_PERMISSIONS_CHANGED}
 
 
-    @handle_db_file_error
+    # @handle_db_file_error
     def user_stat(self, data):
         if not data:
             return server_response.E_INVALID_DATA
@@ -104,10 +104,6 @@ class UserManagement:
         else:
             self.database_support.data_update('users', 'status', user_to_change_status, new_status)
             return {user_to_change_status: server_response.USER_STATUS_CHANGED}
-
-    # def convert_datetime_date_to_string_date(self, date_from_db):
-    #     converted_date = date_from_db.strftime('%Y-%m-%d')
-    #     return converted_date
 
     def convert_datetime_datetime_to_string_date(self, datetime_from_db):
         if not datetime_from_db:

@@ -1,12 +1,11 @@
 import psycopg2
-from server_package.config import config
+from server_package.config import db_config
 
 
 def connect():
-    """Nawiązuje połączenie z bazą danych i zwraca kursor."""
     conn = None
     try:
-        params = config()
+        params = db_config()
         print('Connecting to the PostgreSQL database...')
         conn = psycopg2.connect(**params)
         return conn.cursor(), conn
