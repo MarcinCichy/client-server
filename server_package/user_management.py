@@ -1,5 +1,4 @@
 import server_package.server_response as server_response
-from server_package.database_support import handle_db_file_error
 
 
 class UserManagement:
@@ -10,7 +9,6 @@ class UserManagement:
     def user_add():
         return {"User-add": "OK"}
 
-  #   @handle_db_file_error
     def create_account(self, data):
         if not data:
             return server_response.E_INVALID_DATA
@@ -31,7 +29,6 @@ class UserManagement:
         else:
             return server_response.E_USER_NAME_NOT_PROVIDED
 
-   #  @handle_db_file_error
     def user_del(self, user_to_del):
         print(f'User to delete = {user_to_del}')
         if not self.database_support.check_if_user_exist(user_to_del):
@@ -43,7 +40,6 @@ class UserManagement:
             self.database_support.delete_record_from_db('users', user_to_del)
             return {user_to_del: server_response.USER_DELETED}
 
-   # @handle_db_file_error
     def user_list(self):
         all_user_data = self.database_support.get_all_users_list()
         users_dict = {}
@@ -53,8 +49,12 @@ class UserManagement:
         return {server_response.EXISTING_ACCOUNTS: users_dict}
 
     def user_info(self, username):
+        database_response = self.database_support.get_info_about_user(username)
+        print(database_response)
         if not self.database_support.check_if_user_exist(username):
             return server_response.E_USER_DOES_NOT_EXIST
+        elif "Error" in database_response:
+            return server_response.E_DATABASE_ERROR
         else:
             selected_user_data = self.database_support.get_info_about_user(username)
             new_selected_user_data = {'user': selected_user_data.pop('user_name')}
@@ -66,8 +66,6 @@ class UserManagement:
 
             return {server_response.ACCOUNT_INFO: new_selected_user_data}
 
-
-    # @handle_db_file_error
     def user_perm(self, data):
         if not data:
             return server_response.E_INVALID_DATA
@@ -86,8 +84,6 @@ class UserManagement:
             self.database_support.data_update('users', 'permissions', user_to_change_permission, new_permissions)
             return {user_to_change_permission: server_response.USER_PERMISSIONS_CHANGED}
 
-
-    # @handle_db_file_error
     def user_stat(self, data):
         if not data:
             return server_response.E_INVALID_DATA

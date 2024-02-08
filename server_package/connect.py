@@ -1,16 +1,14 @@
 import psycopg2
+from psycopg2 import connect as pg_connect
 from server_package.config import db_config
 
 
 def connect():
-    conn = None
     try:
-        params = db_config()
         print('Connecting to the PostgreSQL database...')
-        conn = psycopg2.connect(**params)
-        return conn.cursor(), conn
+        params = db_config()
+        return pg_connect(**params)
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
-        if conn is not None:
-            conn.close()
-            print('Database connection closed.')
+        print('Database connection failed.')
+        return None

@@ -1,4 +1,3 @@
-from server_package.database_support import handle_db_file_error
 import server_package.server_response as server_response
 import server_package.server_data as server_data
 
@@ -75,7 +74,6 @@ class MessageManagement:
         else:
             return server_response.E_MESSAGE_NOT_FOUND
 
-    # @handle_db_file_error
     def msg_count(self, username):  # to count all messages in inbox
         if not username:
             return server_response.E_INVALID_DATA

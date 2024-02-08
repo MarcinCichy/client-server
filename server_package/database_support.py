@@ -1,241 +1,183 @@
-import json
 from functools import wraps
 import server_package.server_response as server_response
-import server_package.server_data as server_data
 from server_package.connect import connect
 from psycopg2 import sql
 
 
-def handle_db_errors(func):
+def handle_database_errors(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         try:
-            return {"success": True, "data": func(*args, **kwargs)}
+            return func(*args, **kwargs)
         except Exception as e:
             print(f"Error: {e}")
             return {"success": False, "error": str(e)}
     return wrapper
 
 
-class JSONDatabaseSupport:
-    @staticmethod
-    @handle_db_file_error
-    def read_db_json(db_file):
-        with open(db_file, 'r') as file:
-            return json.load(file)
-
-    @staticmethod
-    @handle_db_file_error
-    def save_db_json(db, db_file):
-        with open(db_file, 'w') as file:
-            json.dump(db, file, indent=4)
-
-    @handle_db_file_error
-    def get_user(self):
-        return self.read_db_json(server_data.USERS_DATABASE)
-
-    @handle_db_file_error
-    def save_user(self, data):
-        self.save_db_json(data, server_data.USERS_DATABASE)
-
-    @handle_db_file_error
-    def get_messages(self):
-        return self.read_db_json(server_data.MESSAGES_DATABASE)
-
-    @handle_db_file_error
-    def save_messages(self, data):
-        self.save_db_json(data, server_data.MESSAGES_DATABASE)
-# ----------------------------------------------------------------------------------------------
-
-
 class DatabaseSupport:
+    @handle_database_errors
     def data_update(self, table, column, user_name, new_value=None):
-        cur, conn = connect()
         try:
-            query = sql.SQL("UPDATE {table} SET {column} = %s WHERE user_name = %s").format(table=sql.Identifier(table), column=sql.Identifier(column))
-            cur.execute(query, (new_value, user_name))
-            conn.commit()
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    query = sql.SQL("UPDATE {table} SET {column} = %s WHERE user_name = %s").format(table=sql.Identifier(table), column=sql.Identifier(column))
+                    cur.execute(query, (new_value, user_name))
+                    conn.commit()
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
     def get_info_about_user(self, user_name):
-        cur, conn = connect()
         try:
-            cur.execute("SELECT * FROM users WHERE user_name = %s", (user_name,))
-            result = cur.fetchone()
-
-            column_names = [desc[0] for desc in cur.description]
-            result_dict = dict(zip(column_names, result)) if result else None
-            return result_dict
-
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT * FROM users WHERE user_name = %s", (user_name,))
+                    result = cur.fetchone()
+                    column_names = [desc[0] for desc in cur.description]
+                    result_dict = dict(zip(column_names, result)) if result else None
+                    print(f'RESULT_DIC: {result_dict}')
+                    return result_dict
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
+            return {server_response.E_DATABASE_ERROR}
 
+    @handle_database_errors
     def get_all_users_list(self):
-        cur, conn = connect()
         try:
-            cur.execute("SELECT user_name, permissions, status FROM users ORDER BY user_id")
-            result = cur.fetchall()
-            return result
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT user_name, permissions, status FROM users ORDER BY user_id")
+                    result = cur.fetchall()
+                    return result
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
     def check_if_user_exist(self, user_name):
-        cur, conn = connect()
         try:
-            cur.execute("SELECT 1 FROM users WHERE user_name = %s", (user_name,))
-            if cur.fetchone():
-                return True  # User exist
-            else:
-                return False  # User not exist
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT 1 FROM users WHERE user_name = %s", (user_name,))
+                    if cur.fetchone():
+                        return True  # User exist
+                    else:
+                        return False  # User not exist
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
+    @handle_database_errors
     def inbox_msg_counting(self, recipient_id):
-        cur, conn = connect()
         try:
-            cur.execute("SELECT COUNT(*) FROM messages WHERE recipient_id = %s", (recipient_id,))
-            count = cur.fetchone()[0]
-            return count
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT COUNT(*) FROM messages WHERE recipient_id = %s", (recipient_id,))
+                    count = cur.fetchone()[0]
+                    return count
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
     def check_if_user_is_logged_in(self, user_name):
-        cur, conn = connect()
         try:
-            cur.execute("SELECT login_time FROM users WHERE user_name = %s", (user_name,))
-            result = cur.fetchone()
-            if result and result[0] is not None:
-                return True  # User is looged in
-            else:
-                return False  # User is not logged in
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT login_time FROM users WHERE user_name = %s", (user_name,))
+                    result = cur.fetchone()
+                    if result and result[0] is not None:
+                        return True  # User is looged in
+                    else:
+                        return False  # User is not logged in
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
     def add_account_to_db(self, new_data):
-        cur, conn = connect()
         try:
-            query = sql.SQL("INSERT INTO users (user_name, password, permissions, status, activation_date) VALUES (%s, %s, %s, %s, %s)")
-            cur.execute(query, new_data)
-            conn.commit()
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    query = sql.SQL("INSERT INTO users (user_name, password, permissions, status, activation_date) VALUES (%s, %s, %s, %s, %s)")
+                    cur.execute(query, new_data)
+                    conn.commit()
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
     def delete_record_from_db(self, table, data):
-        cur, conn = connect()
         try:
-            query = sql.SQL("DELETE FROM {table} WHERE user_name = %s").format(table=sql.Identifier(table))
-            cur.execute(query, (data,))
-            conn.commit()
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    query = sql.SQL("DELETE FROM {table} WHERE user_name = %s").format(table=sql.Identifier(table))
+                    cur.execute(query, (data,))
+                    conn.commit()
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
     def show_all_messages_inbox(self, username):
-        cur, conn = connect()
         try:
-            query = sql.SQL("SELECT message_id, sender_id, date FROM messages WHERE recipient_id = %s ORDER BY message_id")
-            cur.execute(query, (username,))
-            result = cur.fetchall()
-            return result
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    query = sql.SQL("SELECT message_id, sender_id, date FROM messages WHERE recipient_id = %s ORDER BY message_id")
+                    cur.execute(query, (username,))
+                    result = cur.fetchall()
+                    return result
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
     def show_selected_message(self, msg_id):
-        cur, conn = connect()
         try:
-            cur.execute("SELECT * FROM messages WHERE message_id = %s", (msg_id,))
-            result = cur.fetchone()
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    cur.execute("SELECT * FROM messages WHERE message_id = %s", (msg_id,))
+                    result = cur.fetchone()
 
-            column_names = [desc[0] for desc in cur.description]
+                    column_names = [desc[0] for desc in cur.description]
 
-            result_dict = dict(zip(column_names, result)) if result else None
+                    result_dict = dict(zip(column_names, result)) if result else None
 
-            print(f'RESULT = {result_dict}')
-            return result_dict
-
+                    print(f'RESULT = {result_dict}')
+                    return result_dict
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
     def delete_selected_message(self, msg_id):
-        cur, conn = connect()
         try:
-            query = sql.SQL(
-                "DELETE FROM messages WHERE message_id = %s")
-            cur.execute(query, (msg_id,))
-            conn.commit()
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    query = sql.SQL(
+                        "DELETE FROM messages WHERE message_id = %s")
+                    cur.execute(query, (msg_id,))
+                    conn.commit()
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
     def delete_all_user_messages(self, user_to_del):
-        cur, conn = connect()
         try:
-            query = sql.SQL(
-                "DELETE FROM messages WHERE recipient_id = %s")
-            cur.execute(query, (user_to_del,))
-            conn.commit()
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    query = sql.SQL(
+                        "DELETE FROM messages WHERE recipient_id = %s")
+                    cur.execute(query, (user_to_del,))
+                    conn.commit()
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
 
+    @handle_database_errors
     def add_new_message_to_db(self, new_data):
-        cur, conn = connect()
         try:
-            query = sql.SQL("INSERT INTO messages (sender_id, date, recipient_id, content) VALUES (%s, %s, %s, %s)")
-            cur.execute(query, new_data)
-            conn.commit()
+            with connect() as conn:
+                with conn.cursor() as cur:
+                    query = sql.SQL("INSERT INTO messages (sender_id, date, recipient_id, content) VALUES (%s, %s, %s, %s)")
+                    cur.execute(query, new_data)
+                    conn.commit()
         except Exception as e:
             print(f"Error: {e}")
-            conn.rollback()
-        finally:
-            cur.close()
-            conn.close()
+
 
 
 

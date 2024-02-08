@@ -17,7 +17,7 @@ E_UNABLE_TO_SAVE_DB_FILE = "Error: Unable to save db file."
 E_FILE_IS_UNAVAILABLE = {"Error": "DB file is unavailable"}
 E_COMMAND_UNAVAILABLE = {"Error": "Command unavailable. No permissions"}
 E_INVALID_DATA = {"Error": "Invalid data."}
-
+E_DATABASE_ERROR = {"Error": "A database error occurred"}
 
 # -------------- OTHERS RESPONSES -------------------
 MESSAGE_WAS_SENT = {"Message": "was sent"}
