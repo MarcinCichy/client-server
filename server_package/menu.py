@@ -52,7 +52,7 @@ class CommandHandler:
             if user_data_db is not None:
                 self.permissions = user_data_db['permissions']
             else:
-                pass
+                self.permissions = None
 
         if isinstance(self.new_command, dict):
             command = list(self.new_command.keys())[0]

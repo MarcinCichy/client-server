@@ -1,4 +1,5 @@
 import server_package.server_response as server_response
+from database_support import handle_database_errors
 
 
 class UserManagement:
@@ -48,6 +49,7 @@ class UserManagement:
             users_dict[user_name] = {'permissions': permissions, 'status': status}
         return {server_response.EXISTING_ACCOUNTS: users_dict}
 
+    @handle_database_errors
     def user_info(self, username):
         database_response = self.database_support.get_info_about_user(username)
         print(database_response)
