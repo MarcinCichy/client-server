@@ -10,9 +10,8 @@ def handle_database_errors(func):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            print(f"Error from handler: {e}")
-            # return {"Error": str(e)}
-            return {server_response.E_DATABASE_ERROR}
+            print(f"Error: {e}")
+            return server_response.E_DATABASE_ERROR
     return wrapper
 
 
@@ -25,7 +24,6 @@ class DatabaseSupport:
                 cur.execute(query, (new_value, user_name))
                 conn.commit()
 
-
     @handle_database_errors
     def get_info_about_user(self, user_name):
         with connect() as conn:
@@ -37,7 +35,6 @@ class DatabaseSupport:
                 print(f'RESULT_DIC: {result_dict}')
                 return result_dict
 
-
     @handle_database_errors
     def get_all_users_list(self):
         with connect() as conn:
@@ -45,7 +42,6 @@ class DatabaseSupport:
                 cur.execute("SELECT user_name, permissions, status FROM users ORDER BY user_id")
                 result = cur.fetchall()
                 return result
-
 
     @handle_database_errors
     def check_if_user_exist(self, user_name):

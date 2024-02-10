@@ -50,7 +50,8 @@ class CommandHandler:
             self.new_command = entrance_command.pop(self.username)
             user_data_db = self.database_support.get_info_about_user(self.username)
             if user_data_db is not None:
-                self.permissions = user_data_db['permissions']
+                # self.permissions = user_data_db['permissions']
+                self.permissions = user_data_db.get('permissions')
             else:
                 self.permissions = None
 

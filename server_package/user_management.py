@@ -1,5 +1,5 @@
 import server_package.server_response as server_response
-from database_support import handle_database_errors
+from server_package.database_support import handle_database_errors
 
 
 class UserManagement:
@@ -52,7 +52,6 @@ class UserManagement:
     @handle_database_errors
     def user_info(self, username):
         database_response = self.database_support.get_info_about_user(username)
-        print(database_response)
         if not self.database_support.check_if_user_exist(username):
             return server_response.E_USER_DOES_NOT_EXIST
         elif "Error" in database_response:

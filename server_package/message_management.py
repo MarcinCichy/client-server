@@ -61,7 +61,7 @@ class MessageManagement:
         username = list(data.keys())[0]
         msg_list_dict = self.msg_list(username)["msg"]
         msg_num = list(data.values())[0]
-        cos_tam = list(msg_list_dict.keys())
+        cos_tam = list(msg_list_dict.keys())  # ??????????????????
         if int(msg_num) in cos_tam:
             msg_id_to_show = msg_list_dict[int(msg_num)]["message_id"]
             print(f'message to show = {msg_id_to_show}')

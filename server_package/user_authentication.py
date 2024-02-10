@@ -1,12 +1,10 @@
 import server_package.server_response as server_response
-from database_support import handle_database_errors
+from server_package.database_support import handle_database_errors
 
 
 class UserAuthentication:
     def __init__(self, database_support):
-        self.database_support = database_support
-        self.logged_in_username = None
-        self.logged_in_permissions = None
+        self.database_support = database_support  # ???????????????????
 
     @handle_database_errors
     def login(self, login_data):
@@ -25,7 +23,7 @@ class UserAuthentication:
         elif user_data is not None and user_data['status'] == "banned":
             print(f'Access denied to {login_username}, user banned')
             return server_response.E_USER_IS_BANNED
-        elif "Error" in user_data:
+        elif "Error" in user_data:      # ????????????????????????????????
             return user_data
         else:
             print(f'Access denied to {login_username}, invalid credentials')
