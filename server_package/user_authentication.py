@@ -23,12 +23,11 @@ class UserAuthentication:
         elif user_data is not None and user_data['status'] == "banned":
             print(f'Access denied to {login_username}, user banned')
             return server_response.E_USER_IS_BANNED
-        elif "Error" in user_data:      # ????????????????????????????????
-            return user_data
         else:
             print(f'Access denied to {login_username}, invalid credentials')
             return server_response.E_INVALID_CREDENTIALS
 
+    @handle_database_errors
     def logout(self, logged_in_user):
         if not logged_in_user:
             return server_response.E_INVALID_DATA

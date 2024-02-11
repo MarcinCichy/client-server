@@ -41,38 +41,23 @@ class MessageManagement:
     def msg_del(self, data):
         if not data:
             return server_response.E_INVALID_DATA
-
-        username = list(data.keys())[0]
-        msg_list_dict = self.msg_list(username)["msg"]
-        msg_num = list(data.values())[0]
-        cos_tam = list(msg_list_dict.keys())
-        if int(msg_num) in cos_tam:
-            msg_id_to_del = msg_list_dict[int(msg_num)]["message_id"]
-            print(f'message to del = {msg_id_to_del}')
+        msg_id_to_del = self.choose_which_message(data)
+        if isinstance(msg_id_to_del, int):
             self.database_support.delete_selected_message(int(msg_id_to_del))
             return server_response.MESSAGE_WAS_DELETED
         else:
-            return server_response.E_MESSAGE_NOT_FOUND
+            return msg_id_to_del
 
     def msg_show(self, data):   # to show selected message
         if not data:
             return server_response.E_INVALID_DATA
-
-        username = list(data.keys())[0]
-        msg_list_dict = self.msg_list(username)["msg"]
-        msg_num = list(data.values())[0]
-        cos_tam = list(msg_list_dict.keys())  # ??????????????????
-        if int(msg_num) in cos_tam:
-            msg_id_to_show = msg_list_dict[int(msg_num)]["message_id"]
-            print(f'message to show = {msg_id_to_show}')
-            message_to_show = self.database_support.show_selected_message(int(msg_id_to_show))
-            print(message_to_show)
-            print(type(message_to_show))
+        msg_id_to_show = self.choose_which_message(data)
+        if isinstance(msg_id_to_show, int):
+            message_to_show = self.database_support.show_selected_message(msg_id_to_show)
             message_to_show['date'] = self.convert_datetime_datetime_to_string_date(message_to_show['date'])
-            print(message_to_show)
             return {"Message to show": message_to_show}
         else:
-            return server_response.E_MESSAGE_NOT_FOUND
+            return msg_id_to_show
 
     def msg_count(self, username):  # to count all messages in inbox
         if not username:
@@ -89,3 +74,14 @@ class MessageManagement:
         else:
             converted_datetime = datetime_from_db.strftime('%Y-%m-%d')
             return converted_datetime
+
+    def choose_which_message(self, data):
+        username = list(data.keys())[0]
+        msg_list_dict = self.msg_list(username)["msg"]
+        msg_num = list(data.values())[0]
+        if msg_num is None:
+            return server_response.E_MESSAGE_NOT_FOUND
+        else:
+            chosen_msg = msg_list_dict[int(msg_num)]["message_id"]
+            print(f'chosen_id = {chosen_msg}')
+            return chosen_msg

@@ -43,14 +43,15 @@ class CommandHandler:
         }
 
     def use_command(self, entrance_command):
+        print(f'entrance_command = {entrance_command}')
         if isinstance(entrance_command, dict):
             # Extract the first key, which is the username submitted
             self.username = next(iter(entrance_command))
             # Based on this username, create a new dictionary with the command
             self.new_command = entrance_command.pop(self.username)
+            print(f'new_command = {self.new_command}')
             user_data_db = self.database_support.get_info_about_user(self.username)
             if user_data_db is not None:
-                # self.permissions = user_data_db['permissions']
                 self.permissions = user_data_db.get('permissions')
             else:
                 self.permissions = None
