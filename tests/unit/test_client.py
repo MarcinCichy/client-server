@@ -40,6 +40,7 @@ class TestClient(unittest.TestCase):
         self.assertEqual(response, {"response": "ok"})
 
     def test_handle_no_connection_to_server(self):
+        self.client = Client("127.0.0.100", self.test_port, self.test_buff)
         result = self.client.process_command({"command": "info"})
         expected_result = {"Error": "Unable to connect to server"}
         self.assertEqual(result, expected_result)

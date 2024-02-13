@@ -42,8 +42,7 @@ class CommandHandler:
             "create_account": self.user_management.create_account
         }
 
-    def use_command(self, entrance_command):
-        print(f'entrance_command = {entrance_command}')
+    def prepare_command_and_user_data(self, entrance_command):
         if isinstance(entrance_command, dict):
             # Extract the first key, which is the username submitted
             self.username = next(iter(entrance_command))
@@ -55,7 +54,11 @@ class CommandHandler:
                 self.permissions = user_data_db.get('permissions')
             else:
                 self.permissions = None
+            return self.new_command, self.username, self.permissions
 
+    def use_command(self, entrance_command):
+        print(f'entrance_command = {entrance_command}')
+        self.new_command, self.username, self.permissions = self.prepare_command_and_user_data(entrance_command)
         if isinstance(self.new_command, dict):
             command = list(self.new_command.keys())[0]
             data = self.new_command[command]

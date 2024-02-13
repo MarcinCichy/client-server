@@ -12,7 +12,7 @@ class Server:
         self.srv_buff = srv_buff
         self.handler = CommandHandler()
 
-    def server_connection(self):
+    def set_server_connection(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((self.srv_host, self.srv_port))
             s.listen()
@@ -55,7 +55,7 @@ class Server:
 def start():
     SystemUtilities.clear_screen()
     server = Server(server_data.HOST, server_data.PORT, server_data.BUFFER_SIZE)
-    server.server_connection()
+    server.set_server_connection()
 
 
 if __name__ == '__main__':
