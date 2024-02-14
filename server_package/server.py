@@ -3,6 +3,7 @@ import socket
 from server_package import server_data
 from server_package.menu import CommandHandler
 from server_package.functions import SystemUtilities
+from server_package.database_support import DatabaseSupport
 
 
 class Server:
@@ -11,6 +12,7 @@ class Server:
         self.srv_port = srv_port
         self.srv_buff = srv_buff
         self.handler = CommandHandler()
+        self.database_support = DatabaseSupport()
 
     def set_server_connection(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -32,9 +34,25 @@ class Server:
                             print("Server stopped")
                             break
 
+    def get_username_from_data(self, data):
+        username = next(iter(data))
+        return username
+
+    def get_user_data_from_db(self, username):
+        user_data_db = self.database_support.get_info_about_user(username)
+        return user_data_db
+
     def handle_connection(self, data):
         com = self.json_decode_received_data(data)
-        result = self.json_serialize_response(self.handler.use_command(com))
+        username = self.get_username_from_data(com)
+        user_data_db = self.get_user_data_from_db(username)
+        print(f'USER_DATA_DB = {user_data_db}')
+        if user_data_db is not None:
+            permissions = user_data_db.get('permissions')
+        else:
+            permissions = None
+        print(f'PERMISSIONS = {permissions}')
+        result = self.json_serialize_response(self.handler.use_command(com, permissions))
         return result
 
     @staticmethod

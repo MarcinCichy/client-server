@@ -48,23 +48,21 @@ class TestServer(unittest.TestCase):
     def test_handle_connection_correct_command2(self):
         test_data = json.dumps({"command": {"RECIPIENT": "info"}}).encode('utf-8')
         result = self.server.handle_connection(test_data)
-        expected_result = json.dumps({"version": "0.1.8", "start_at": "2024-01-01"})
+        expected_result = json.dumps({"version": "0.2.0", "start_at": "2024-02-14"})
         self.assertEqual(expected_result, result)
 
     def test_handle_connection_stop_command(self):
-        self.logged_in_user_data.set_user_data("logged_username", "admin")
-        self.server = Server(self.test_host, self.test_port, self.test_buff, self.logged_in_user_data)
-        test_data = json.dumps({"command": {"logged_username": "stop"}}).encode('utf-8')
-        result = self.server.handle_connection(test_data)
+        test_data = json.dumps({"command": {"marcin": "stop"}}).encode('utf-8')
+        result = self.server.handle_connection(test_data, )
         result_dict = json.loads(result)
         expected_result = {"Connection": "close"}
         self.assertEqual(expected_result, result_dict)
 
     def test_handle_connection_stop_command_invalid_permissions(self):
         self.logged_in_user_data.set_user_data("logged_username", "user")
-        self.server = Server(self.test_host, self.test_port, self.test_buff, self.logged_in_user_data)
+        self.server = Server(self.test_host, self.test_port, self.test_buff)
         test_data = json.dumps({"command": {"logged_username": "stop"}}).encode('utf-8')
-        result = self.server.handle_connection(test_data)
+        result = self.server.handle_connection(test_data, )
         result_dict = json.loads(result)
         expected_result = server_response.E_COMMAND_UNAVAILABLE
         self.assertEqual(expected_result, result_dict)
