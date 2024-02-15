@@ -1,19 +1,17 @@
 import unittest
 from server_package.user_authentication import UserAuthentication
 import server_package.server_response as server_response
-from database_support_dummy import DatabaseSupportDummy
-from server_package.server_user_state import ServerUserState
+from server_package.database_support import DatabaseSupport
 
 
 class TestUserAuthentication(unittest.TestCase):
     def setUp(self):
-        self.logged_in_user_data = ServerUserState()
-        self.db_support_dummy = DatabaseSupportDummy()
-        self.user_auth = UserAuthentication(self.logged_in_user_data, self.db_support_dummy)
+        self.database_support = DatabaseSupport()
+        self.user_auth = UserAuthentication(self.database_support)
 
     def test_login_user_no_login_data(self):
-        data = []
-        result = self.user_auth.login(data)
+        no_data = []
+        result = self.user_auth.login(no_data)
         self.assertEqual(result, server_response.E_INVALID_DATA)
 
     def test_login_user_valid_data(self):

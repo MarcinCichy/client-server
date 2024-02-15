@@ -1,21 +1,21 @@
 import unittest
 from server_package.user_management import UserManagement
 import server_package.server_response as server_response
-from database_support_dummy import DatabaseSupportDummy
+from server_package.database_support import DatabaseSupport
 
 
 class TestMessageManagement(unittest.TestCase):
     def setUp(self):
-        self.db_support_dummy = DatabaseSupportDummy()
-        self.usr_mgmt = UserManagement(self.db_support_dummy)
+        self.database_support = DatabaseSupport()
+        self.usr_mgmt = UserManagement(self.database_support)
 
     def test_create_account_valid_data(self):
-        new_username = {'username': "new_username"}
-        password = {'password': "new_username_password"}
-        permissions = {'permissions': "user"}
-        status = {'status': "active"}
-        activation_date = {'activation_date': '2023-01-01'}
-        data = [new_username, password, permissions, status, activation_date]
+        new_username = {"new_username"}
+        password = {"new_username_password"}
+        permissions = {"user"}
+        status = {"active"}
+        activation_date = {'2023-01-01'}
+        data = (new_username, password, permissions, status, activation_date)
 
         result = self.usr_mgmt.create_account(data)
         self.assertEqual(result, server_response.NEW_ACCOUNT_CREATED)

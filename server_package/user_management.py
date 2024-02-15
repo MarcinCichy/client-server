@@ -15,6 +15,7 @@ class UserManagement:
             return server_response.E_INVALID_DATA
 
         new_user_data = tuple(d[next(iter(d))] for d in data)
+        print(f'NEW_USER_DATA = {new_user_data}')
         if new_user_data:
             username = new_user_data[0]
             permissions = new_user_data[2]

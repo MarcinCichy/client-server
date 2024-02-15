@@ -1,14 +1,14 @@
 import unittest
 from server_package.message_management import MessageManagement
 import server_package.server_response as server_response
-from database_support_dummy import DatabaseSupportDummy
+from server_package.database_support import DatabaseSupport
 from server_package import server_data as server_data
 
 
 class TestMessageManagement(unittest.TestCase):
     def setUp(self):
-        self.db_support_dummy = DatabaseSupportDummy()
-        self.msg_mgmt = MessageManagement(self.db_support_dummy)
+        self.database_support = DatabaseSupport()
+        self.msg_mgmt = MessageManagement(self.database_support)
 
     def test_new_message_valid_data(self):
         sender = {'sender': 'sendername'}
