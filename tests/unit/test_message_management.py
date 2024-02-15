@@ -48,7 +48,7 @@ class TestMessageManagement(unittest.TestCase):
 
     def test_msg_del_existing_message(self):
         result = self.msg_mgmt.msg_del({'RECIPIENT': '1'})
-        self.assertEqual(result, server_response.MESSAGE_WAD_DELETED)
+        self.assertEqual(result, server_response.MESSAGE_WAS_DELETED)
 
     def test_msg_del_non_existing_message(self):
         result = self.msg_mgmt.msg_del({'RECIPIENT': '7'})

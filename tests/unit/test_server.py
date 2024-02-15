@@ -2,7 +2,7 @@ import json
 import unittest
 from server_package.server import Server
 import server_package.server_response as server_response
-from database_support_dummy import DatabaseSupportDummy
+# from database_support_dummy import DatabaseSupportDummy
 from server_package.server_user_state import ServerUserState
 
 
@@ -13,7 +13,7 @@ class TestServerInitialization(unittest.TestCase):
         self.test_buff = 1024
         self.server = Server(self.test_host, self.test_port, self.test_buff)
         self.logged_in_user_data = ServerUserState()
-        self.db_support_dummy = DatabaseSupportDummy()
+        # self.db_support_dummy = DatabaseSupportDummy()
 
     def test_initialization(self):
         self.assertEqual(self.server.srv_host, self.test_host)
@@ -28,41 +28,40 @@ class TestServer(unittest.TestCase):
         self.test_buff = 1024
         self.server = Server(self.test_host, self.test_port, self.test_buff)
 
-        self.db_support_dummy = DatabaseSupportDummy()
+        # self.db_support_dummy = DatabaseSupportDummy()
         self.logged_in_user_data = ServerUserState()
         self.logged_in_user_data.set_user_data("logged_username", "admin")
 
     def test_handle_connection_unrecognised_command(self):
-        test_data = json.dumps({"command": {"RECIPIENT": "inforrr"}}).encode('utf-8')
-        result = self.server.handle_connection(test_data)
+        test_data = {"command": {"RECIPIENT": "inforrr"}}
+        result = self.server.handle_connection(test_data, {"permissions":'admin'})
         result_dict = json.loads(result)
         expected_result = server_response.UNRECOGNISED_COMMAND
         self.assertEqual(result_dict, expected_result)
 
     def test_handle_connection_correct_command(self):
-        test_data = json.dumps({"command": {"RECIPIENT": "info"}}).encode('utf-8')
-        result = self.server.handle_connection(test_data)
+        test_data = {"RECIPIENT": "info"}
+        result = self.server.handle_connection(test_data, {"permissions":'admin'})
+        result_dict = json.loads(result)
         expected_result = "version"
-        self.assertIn(expected_result, result)
+        self.assertIn(expected_result, result_dict)
 
     def test_handle_connection_correct_command2(self):
-        test_data = json.dumps({"command": {"RECIPIENT": "info"}}).encode('utf-8')
-        result = self.server.handle_connection(test_data)
+        test_data = {"RECIPIENT": "info"}
+        result = self.server.handle_connection(test_data, {"permissions":'admin'})
         expected_result = json.dumps({"version": "0.2.0", "start_at": "2024-02-14"})
         self.assertEqual(expected_result, result)
 
     def test_handle_connection_stop_command(self):
-        test_data = json.dumps({"command": {"marcin": "stop"}}).encode('utf-8')
-        result = self.server.handle_connection(test_data, )
+        test_data = {"marcin": "stop"}
+        result = self.server.handle_connection(test_data, {"permissions": 'admin'})
         result_dict = json.loads(result)
         expected_result = {"Connection": "close"}
         self.assertEqual(expected_result, result_dict)
 
     def test_handle_connection_stop_command_invalid_permissions(self):
-        self.logged_in_user_data.set_user_data("logged_username", "user")
-        self.server = Server(self.test_host, self.test_port, self.test_buff)
-        test_data = json.dumps({"command": {"logged_username": "stop"}}).encode('utf-8')
-        result = self.server.handle_connection(test_data, )
+        test_data = {"logged_username": "stop"}
+        result = self.server.handle_connection(test_data, {"permissions": 'user'})
         result_dict = json.loads(result)
         expected_result = server_response.E_COMMAND_UNAVAILABLE
         self.assertEqual(expected_result, result_dict)

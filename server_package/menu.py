@@ -42,24 +42,21 @@ class CommandHandler:
             "create_account": self.user_management.create_account
         }
 
-    def prepare_command_and_user_data(self, entrance_command, permissions):
+    def prepare_command_and_user_data(self, entrance_command):
         if isinstance(entrance_command, dict):
             # Extract the first key, which is the username submitted
             username = next(iter(entrance_command))
+            print(f'prep_com_username = {username}')
             # Based on this username, create a new dictionary with the command
             new_command = entrance_command.pop(username)
             print(f'new_command = {new_command}')
-            # if user_data_db is not None:
-            #     permissions = user_data_db.get('permissions')
-            # else:
-            #     permissions = None
-            return new_command, username, permissions
+            return new_command, username
 
     def use_command(self, entrance_command, permissions):
         print(f'entrance_command = {entrance_command}')
 
-        # self.new_command, self.username, self.permissions = self.prepare_command_and_user_data(entrance_command, user_data_db)
-        self.new_command, self.username, self.permissions = self.prepare_command_and_user_data(entrance_command, permissions)
+        self.new_command, self.username = self.prepare_command_and_user_data(entrance_command)
+        self.permissions = permissions
 
         if isinstance(self.new_command, dict):
             command = list(self.new_command.keys())[0]

@@ -14,7 +14,7 @@ class Server:
         self.handler = CommandHandler()
         self.database_support = DatabaseSupport()
 
-    def set_server_connection(self):
+    def server_connection(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((self.srv_host, self.srv_port))
             s.listen()
@@ -24,9 +24,14 @@ class Server:
                 SystemUtilities.clear_screen()
                 with conn:
                     print(f"Connected by {addr}")
-                    data = conn.recv(self.srv_buff)
-                    print(f'Server USER DATA = {data}')
-                    result = self.handle_connection(data)
+                    received_data = conn.recv(self.srv_buff)
+                    print(f'Server USER DATA = {received_data}')
+
+                    command = self.json_decode_received_data(received_data)
+                    username = self.get_username_from_received_data(command)
+                    user_data_db = self.get_user_data_from_db(username)
+
+                    result = self.handle_connection(command, user_data_db)
                     conn.sendall(result.encode(server_data.ENCODE_FORMAT))
 
                     if "Connection" in result:
@@ -34,7 +39,7 @@ class Server:
                             print("Server stopped")
                             break
 
-    def get_username_from_data(self, data):
+    def get_username_from_received_data(self, data):
         username = next(iter(data))
         return username
 
@@ -42,17 +47,14 @@ class Server:
         user_data_db = self.database_support.get_info_about_user(username)
         return user_data_db
 
-    def handle_connection(self, data):
-        com = self.json_decode_received_data(data)
-        username = self.get_username_from_data(com)
-        user_data_db = self.get_user_data_from_db(username)
+    def handle_connection(self, command, user_data_db):
         print(f'USER_DATA_DB = {user_data_db}')
         if user_data_db is not None:
             permissions = user_data_db.get('permissions')
         else:
             permissions = None
         print(f'PERMISSIONS = {permissions}')
-        result = self.json_serialize_response(self.handler.use_command(com, permissions))
+        result = self.json_serialize_response(self.handler.use_command(command, permissions))
         return result
 
     @staticmethod
@@ -73,7 +75,7 @@ class Server:
 def start():
     SystemUtilities.clear_screen()
     server = Server(server_data.HOST, server_data.PORT, server_data.BUFFER_SIZE)
-    server.set_server_connection()
+    server.server_connection()
 
 
 if __name__ == '__main__':
