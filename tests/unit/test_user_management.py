@@ -114,15 +114,17 @@ class TestMessageManagement(unittest.TestCase):
 
     # the user_stat() method is very similar to the user_perm() method, so no tests are needed.
 
-    # def test_user_list(self):
-    #     expected_result = {server_response.EXISTING_ACCOUNTS: {
-    #         "RECIPIENT": {"permissions": "user", "status": "active"},
-    #         "other_user": {"permissions": "admin", "status": "banned"},
-    #         "logged_username": {"permissions": "admin", "status": "active"}
-    #         }
-    #     }
-    #     result = self.usr_mgmt.user_list()
-    #     self.assertEqual(result, expected_result)
+    def test_user_list(self):
+        expected_result = {server_response.EXISTING_ACCOUNTS: {
+            "user1": {"permissions": "admin", "status": "active"},
+            "user2": {"permissions": "user", "status": "banned"},
+            "user3": {"permissions": "user", "status": "active"},
+            "user4": {"permissions": "admin", "status": "active"},
+            "user5": {"permissions": "user", "status": "banned"}
+            }
+        }
+        result = self.usr_mgmt.user_list()
+        self.assertEqual(result, expected_result)
 
 
 if __name__ == '__main__':
