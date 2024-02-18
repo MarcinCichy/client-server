@@ -11,6 +11,7 @@ class UserManagement:
         return {"User-add": "OK"}
 
     def create_account(self, data):
+        print(f'create_user={data}')
         if not data:
             return server_response.E_INVALID_DATA
 

@@ -78,8 +78,10 @@ class MessageManagement:
     def choose_which_message(self, data):
         username = list(data.keys())[0]
         msg_list_dict = self.msg_list(username)["msg"]
+        print(f'msg_list_dict = {msg_list_dict}')
         msg_num = list(data.values())[0]
-        if msg_num is None:
+        print(f'msg_num = {msg_num}')
+        if msg_num is None or int(msg_num) not in msg_list_dict.keys():
             return server_response.E_MESSAGE_NOT_FOUND
         else:
             chosen_msg = msg_list_dict[int(msg_num)]["message_id"]

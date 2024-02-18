@@ -1,51 +1,21 @@
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-from server_package.connect import connect
-from psycopg2 import connect as pg_connect
-from server_package.config import db_config
+from tests.unit.test_config import test_db_config
 
-# Parametry połączenia do oryginalnej bazy danych
-db_params = {
-    'dbname': 'db_CS',
-    'user': 'pozamiataj',
-    'password': 'pozamiataj.pl',
-    'host': '127.0.0.1'
-}
+params = test_db_config()
 
-# Nazwa tymczasowej bazy danych
 temp_db_name = 'test_database'
 
 
-# Tworzenie tymczasowej bazy danych
 def create_temp_db():
-    # Połączenie do domyślnej bazy danych, zwykle 'postgres', aby utworzyć nową bazę
-    conn = psycopg2.connect(dbname='postgres', user=db_params['user'], password=db_params['password'],
-                            host=db_params['host'])
+    conn = psycopg2.connect(dbname='db_CS', user=params['user'], password=params['password'], host=params['host'])
     conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     cur = conn.cursor()
     cur.execute(f'CREATE DATABASE "{temp_db_name}";')
-    cur.close()
-    conn.close()
 
-
-# Usuwanie tymczasowej bazy danych
-def drop_temp_db():
-    conn = psycopg2.connect(**db_params)
-    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-    cur = conn.cursor()
-    cur.execute(f"DROP DATABASE IF EXISTS {temp_db_name};")
-    cur.close()
-    conn.close()
-
-
-# Wypełnianie tymczasowej bazy danych fragmentem danych z oryginalnej bazy
-def fill_temp_db():
-    ## Połączenie z nowo utworzoną bazą danych
-    conn = psycopg2.connect(dbname=temp_db_name, user=db_params['user'], password=db_params['password'], host=db_params['host'])
-    cur = conn.cursor()
-
-    # Utworzenie schematu tabel - przykład dla 'users' i 'messages', dostosuj zgodnie z potrzebami
-    cur.execute("""
+    conn_temp = psycopg2.connect(dbname=temp_db_name, user=params['user'], password=params['password'], host=params['host'])
+    cur_temp = conn_temp.cursor()
+    cur_temp.execute("""
     CREATE TABLE IF NOT EXISTS users (
         user_id serial PRIMARY KEY,
         user_name varchar(50) NOT NULL,
@@ -57,54 +27,83 @@ def fill_temp_db():
         UNIQUE(user_name)
     );
     """)
-    cur.execute("""
+    cur_temp.execute("""
     CREATE TABLE IF NOT EXISTS messages (
         message_id serial PRIMARY KEY,
-        sender_id varchar(50) REFERENCES users(user_name),
+        sender_id varchar(50),
         date date NOT NULL,
         recipient_id varchar(50) REFERENCES users(user_name),
         content varchar(250)
     );
     """)
+    conn_temp.commit()
+    cur_temp.close()
+    conn_temp.close()
 
-    # Połączenie z oryginalną bazą danych do skopiowania danych
-    conn_orig = psycopg2.connect(**db_params)
-    cur_orig = conn_orig.cursor()
+    cur.close()
+    conn.close()
+    print(f'Testing database with tables was created')
 
-    # Przechowywanie user_name skopiowanych użytkowników
-    user_names = []
 
-    # Kopiowanie 5 pierwszych rekordów z 'users'
-    cur_orig.execute("SELECT * FROM users LIMIT 5;")
-    users_rows = cur_orig.fetchall()
-    for row in users_rows:
+def drop_temp_db():
+    conn = psycopg2.connect(dbname='postgres', user=params['user'], password=params['password'], host=params['host'])
+    conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+    cur = conn.cursor()
+
+    # All connection to db was finished
+    cur.execute(f"""
+    SELECT pg_terminate_backend(pg_stat_activity.pid)
+    FROM pg_stat_activity
+    WHERE pg_stat_activity.datname = '{temp_db_name}'
+      AND pid <> pg_backend_pid();
+    """)
+
+    cur.execute(f"DROP DATABASE IF EXISTS {temp_db_name};")
+    cur.close()
+    conn.close()
+    print(f'Testing database was dropped')
+
+
+def fill_temp_db():
+    print("Test tables filling was started")
+    conn = psycopg2.connect(dbname=temp_db_name, user=params['user'], password=params['password'], host=params['host'])
+    cur = conn.cursor()
+
+    users_data = [
+        ("user1", "password1", "admin", "active", "2024-02-18"),
+        ("user2", "password2", "user", "banned", "2024-02-18"),
+        ("user3", "password3", "user", "active", "2024-02-18"),
+        ("user4", "password4", "admin", "active", "2024-02-18"),
+        ("user5", "password5", "user", "banned", "2024-02-18")
+    ]
+    for user_data in users_data:
         cur.execute(
-            "INSERT INTO users (user_name, password, permissions, status, activation_date, login_time) VALUES (%s, %s, %s, %s, %s, %s) RETURNING user_name",
-            (row[1], row[2], row[3], row[4], row[5], row[6]))
-        user_name = cur.fetchone()[0]  # Pobranie user_name z wstawionego rekordu
-        user_names.append(user_name)
+            "INSERT INTO users (user_name, password, permissions, status, activation_date) VALUES (%s, %s, %s, %s, %s)",
+            user_data
+        )
 
-    # Kopiowanie 5 pierwszych rekordów z 'messages'
-    for user_name in user_names:
-        cur_orig.execute("SELECT * FROM messages WHERE sender_id = %s OR recipient_id = %s LIMIT 5;",
-                         (user_name, user_name))
-        messages_rows = cur_orig.fetchall()
-        for row in messages_rows:
-            cur.execute("INSERT INTO messages (sender_id, date, recipient_id, content) VALUES (%s, %s, %s, %s)",
-                        (row[1], row[2], row[3], row[4]))
+    messages_data = [
+        ("user1", "2024-02-18", "user1", "Hello, user2!"),
+        ("user2", "2024-02-18", "user2", "Hi there, user3!"),
+        ("user1", "2024-02-18", "user3", "Hey user4, how are you?"),
+        ("user4", "2024-02-18", "user4", "Greetings, user5!"),
+        ("user4", "2024-02-18", "user5", "Welcome, user1!")
+    ]
+    for message_data in messages_data:
+        cur.execute(
+            "INSERT INTO messages (sender_id, date, recipient_id, content) VALUES (%s, %s, %s, %s)",
+            message_data
+        )
 
-    # Zatwierdzenie zmian i zamknięcie połączeń
     conn.commit()
     cur.close()
     conn.close()
-    cur_orig.close()
-    conn_orig.close()
+    print("Test tables filling was finished")
 
-
-# Przykład użycia
-if __name__ == "__main__":
-    drop_temp_db()  # Usuwanie bazy po testach
-    create_temp_db()  # Tworzenie bazy
-    fill_temp_db()  # Wypełnianie danymi
-    # Tutaj można wykonać testy...
-    drop_temp_db()  # Usuwanie bazy po testach
+# if __name__ == "__main__":
+#     drop_temp_db()  # Usuwanie bazy po testach
+#     create_temp_db()  # Tworzenie bazy i tabel w niej
+#     fill_temp_db()  # Wypełnianie danymi
+#
+#     input(f'Nacisnij cos....')
+#     drop_temp_db()  # Usuwanie bazy po testach

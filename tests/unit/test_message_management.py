@@ -1,8 +1,11 @@
+import os
 import unittest
 from server_package.message_management import MessageManagement
 import server_package.server_response as server_response
 from server_package.database_support import DatabaseSupport
 from server_package import server_data as server_data
+
+os.environ['TEST_ENV'] = 'test'
 
 
 class TestMessageManagement(unittest.TestCase):

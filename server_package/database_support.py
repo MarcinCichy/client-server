@@ -16,6 +16,7 @@ def handle_database_errors(func):
 
 
 class DatabaseSupport:
+
     @handle_database_errors
     def data_update(self, table, column, user_name, new_value=None):
         with connect() as conn:
@@ -55,11 +56,11 @@ class DatabaseSupport:
 
     @handle_database_errors
     def inbox_msg_counting(self, recipient_id):
-            with connect() as conn:
-                with conn.cursor() as cur:
-                    cur.execute("SELECT COUNT(*) FROM messages WHERE recipient_id = %s", (recipient_id,))
-                    count = cur.fetchone()[0]
-                    return count
+        with connect() as conn:
+            with conn.cursor() as cur:
+                cur.execute("SELECT COUNT(*) FROM messages WHERE recipient_id = %s", (recipient_id,))
+                count = cur.fetchone()[0]
+                return count
 
     @handle_database_errors
     def check_if_user_is_logged_in(self, user_name):
@@ -82,20 +83,20 @@ class DatabaseSupport:
 
     @handle_database_errors
     def delete_record_from_db(self, table, data):
-            with connect() as conn:
-                with conn.cursor() as cur:
-                    query = sql.SQL("DELETE FROM {table} WHERE user_name = %s").format(table=sql.Identifier(table))
-                    cur.execute(query, (data,))
-                    conn.commit()
+        with connect() as conn:
+            with conn.cursor() as cur:
+                query = sql.SQL("DELETE FROM {table} WHERE user_name = %s").format(table=sql.Identifier(table))
+                cur.execute(query, (data,))
+                conn.commit()
 
     @handle_database_errors
     def show_all_messages_inbox(self, username):
-            with connect() as conn:
-                with conn.cursor() as cur:
-                    query = sql.SQL("SELECT message_id, sender_id, date FROM messages WHERE recipient_id = %s ORDER BY message_id")
-                    cur.execute(query, (username,))
-                    result = cur.fetchall()
-                    return result
+        with connect() as conn:
+            with conn.cursor() as cur:
+                query = sql.SQL("SELECT message_id, sender_id, date FROM messages WHERE recipient_id = %s ORDER BY message_id")
+                cur.execute(query, (username,))
+                result = cur.fetchall()
+                return result
 
     @handle_database_errors
     def show_selected_message(self, msg_id):
@@ -113,12 +114,12 @@ class DatabaseSupport:
 
     @handle_database_errors
     def delete_selected_message(self, msg_id):
-            with connect() as conn:
-                with conn.cursor() as cur:
-                    query = sql.SQL(
-                        "DELETE FROM messages WHERE message_id = %s")
-                    cur.execute(query, (msg_id,))
-                    conn.commit()
+        with connect() as conn:
+            with conn.cursor() as cur:
+                query = sql.SQL(
+                    "DELETE FROM messages WHERE message_id = %s")
+                cur.execute(query, (msg_id,))
+                conn.commit()
 
     @handle_database_errors
     def delete_all_user_messages(self, user_to_del):

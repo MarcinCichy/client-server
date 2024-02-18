@@ -1,7 +1,14 @@
+import os
 import unittest
 from server_package.user_authentication import UserAuthentication
 import server_package.server_response as server_response
 from server_package.database_support import DatabaseSupport
+import build_test_db
+
+os.environ['TEST_ENV'] = 'test'
+build_test_db.drop_temp_db()
+build_test_db.create_temp_db()
+build_test_db.fill_temp_db()
 
 
 class TestUserAuthentication(unittest.TestCase):
@@ -15,13 +22,13 @@ class TestUserAuthentication(unittest.TestCase):
         self.assertEqual(result, server_response.E_INVALID_DATA)
 
     def test_login_user_valid_data(self):
-        valid_login_data = [{"username": "RECIPIENT"}, {"password": "pass"}]
-        expected = {"Login": "OK", "login_username": "RECIPIENT", "user_permissions": "user"}
+        valid_login_data = [{"username": "user1"}, {"password": "password1"}]
+        expected = {"Login": "OK", "login_username": "user1", "user_permissions": "admin"}
         result = self.user_auth.login(valid_login_data)
         self.assertEqual(result, expected)
 
     def test_login_banned_user(self):
-        banned_user_data = [{"username": "other_user"}, {"password": "pass2"}]
+        banned_user_data = [{"username": "user2"}, {"password": "password2"}]
         expected = server_response.E_USER_IS_BANNED
         result = self.user_auth.login(banned_user_data)
         self.assertEqual(result, expected)
@@ -39,7 +46,7 @@ class TestUserAuthentication(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_logout_user_logged_in_user(self):
-        data = "username_invalid"
+        data = "user1"
         expected = {"Logout": "Successful"}
         result = self.user_auth.logout(data)
         self.assertEqual(result, expected),

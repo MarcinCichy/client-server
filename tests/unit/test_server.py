@@ -34,23 +34,17 @@ class TestServer(unittest.TestCase):
 
     def test_handle_connection_unrecognised_command(self):
         test_data = {"command": {"RECIPIENT": "inforrr"}}
-        result = self.server.handle_connection(test_data, {"permissions":'admin'})
+        result = self.server.handle_connection(test_data, {"permissions": 'admin'})
         result_dict = json.loads(result)
         expected_result = server_response.UNRECOGNISED_COMMAND
         self.assertEqual(result_dict, expected_result)
 
     def test_handle_connection_correct_command(self):
         test_data = {"RECIPIENT": "info"}
-        result = self.server.handle_connection(test_data, {"permissions":'admin'})
+        result = self.server.handle_connection(test_data, {"permissions": 'admin'})
         result_dict = json.loads(result)
         expected_result = "version"
         self.assertIn(expected_result, result_dict)
-
-    # def test_handle_connection_correct_command2(self):
-    #     test_data = {"RECIPIENT": "info"}
-    #     result = self.server.handle_connection(test_data, {"permissions":'admin'})
-    #     expected_result = json.dumps({"version": "0.2.0", "start_at": "2024-02-14"})
-    #     self.assertEqual(expected_result, result)
 
     def test_handle_connection_stop_command(self):
         test_data = {"marcin": "stop"}
