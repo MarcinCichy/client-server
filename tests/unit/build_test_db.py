@@ -86,8 +86,11 @@ def fill_temp_db():
         ("user1", "2024-02-18", "user1", "Hello, user2!"),
         ("user2", "2024-02-18", "user2", "Hi there, user3!"),
         ("user1", "2024-02-18", "user3", "Hey user4, how are you?"),
-        ("user4", "2024-02-18", "user4", "Greetings, user5!"),
-        ("user4", "2024-02-18", "user5", "Welcome, user1!")
+        ("user4", "2024-02-18", "user1", "Greetings, user5!"),
+        ("user4", "2024-02-18", "user5", "Welcome, user1!"),
+        ("user2", "2024-02-18", "user1", "Hello, user2!"),
+        ("user3", "2024-02-18", "user1", "Hello, user2!"),
+        ("user5", "2024-02-18", "user1", "Hello, user2!")
     ]
     for message_data in messages_data:
         cur.execute(

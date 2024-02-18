@@ -4,8 +4,12 @@ from server_package.message_management import MessageManagement
 import server_package.server_response as server_response
 from server_package.database_support import DatabaseSupport
 from server_package import server_data as server_data
+import build_test_db
 
 os.environ['TEST_ENV'] = 'test'
+build_test_db.drop_temp_db()
+build_test_db.create_temp_db()
+build_test_db.fill_temp_db()
 
 
 class TestMessageManagement(unittest.TestCase):
@@ -14,9 +18,9 @@ class TestMessageManagement(unittest.TestCase):
         self.msg_mgmt = MessageManagement(self.database_support)
 
     def test_new_message_valid_data(self):
-        sender = {'sender': 'sendername'}
-        date = {'date': 'YYYY-MM-DD'}
-        recipient = {'recipient': 'RECIPIENT'}
+        sender = {'sender': 'user1'}
+        date = {'date': '2024-02-18'}
+        recipient = {'recipient': 'user3'}
         content = {'content': 'MSG CONTENT'}
         data = [sender, date, recipient, content]
         response = self.msg_mgmt.new_message(data)
@@ -28,13 +32,9 @@ class TestMessageManagement(unittest.TestCase):
         self.assertEqual(response, server_response.E_INVALID_DATA)
 
     def test_new_message_full_inbox(self):
-        full_inbox = {}
-        for i in range(1, server_data.MAX_MSG_IN_INBOX + 1):
-            full_inbox[str(i)] = 'message'
-
-        sender = {'sender': 'sendername'}
+        sender = {'sender': 'user5'}
         date = {'date': 'YYYY-MM-DD'}
-        recipient = {'recipient': 'FULL_INBOX_USER'}
+        recipient = {'recipient': 'user1'}
         content = {'content': 'MSG CONTENT'}
         data = [sender, date, recipient, content]
 
@@ -46,11 +46,11 @@ class TestMessageManagement(unittest.TestCase):
         self.assertEqual(result, {"msg": {}})
 
     def test_msg_list_with_messages(self):
-        result = self.msg_mgmt.msg_list('RECIPIENT')
-        self.assertNotEqual(result, {"msg": {}})  # ?????
+        result = self.msg_mgmt.msg_list('user1')
+        self.assertNotEqual(result, {"msg": {}})
 
     def test_msg_del_existing_message(self):
-        result = self.msg_mgmt.msg_del({'RECIPIENT': '1'})
+        result = self.msg_mgmt.msg_del({'user3': '1'})
         self.assertEqual(result, server_response.MESSAGE_WAS_DELETED)
 
     def test_msg_del_non_existing_message(self):
@@ -58,16 +58,20 @@ class TestMessageManagement(unittest.TestCase):
         self.assertEqual(result, server_response.E_MESSAGE_NOT_FOUND)
 
     def test_msg_show_existing(self):
-        result = self.msg_mgmt.msg_show({'RECIPIENT': '3'})
-        self.assertEqual(result, {"Message to show": {'test_message_3'}})
+        result = self.msg_mgmt.msg_show({'user1': '2'})
+        self.assertEqual(result, {"Message to show": {'content': 'Greetings, user5!',
+                     'date': '2024-02-18',
+                     'message_id': 4,
+                     'recipient_id': 'user1',
+                     'sender_id': 'user4'}})
 
     def test_msg_show_non_existing(self):
-        result = self.msg_mgmt.msg_show({'RECIPIENT': '4'})
+        result = self.msg_mgmt.msg_show({'user2': '4'})
         self.assertEqual(result, server_response.E_MESSAGE_NOT_FOUND)
 
     def test_msg_count(self):
-        result = self.msg_mgmt.msg_count('RECIPIENT')
-        self.assertEqual(result, {"msg-inbox-count": 3})
+        result = self.msg_mgmt.msg_count('user2')
+        self.assertEqual(result, {"msg-inbox-count": 1})
 
 
 if __name__ == '__main__':

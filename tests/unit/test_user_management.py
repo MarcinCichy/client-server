@@ -8,6 +8,7 @@ from server_package.user_authentication import UserAuthentication
 
 os.environ['TEST_ENV'] = 'test'
 
+
 class TestMessageManagement(unittest.TestCase):
     def setUp(self):
         self.database_support = DatabaseSupport()
