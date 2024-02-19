@@ -102,11 +102,3 @@ def fill_temp_db():
     cur.close()
     conn.close()
     print("Test tables filling was finished")
-
-# if __name__ == "__main__":
-#     drop_temp_db()  # Usuwanie bazy po testach
-#     create_temp_db()  # Tworzenie bazy i tabel w niej
-#     fill_temp_db()  # Wypełnianie danymi
-#
-#     input(f'Nacisnij cos....')
-#     drop_temp_db()  # Usuwanie bazy po testach
