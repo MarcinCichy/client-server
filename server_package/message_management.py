@@ -59,7 +59,7 @@ class MessageManagement:
         else:
             return msg_id_to_show
 
-    def msg_count(self, username):  # to count all messages in inbox
+    def msg_count(self, username):
         if not username:
             return server_response.E_INVALID_DATA
 

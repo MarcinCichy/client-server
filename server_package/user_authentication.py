@@ -4,7 +4,7 @@ from server_package.database_support import handle_database_errors
 
 class UserAuthentication:
     def __init__(self, database_support):
-        self.database_support = database_support  # ???????????????????
+        self.database_support = database_support
 
     @handle_database_errors
     def login(self, login_data):

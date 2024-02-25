@@ -1,8 +1,10 @@
 import server_package.server_response as server_response
+from server_package.crypt_supprt import Crypto
 
 
 class UserManagement:
     def __init__(self, database_support):
+        self.crypto = Crypto
         self.database_support = database_support
 
     @staticmethod
@@ -14,11 +16,15 @@ class UserManagement:
         if not data:
             return server_response.E_INVALID_DATA
 
-        new_user_data = tuple(d[next(iter(d))] for d in data)
+        new_user_data = list(d[next(iter(d))] for d in data)
         print(f'NEW_USER_DATA = {new_user_data}')
         if new_user_data:
             username = new_user_data[0]
+            password = new_user_data[1]
             permissions = new_user_data[2]
+
+            new_user_data[1] = self.crypto.password_hashing(password)
+            print(new_user_data[1])
 
         if len(username) > 0:
             if self.database_support.check_if_user_exist(username):
