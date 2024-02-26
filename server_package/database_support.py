@@ -29,13 +29,21 @@ class DatabaseSupport:
     def get_info_about_user(self, user_name):
         with connect() as conn:
             with conn.cursor() as cur:
-                cur.execute("SELECT * FROM users WHERE user_name = %s", (user_name,))
+                # Zmodyfikowane zapytanie do pobrania danych użytkownika wraz z zahaszowanym hasłem i solą
+                cur.execute("""
+                    SELECT u.*, p.hashed_password, p.salt
+                    FROM users u
+                    JOIN passwords p ON u.user_id = p.user_id
+                    WHERE u.user_name = %s
+                """, (user_name,))
                 result = cur.fetchone()
+
+                # Dodanie nazw kolumn z tabeli passwords do listy nazw kolumn
                 column_names = [desc[0] for desc in cur.description]
                 result_dict = dict(zip(column_names, result)) if result else None
-                print(f'RESULT_DIC: {result_dict}')
-                return result_dict
 
+                print(f'RESULT_DICT: {result_dict}')
+                return result_dict
     @handle_database_errors
     def get_all_users_list(self):
         with connect() as conn:

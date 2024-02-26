@@ -1,10 +1,10 @@
 import server_package.server_response as server_response
-from server_package.crypt_supprt import Crypto
+from server_package.crypt_supprt import CryptoSupport
 
 
 class UserManagement:
     def __init__(self, database_support):
-        self.crypto = Crypto
+        self.crypto = CryptoSupport()
         self.database_support = database_support
 
     @staticmethod
@@ -25,6 +25,7 @@ class UserManagement:
 
             new_user_data[1] = self.crypto.password_hashing(password)
             print(new_user_data[1])
+            print(f'NEWUSERDATAAFTERHASH = {new_user_data}')
 
         if len(username) > 0:
             if self.database_support.check_if_user_exist(username):
