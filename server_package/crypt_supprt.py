@@ -7,7 +7,7 @@ class CryptoSupport:
         salt = bcrypt.gensalt()
         print(f'SALT: {salt}')
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-        print(f'hshed passw: {hashed_password}')
+        print(f'hashed passw: {hashed_password}')
         return hashed_password
 
     def verifying_password(self, stored_hashed_password, provided_password):

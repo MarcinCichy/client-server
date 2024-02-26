@@ -68,6 +68,9 @@ class UserManagement:
             new_selected_user_data = {'user': selected_user_data.pop('user_name')}
             new_selected_user_data.update(selected_user_data)
             new_selected_user_data['activation_date'] = self.convert_datetime_datetime_to_string_date(selected_user_data['activation_date'])
+            del new_selected_user_data['hashed_password']
+            del new_selected_user_data['salt']
+            print(f'NSUD = {new_selected_user_data}')
             inbox_msg_count = self.database_support.inbox_msg_counting(username)
             new_selected_user_data["inbox messages"] = inbox_msg_count
             new_selected_user_data['login_time'] = self.convert_datetime_datetime_to_string_date(selected_user_data['login_time'])

@@ -3,7 +3,7 @@ import unittest
 from server_package.server import Server
 import server_package.server_response as server_response
 # from database_support_dummy import DatabaseSupportDummy
-from server_package.server_user_state import ServerUserState
+# from server_package.server_user_state import ServerUserState
 
 
 class TestServerInitialization(unittest.TestCase):
@@ -12,7 +12,7 @@ class TestServerInitialization(unittest.TestCase):
         self.test_port = 8000
         self.test_buff = 1024
         self.server = Server(self.test_host, self.test_port, self.test_buff)
-        self.logged_in_user_data = ServerUserState()
+        # self.logged_in_user_data = ServerUserState()
         # self.db_support_dummy = DatabaseSupportDummy()
 
     def test_initialization(self):
@@ -29,7 +29,7 @@ class TestServer(unittest.TestCase):
         self.server = Server(self.test_host, self.test_port, self.test_buff)
 
         # self.db_support_dummy = DatabaseSupportDummy()
-        self.logged_in_user_data = ServerUserState()
+        # self.logged_in_user_data = ServerUserState()
         self.logged_in_user_data.set_user_data("logged_username", "admin")
 
     def test_handle_connection_unrecognised_command(self):

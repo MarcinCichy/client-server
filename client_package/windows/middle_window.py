@@ -61,22 +61,21 @@ class MiddleWindow(BaseWindow):
             if response_content == "line":
                 self.window.hline(client_data.START_POINT + row, 10, 0, self.maxX)
                 row += 1
-            else:
-                if 'message_id' in response_keyword:
-                    del response_keyword['message_id']
-                text = f"{response_keyword} : {response_content}"
+            if 'message_id' in response_content:
+                del response_content['message_id']
+            text = f"{response_keyword} : {response_content}"
+            self.window.refresh()
+            for char in str(text):
+                if column == self.maxX - 3:
+                    row += 1
+                    column = 0
+                if char not in '{}':
+                    self.window.addch(client_data.START_POINT + row, 10 + column, str(char))
+                curses.delay_output(100)
                 self.window.refresh()
-                for char in str(text):
-                    if column == self.maxX - 3:
-                        row += 1
-                        column = 0
-                    if char not in '{}':
-                        self.window.addch(client_data.START_POINT + row, 10 + column, str(char))
-                    curses.delay_output(100)
-                    self.window.refresh()
-                    column += 1
-                row += 1
-                column = 0
+                column += 1
+            row += 1
+            column = 0
 
     def show_response(self, server_response):
         self.handler.server_response_handler(server_response)

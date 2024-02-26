@@ -36,6 +36,7 @@ class MessageManagement:
         for index, (message_id, sender, date) in enumerate(all_inbox_msgs, start=1):
             formatted_date = date.strftime('%Y-%m-%d')
             msg_list_dict[index] = {'message_id': message_id, 'sender': sender, 'date': formatted_date}
+        print(f'MSG_LIST = { {"msg": msg_list_dict}}')
         return {"msg": msg_list_dict}
 
     def msg_del(self, data):
