@@ -61,8 +61,8 @@ class MiddleWindow(BaseWindow):
             if response_content == "line":
                 self.window.hline(client_data.START_POINT + row, 10, 0, self.maxX)
                 row += 1
-            if 'message_id' in response_content:
-                del response_content['message_id']
+            # if 'message_id' in response_content:
+            #     del response_content['message_id']
             text = f"{response_keyword} : {response_content}"
             self.window.refresh()
             for char in str(text):

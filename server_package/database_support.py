@@ -82,11 +82,16 @@ class DatabaseSupport:
                     return False  # User is not logged in
 
     @handle_database_errors
-    def add_account_to_db(self, new_data):
+    def add_account_to_db(self, new_data, password_data):
         with connect() as conn:
             with conn.cursor() as cur:
-                query = sql.SQL("INSERT INTO users (user_name, password, permissions, status, activation_date) VALUES (%s, %s, %s, %s, %s)")
-                cur.execute(query, new_data)
+                query_users = sql.SQL("INSERT INTO users (user_name, permissions, status, activation_date) VALUES (%s, %s, %s, %s) RETURNING user_id;")
+                cur.execute(query_users, new_data)
+                user_id = cur.fetchone()[0]
+
+                querry_passwords = sql.SQL("INSERT INTO passwords (user_id, hashed_password, salt) VALUES (%s, %s, %s);")
+                password_data_with_id = (user_id,) + password_data
+                cur.execute(querry_passwords, password_data_with_id)
                 conn.commit()
 
     @handle_database_errors

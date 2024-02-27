@@ -28,6 +28,7 @@ ACCOUNT_INFO = "Account_info"
 USER_DELETED = " - user was deleted"
 USER_PERMISSIONS_CHANGED = " - user permissions was changed"
 USER_STATUS_CHANGED = " - user status was changed"
+USER_PASSWORD_CHANGED = " - user password was changed"
 YOUR_INBOX_IS_FULL = " / Your Inbox is full"
 CONNECTION_CLOSE = {"Connection": "close"}
 UNRECOGNISED_COMMAND = {"Unrecognised command": "Please correct or type <help>."}

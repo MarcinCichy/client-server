@@ -27,9 +27,6 @@ class TestServer(unittest.TestCase):
         self.test_port = 8000
         self.test_buff = 1024
         self.server = Server(self.test_host, self.test_port, self.test_buff)
-
-        # self.db_support_dummy = DatabaseSupportDummy()
-        # self.logged_in_user_data = ServerUserState()
         self.logged_in_user_data.set_user_data("logged_username", "admin")
 
     def test_handle_connection_unrecognised_command(self):
