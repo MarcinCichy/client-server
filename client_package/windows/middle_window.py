@@ -42,6 +42,7 @@ class MiddleWindow(BaseWindow):
         column = 0
         self.window.refresh()
         if "msg" in sentence.keys():
+            # del sentence['msg']['message_id']
             sentence = sentence['msg']
             self.window.addstr(2, 10, "Messages: ")
             self.window.hline(client_data.START_POINT + 1, 10, 0, 30)

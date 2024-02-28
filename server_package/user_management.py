@@ -20,14 +20,10 @@ class UserManagement:
         print(f'NEW_USER_DATA = {new_user_data}')
         if new_user_data:
             username = new_user_data[0]
-            # password = new_user_data[1]
             password = new_user_data.pop(1)
             permissions = new_user_data[1]
 
-            # hashed_password, salt = self.crypto.password_hashing(password)
             password_data = self.crypto.password_hashing(password)
-            # print(hashed_password)
-            # print(salt)
             print(password_data)
             print(f'NEWUSERDATAAFTERHASH = {new_user_data}')
 
@@ -50,7 +46,7 @@ class UserManagement:
         elif self.database_support.check_if_user_is_logged_in(user_to_del):
             return server_response.E_USER_LOGGED_CANNOT_BE_DELETED
         else:
-            self.database_support.delete_all_user_messages(user_to_del)
+            #  self.database_support.delete_all_user_messages(user_to_del)
             self.database_support.delete_record_from_db('users', user_to_del)
             return {user_to_del: server_response.USER_DELETED}
 
