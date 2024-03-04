@@ -5,7 +5,7 @@ from .handlers import Handlers
 
 
 class MiddleWindow(BaseWindow):
-    def __init__(self, stdscr, useradd_window, new_message_window, show_message_window, login_window):
+    def __init__(self, stdscr, useradd_window, new_message_window, show_message_window, login_window, user_change_passw_window):
         super().__init__(stdscr)
         self.window = self.stdscr.subwin(self.maxY - 5, client_data.MIDDLE_HEIGHT, 2, 1)
         self.window.bkgd(' ', curses.color_pair(client_data.COLOR_PAIR))
@@ -18,6 +18,7 @@ class MiddleWindow(BaseWindow):
         self.new_message_window = new_message_window
         self.show_message_window = show_message_window
         self.login_window = login_window
+        self.user_change_passw_window = user_change_passw_window
 
     def init_window(self):
         self.window.addstr(1, 2, "Server response: ")

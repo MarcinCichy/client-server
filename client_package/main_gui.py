@@ -9,6 +9,7 @@ from windows.middle_window import MiddleWindow
 from windows.new_message_window import NewMessageWindow
 from windows.show_message_window import ShowMessageWindow
 from windows.user_add_window import UserAddWindow
+from windows.user_change_passw_windows import UserChangePasswWindow
 from windows.handlers import Handlers
 from client_communication import ClientCommunication
 
@@ -25,7 +26,8 @@ class Console:
         self.useradd_window = UserAddWindow(stdscr, self.middle_window, self.login_window)
         self.new_message_window = NewMessageWindow(stdscr, self.middle_window, self.login_window)
         self.show_message_window = ShowMessageWindow(stdscr)
-        self.middle_window = MiddleWindow(stdscr, self.useradd_window, self.new_message_window, self.show_message_window, self.login_window)
+        self.user_change_passw_window = UserChangePasswWindow(stdscr, self.middle_window, self.login_window)
+        self.middle_window = MiddleWindow(stdscr, self.useradd_window, self.new_message_window, self.show_message_window, self.login_window, self.user_change_passw_window )
         self.bottom_window = BottomWindow(stdscr, self.login_window, self.middle_window)
         self.init_curses()
 

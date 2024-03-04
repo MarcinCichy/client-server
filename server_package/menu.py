@@ -39,7 +39,9 @@ class CommandHandler:
             "user-perm": self.user_management.user_perm,
             "user-stat": self.user_management.user_stat,
             "user-info": self.user_management.user_info,
-            "create_account": self.user_management.create_account
+            "create_account": self.user_management.create_account,
+            "user-pass": self.user_management.user_pass,
+            "change_password": self.user_management.change_password
         }
 
     def prepare_command_and_user_data(self, entrance_command):

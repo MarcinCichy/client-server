@@ -2,6 +2,7 @@ import server_package.server_response as server_response
 from server_package.database_support import handle_database_errors
 from server_package.crypt_supprt import CryptoSupport
 
+
 class UserAuthentication:
     def __init__(self, database_support):
         self.crypto = CryptoSupport()

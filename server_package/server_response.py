@@ -18,6 +18,7 @@ E_FILE_IS_UNAVAILABLE = {"Error": "DB file is unavailable"}
 E_COMMAND_UNAVAILABLE = {"Error": "Command unavailable. No permissions"}
 E_INVALID_DATA = {"Error": "Invalid data."}
 E_DATABASE_ERROR = {"Error": "A database error occurred"}
+E_NEW_PASSWORD_ERROR = {"Error": "The confirmed password is incorrect."}
 
 # -------------- OTHERS RESPONSES -------------------
 MESSAGE_WAS_SENT = {"Message": "was sent"}

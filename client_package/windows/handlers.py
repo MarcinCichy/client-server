@@ -45,6 +45,11 @@ class Handlers:
             self.window.useradd_window.init_window()
             self.window.useradd_window.show()
             self.window.init_window()
+        elif "User-pass" in server_response:
+            self.window.clear_previous_messages()
+            self.window.user_change_passw_window.init_window()
+            self.window.user_change_passw_window.show()
+            self.window.init_window()
         elif "Msg-snd" in server_response:
             self.window.clear_previous_messages()
             self.window.new_message_window.init_window()

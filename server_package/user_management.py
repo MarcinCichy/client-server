@@ -113,19 +113,27 @@ class UserManagement:
             self.database_support.data_update('users', 'status', user_to_change_status, new_status)
             return {user_to_change_status: server_response.USER_STATUS_CHANGED}
 
-    def user_pass(self, data):
+    @staticmethod
+    def user_pass():
+        return {"User-pass": "OK"}
+
+    def change_password(self, data):
         if not data:
             return server_response.E_INVALID_DATA
         else:
-            user_to_change_password, new_password = next(iter(data.items()))
+            print(f'CHANGE PASSWORD DATA = {data}')
+            user_to_change_password, new_password, confirmed_new_password = next(iter(data.items()))
             print(f'User name to change password: {user_to_change_password}, to new password: {new_password}')
         if not self.database_support.check_if_user_exist(user_to_change_password):
             return server_response.E_USER_DOES_NOT_EXIST
         else:
-            new_password_hashed = self.crypto.password_hashing(new_password)
-            self.database_support.data_update('passwords', 'hashed_password', user_to_change_password, new_password_hashed)
-            return {user_to_change_password: server_response.USER_PASSWORD_CHANGED}
-
+            if new_password == confirmed_new_password:
+                # new_password_hashed = self.crypto.password_hashing(new_password)
+                # self.database_support.data_update('passwords', 'hashed_password', user_to_change_password, new_password_hashed)
+                print("HASŁO ZMIENIONE")
+                return {user_to_change_password: server_response.USER_PASSWORD_CHANGED}
+            else:
+                return server_response.E_NEW_PASSWORD_ERROR
 
     def convert_datetime_datetime_to_string_date(self, datetime_from_db):
         if not datetime_from_db:

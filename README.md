@@ -51,6 +51,7 @@
             user-stat [username] [status] - change user status [active] or [banned]
             user-info [username] - to show information about account of selected user
 
+    - v 0.2.1 Added password hashing and salting
     - v 0.2.0 Added support for PostgreSQL databases. Bye, bye JSON format database ;)
 
     - v 0.1.8 Improved command handling after server connection is lost and re-established
