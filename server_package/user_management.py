@@ -120,20 +120,29 @@ class UserManagement:
     def change_password(self, data):
         if not data:
             return server_response.E_INVALID_DATA
-        else:
-            print(f'CHANGE PASSWORD DATA = {data}')
-            user_to_change_password, new_password, confirmed_new_password = next(iter(data.items()))
-            print(f'User name to change password: {user_to_change_password}, to new password: {new_password}')
-        if not self.database_support.check_if_user_exist(user_to_change_password):
-            return server_response.E_USER_DOES_NOT_EXIST
-        else:
-            if new_password == confirmed_new_password:
-                # new_password_hashed = self.crypto.password_hashing(new_password)
-                # self.database_support.data_update('passwords', 'hashed_password', user_to_change_password, new_password_hashed)
-                print("HASŁO ZMIENIONE")
-                return {user_to_change_password: server_response.USER_PASSWORD_CHANGED}
+
+        print(f'CHANGE PASSWORD DATA = {data}')
+        data_to_change_password = list(d[next(iter(d))] for d in data)
+        print(f'User data to change password: {data_to_change_password}')
+        if data_to_change_password:
+            user_to_change_password = data_to_change_password[0]
+            new_password = data_to_change_password.pop(1)
+            confirmed_new_password = data_to_change_password[1]
+
+        if len(user_to_change_password) > 0:
+            if self.database_support.check_if_user_exist(user_to_change_password):
+
+                if new_password == confirmed_new_password:
+                    # self.database_support.add_account_to_db(new_user_data, password_data)
+                    print("HASŁO ZMIENIONE")
+                    return {user_to_change_password:server_response.USER_PASSWORD_CHANGED}
+                else:
+                    print("HASŁO NIE ZMIENIONE")
+                    return server_response.E_NEW_PASSWORD_ERROR
             else:
-                return server_response.E_NEW_PASSWORD_ERROR
+                return server_response.E_USER_DOES_NOT_EXIST
+        else:
+            return server_response.E_USER_NAME_NOT_PROVIDED
 
     def convert_datetime_datetime_to_string_date(self, datetime_from_db):
         if not datetime_from_db:

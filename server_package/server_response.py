@@ -53,5 +53,6 @@ HELP_DICT = {
             "user-del [username]": "deletes the selected account",
             "user-perm [username] [permission]": "change permissions [user] or [admin]",
             "user-stat [username] [status]": "change user status [active] or [banned]",
-            "user-info [username]": "to show information about account of selected user"
+            "user-info [username]": "to show information about account of selected user",
+            "user-pass": "to change password"
 }

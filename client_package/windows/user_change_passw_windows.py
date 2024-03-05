@@ -24,7 +24,7 @@ class UserChangePasswWindow(BaseWindow):
         self.window.refresh()
 
     def clear_line(self, y_poz):
-        self.window.addstr(y_poz, 22, client_data.CLEAR_SPACE_CHANGE_PASSWD_WINDOW)
+        self.window.addstr(y_poz, 12, client_data.CLEAR_SPACE_CHANGE_PASSWD_WINDOW)
 
     def get_change_password_data(self):
         logged_username = self.login_window.logged_username

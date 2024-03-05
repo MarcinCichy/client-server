@@ -27,7 +27,7 @@ class Console:
         self.new_message_window = NewMessageWindow(stdscr, self.middle_window, self.login_window)
         self.show_message_window = ShowMessageWindow(stdscr)
         self.user_change_passw_window = UserChangePasswWindow(stdscr, self.middle_window, self.login_window)
-        self.middle_window = MiddleWindow(stdscr, self.useradd_window, self.new_message_window, self.show_message_window, self.login_window, self.user_change_passw_window )
+        self.middle_window = MiddleWindow(stdscr, self.useradd_window, self.new_message_window, self.show_message_window, self.login_window, self.user_change_passw_window)
         self.bottom_window = BottomWindow(stdscr, self.login_window, self.middle_window)
         self.init_curses()
 
@@ -53,6 +53,7 @@ class Console:
             else:
                 self.init_windows()
                 self.useradd_window.middle_window = self.middle_window
+                self.user_change_passw_window.middle_window = self.middle_window
                 self.new_message_window.middle_window = self.middle_window
                 self.run()
 
@@ -86,6 +87,7 @@ class Console:
         self.useradd_window.window.erase()
         self.new_message_window.window.erase()
         self.show_message_window.window.erase()
+        self.user_change_passw_window.window.erase()
 
         self.header_window.window.refresh()
         self.middle_window.window.refresh()
@@ -94,6 +96,7 @@ class Console:
         self.useradd_window.window.refresh()
         self.new_message_window.window.refresh()
         self.show_message_window.window.refresh()
+        self.user_change_passw_window.window.refresh()
 
 
 def main(stdscr):
