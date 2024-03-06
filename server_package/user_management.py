@@ -133,7 +133,10 @@ class UserManagement:
             if self.database_support.check_if_user_exist(user_to_change_password):
 
                 if new_password == confirmed_new_password:
-                    # self.database_support.add_account_to_db(new_user_data, password_data)
+                    hashed_password, salt = self.crypto.password_hashing(new_password)
+                    user_data = self.database_support.get_info_about_user(user_to_change_password)
+                    user_id = user_data['user_id']
+                    self.database_support.password_update('passwords', 'hashed_password', 'salt', user_id, hashed_password, salt)
                     print("HASŁO ZMIENIONE")
                     return {user_to_change_password:server_response.USER_PASSWORD_CHANGED}
                 else:

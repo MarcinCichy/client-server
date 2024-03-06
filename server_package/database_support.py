@@ -151,6 +151,18 @@ class DatabaseSupport:
                 cur.execute(query, new_data)
                 conn.commit()
 
+    @handle_database_errors
+    def password_update(self, table, column1, column2, user_id, new_value1=None, new_value2=None ):
+        with connect() as conn:
+            with conn.cursor() as cur:
+                query = sql.SQL("UPDATE {table} SET {column} = %s WHERE user_id = %s").format(
+                    table=sql.Identifier(table), column=sql.Identifier(column1))
+                cur.execute(query, (new_value1, user_id))
+                query = sql.SQL("UPDATE {table} SET {column} = %s WHERE user_id = %s").format(
+                    table=sql.Identifier(table), column=sql.Identifier(column2))
+                cur.execute(query, (new_value2, user_id))
+                conn.commit()
+
 
 
 

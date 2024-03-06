@@ -24,7 +24,7 @@ class UserChangePasswWindow(BaseWindow):
         self.window.refresh()
 
     def clear_line(self, y_poz):
-        self.window.addstr(y_poz, 12, client_data.CLEAR_SPACE_CHANGE_PASSWD_WINDOW)
+        self.window.addstr(y_poz, 24, client_data.CLEAR_SPACE_CHANGE_PASSWD_WINDOW)
 
     def get_change_password_data(self):
         logged_username = self.login_window.logged_username
@@ -38,7 +38,7 @@ class UserChangePasswWindow(BaseWindow):
         self.init_window()  # this line is needed to preserve window borders at right side
         self.new_password = self.window.getstr(2, 16).decode(errors="ignore")
         self.init_window()  # this line is needed to preserve window borders at right side
-        self.confirm_new_password = self.window.getstr(3, 25).decode(errors="ignore")
+        self.confirm_new_password = self.window.getstr(3, 24).decode(errors="ignore")
 
         command = self.build_command(logged_username)
         self.window.erase()

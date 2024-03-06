@@ -31,7 +31,7 @@ class NewMessageWindow(BaseWindow):
         self.window.refresh()
 
     def clear_line(self, y_poz):
-        self.window.addstr(y_poz, 12, client_data.CLEAR_SPACE_NEW_MSG__WINDOW)
+        self.window.addstr(y_poz, 12, client_data.CLEAR_SPACE_NEW_MSG_WINDOW)
 
     def number_of_chars(self):
         count = len(self.content)
