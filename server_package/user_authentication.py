@@ -11,7 +11,7 @@ class UserAuthentication:
     @handle_database_errors
     def login(self, login_data):
         print(f'LOGIN_DATA = {login_data}')
-        if not login_data:
+        if not login_data or not isinstance(login_data, list) or len(login_data) != 2:
             return server_response.E_INVALID_DATA
 
         login_username = login_data[0]['username']

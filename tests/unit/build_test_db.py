@@ -1,4 +1,5 @@
 import psycopg2
+import bcrypt
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from tests.unit.test_config import test_db_config
 
@@ -13,29 +14,37 @@ def create_temp_db():
     cur = conn.cursor()
     cur.execute(f'CREATE DATABASE "{temp_db_name}";')
 
-    conn_temp = psycopg2.connect(dbname=temp_db_name, user=params['user'], password=params['password'], host=params['host'])
+    conn_temp = psycopg2.connect(dbname=temp_db_name, user=params['user'], password=params['password'],
+                                 host=params['host'])
     cur_temp = conn_temp.cursor()
     cur_temp.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        user_id serial PRIMARY KEY,
-        user_name varchar(50) NOT NULL,
-        password varchar(50) NOT NULL,
-        permissions varchar(5) NOT NULL,
-        status varchar(6) NOT NULL,
-        activation_date date NOT NULL,
-        login_time timestamp without time zone,
-        UNIQUE(user_name)
-    );
-    """)
+        CREATE TABLE IF NOT EXISTS users (
+            user_id serial PRIMARY KEY,
+            user_name varchar(50) NOT NULL UNIQUE,
+            permissions varchar(5) NOT NULL,
+            status varchar(6) NOT NULL,
+            activation_date date NOT NULL,
+            login_time timestamp without time zone
+        );
+        """)
     cur_temp.execute("""
-    CREATE TABLE IF NOT EXISTS messages (
-        message_id serial PRIMARY KEY,
-        sender_id varchar(50),
-        date date NOT NULL,
-        recipient_id varchar(50) REFERENCES users(user_name),
-        content varchar(250)
-    );
-    """)
+        CREATE TABLE IF NOT EXISTS messages (
+            message_id serial PRIMARY KEY,
+            sender_id varchar(50),
+            date date NOT NULL,
+            recipient_id varchar(50) REFERENCES users(user_name) ON DELETE CASCADE,
+            content varchar(250)
+        );
+        """)
+    cur_temp.execute("""
+       CREATE TABLE IF NOT EXISTS passwords (
+           user_id integer NOT NULL,
+           hashed_password bytea NOT NULL,
+           salt bytea NOT NULL,
+           PRIMARY KEY (user_id),
+           FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+       );
+       """)
     conn_temp.commit()
     cur_temp.close()
     conn_temp.close()
@@ -70,16 +79,30 @@ def fill_temp_db():
     cur = conn.cursor()
 
     users_data = [
-        ("user1", "password1", "admin", "active", "2024-02-18"),
-        ("user2", "password2", "user", "banned", "2024-02-18"),
-        ("user3", "password3", "user", "active", "2024-02-18"),
-        ("user4", "password4", "admin", "active", "2024-02-18"),
-        ("user5", "password5", "user", "banned", "2024-02-18")
+        ("user1", "admin", "active", "2024-02-18"),
+        ("user2", "user", "banned", "2024-02-18"),
+        ("user3", "user", "active", "2024-02-18"),
+        ("user4", "admin", "active", "2024-02-18"),
+        ("user5", "user", "banned", "2024-02-18")
     ]
-    for user_data in users_data:
+    # Passwords corresponding to users, for simplicity, user_name + 'password'
+    passwords = ["password1", "password2", "password3", "password4", "password5"]
+
+    for idx, user_data in enumerate(users_data):
         cur.execute(
-            "INSERT INTO users (user_name, password, permissions, status, activation_date) VALUES (%s, %s, %s, %s, %s)",
+            "INSERT INTO users (user_name, permissions, status, activation_date) VALUES (%s, %s, %s, %s) RETURNING user_id",
             user_data
+        )
+        user_id = cur.fetchone()[0]  # Pobranie wygenerowanego user_id
+
+        # Hashing the password with bcrypt
+        password = passwords[idx].encode('utf-8')
+        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
+
+        # Wstawianie zaszyfrowanego hasła i soli do tabeli passwords
+        cur.execute(
+            "INSERT INTO passwords (user_id, hashed_password, salt) VALUES (%s, %s, %s)",
+            (user_id, hashed_password, hashed_password[:29])  # Przykład z solą; dostosuj według potrzeb
         )
 
     messages_data = [

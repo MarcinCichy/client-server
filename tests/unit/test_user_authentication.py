@@ -34,7 +34,7 @@ class TestUserAuthentication(unittest.TestCase):
         self.assertEqual(result, expected)
 
     def test_login_user_no_valid_data(self):
-        no_valid_login_data = [{"username": "RECIPIENT"}, {"password": "pass3"}]
+        no_valid_login_data = [{"username": "user4"}, {"password": "password3"}]
         expected = server_response.E_INVALID_CREDENTIALS
         result = self.user_auth.login(no_valid_login_data)
         self.assertEqual(result, expected)
