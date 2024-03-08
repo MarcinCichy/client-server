@@ -9,7 +9,7 @@ from server_package.user_authentication import UserAuthentication
 os.environ['TEST_ENV'] = 'test'
 
 
-class TestMessageManagement(unittest.TestCase):
+class TestUserManagement(unittest.TestCase):
     def setUp(self):
         self.database_support = DatabaseSupport()
         self.usr_mgmt = UserManagement(self.database_support)
@@ -56,11 +56,9 @@ class TestMessageManagement(unittest.TestCase):
         self.assertEqual(result, server_response.E_WRONG_PERMISSIONS)
 
     def test_delete_user_valid_data(self):
-        new_account_data = [{'username': 'user5'}, {'password': 'password5'}, {'permissions': 'user'}, {'status': 'active'}]
-        self.usr_mgmt.create_account(new_account_data)
-        # user_to_del = "user5"
-        # result = self.usr_mgmt.user_del(user_to_del)
-        # self.assertEqual(result, {user_to_del: server_response.USER_DELETED})
+        valid_user_to_del = "user4"
+        result = self.usr_mgmt.user_del(valid_user_to_del)
+        self.assertEqual(result, {valid_user_to_del: server_response.USER_DELETED})
 
     def test_delete_user_invalid_data(self):
         user_to_del = "user_100"
@@ -68,7 +66,7 @@ class TestMessageManagement(unittest.TestCase):
         self.assertEqual(result, server_response.E_USER_DOES_NOT_EXIST)
 
     def test_delete_logged_user(self):
-        user_to_del = "username_invalid"
+        user_to_del = "username_logged"
         result = self.usr_mgmt.user_del(user_to_del)
         self.assertEqual(result, server_response.E_USER_DOES_NOT_EXIST)
 
@@ -119,7 +117,6 @@ class TestMessageManagement(unittest.TestCase):
             "user1": {"permissions": "admin", "status": "active"},
             "user2": {"permissions": "user", "status": "banned"},
             "user3": {"permissions": "user", "status": "active"},
-            "user4": {"permissions": "admin", "status": "active"},
             "user5": {"permissions": "user", "status": "banned"}
             }
         }
