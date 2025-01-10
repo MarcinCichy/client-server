@@ -14,5 +14,5 @@ def test_db_config(filename='test_database.ini', section='test_postgresql'):
             db[param[0]] = param[1]
     else:
         raise Exception(f'Section {section} not found in the {filename} file')
-
+    print(f"File {os.path.abspath(filename)} was read successfully")
     return db
