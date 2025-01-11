@@ -4,12 +4,25 @@ from server_package.user_management import UserManagement
 import server_package.server_response as server_response
 from server_package.database_support import DatabaseSupport
 from server_package.user_authentication import UserAuthentication
-
+import build_test_db
 
 os.environ['TEST_ENV'] = 'test'
 
 
 class TestUserManagement(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        # Tworzymy i wypełniamy bazę danych raz przed uruchomieniem testów
+        build_test_db.drop_temp_db()
+        build_test_db.create_temp_db()
+        build_test_db.fill_temp_db()
+
+    @classmethod
+    def tearDownClass(cls):
+        # Usuwamy bazę danych po zakończeniu testów
+        build_test_db.drop_temp_db()
+
     def setUp(self):
         self.database_support = DatabaseSupport()
         self.usr_mgmt = UserManagement(self.database_support)

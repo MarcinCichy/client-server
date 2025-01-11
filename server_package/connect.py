@@ -14,8 +14,10 @@ def connect():
         print('Connecting to the PostgreSQL database...')
         if os.getenv('TEST_ENV') == 'test':
             params = test_db_config()
+            print(f"Łączę się do bazy z parametrami: {params}")
         else:
             params = db_config()
+            print(f"Łączę się do bazy z parametrami: {params}")
         return pg_connect(**params)
     except (Exception, psycopg2.DatabaseError) as e:
        #  print(f"Connect error = {e}")

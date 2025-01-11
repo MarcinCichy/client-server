@@ -1,5 +1,6 @@
 import psycopg2
 import bcrypt
+import time
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from tests.unit.test_config import test_db_config
 
@@ -19,11 +20,12 @@ def create_temp_db():
         )
         conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cur = conn.cursor()
-        cur.execute(f"CREATE DATABASE {params['database']};")
+        cur.execute(f"CREATE DATABASE {temp_db_name};")
 
         cur.close()
         conn.close()
-        print(f'Database {params["database"]} created successfully.')
+        time.sleep(20)
+        print(f'Database {temp_db_name} created successfully.')
 
         conn_temp = psycopg2.connect(
             dbname=temp_db_name,
@@ -95,6 +97,7 @@ def drop_temp_db():
         cur.close()
         conn.close()
         print(f'Testing database was dropped')
+        time.sleep(5)
     except Exception as e:
         print(f'An error occurred while dropping the database: {e}')
 
@@ -103,7 +106,7 @@ def fill_temp_db():
     try:
         print("Test tables filling was started")
         conn = psycopg2.connect(
-            dbname=params['database'],
+            dbname=temp_db_name,
             port=params['port'],
             user=params['user'],
             password=params['password'],

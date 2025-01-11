@@ -6,12 +6,22 @@ from server_package.database_support import DatabaseSupport
 import build_test_db
 
 os.environ['TEST_ENV'] = 'test'
-build_test_db.drop_temp_db()
-build_test_db.create_temp_db()
-build_test_db.fill_temp_db()
 
 
 class TestUserAuthentication(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        # Tworzymy i wypełniamy bazę danych raz przed uruchomieniem testów
+        build_test_db.drop_temp_db()
+        build_test_db.create_temp_db()
+        build_test_db.fill_temp_db()
+
+    @classmethod
+    def tearDownClass(cls):
+        # Usuwamy bazę danych po zakończeniu testów
+        build_test_db.drop_temp_db()
+
     def setUp(self):
         self.database_support = DatabaseSupport()
         self.user_auth = UserAuthentication(self.database_support)
