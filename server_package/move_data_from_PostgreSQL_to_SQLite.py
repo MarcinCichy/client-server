@@ -16,11 +16,11 @@ pg_config = {
 
 def migrate_users(pg_cursor, sqlite_cursor):
     """Migracja danych z tabeli users"""
-    pg_cursor.execute("SELECT user_id, user_name, permissions, status, activation_time, login_time FROM users")
+    pg_cursor.execute("SELECT user_id, user_name, permissions, status, activation_date, login_time FROM users")
     rows = pg_cursor.fetchall()
 
     insert_query = """
-        INSERT INTO users (user_id, user_name, permissions, status, activation_time, login_time)
+        INSERT INTO users (user_id, user_name, permissions, status, activation_date, login_time)
         VALUES (?, ?, ?, ?, ?, ?)
     """
     for row in rows:

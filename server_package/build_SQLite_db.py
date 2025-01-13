@@ -25,7 +25,7 @@ def create_table_users():
                           user_name TEXT NOT NULL,
                           permissions TEXT NOT NULL,
                           status TEXT NOT NULL,
-                          activation_time datetime NOT NULL,
+                          activation_date datetime NOT NULL,
                           login_time timestamp
                         )
                         ''')
