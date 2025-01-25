@@ -109,6 +109,7 @@ class DatabaseSupport:
                 query = sql.SQL("SELECT message_id, sender_id, date FROM messages WHERE recipient_id = %s ORDER BY message_id")
                 cur.execute(query, (username,))
                 result = cur.fetchall()
+                print(f"RESULT ALL MSG = {result}")
                 return result
 
     @handle_database_errors
